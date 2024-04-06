@@ -1,40 +1,51 @@
 <?php
 
-namespace Ihor\MicroFramework\Routes;
+namespace Igarevv\MicroFramework\Routes;
 
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
-use Ihor\MicroFramework\Http\Exceptions\HttpNotFoundException;
-use Ihor\MicroFramework\Http\Exceptions\MethodNotAllowedException;
-use Ihor\MicroFramework\Http\Request;
+use Igarevv\MicroFramework\Http\Exceptions\HttpNotFoundException;
+use Igarevv\MicroFramework\Http\Exceptions\MethodNotAllowedException;
+use Igarevv\MicroFramework\Http\Request;
+use League\Container\Container;
 
 use function FastRoute\simpleDispatcher;
 
 class Router implements RouteInterface
 {
-    public function dispatch(Request $request): array
+
+    private array $routes;
+
+    public function dispatch(Request $request, Container $container): array
     {
         [$handler, $variables] = $this->routeInfo($request);
 
-        if(is_array($handler)){
-            [$controller, $method] = $handler;
-            $handler = [new $controller, $method];
+        if (is_array($handler)) {
+            [$controllerName, $method] = $handler;
+
+            $controller = $container->get($controllerName);
+
+            $handler = [new $controller(), $method];
         }
 
         return [$handler, $variables];
     }
 
+    public function registerRoutes(array $routes): void
+    {
+        $this->routes = $routes;
+    }
+
     private function routeInfo(Request $request): array
     {
-        $dispatcher = simpleDispatcher(function (RouteCollector $collector){
-            $routes = require APP_PATH . '/config/web.php';
-
-            foreach ($routes as $route) {
+        $dispatcher = simpleDispatcher(function (RouteCollector $collector) {
+            foreach ($this->routes as $route) {
                 $collector->addRoute(...$route);
             }
         });
 
-        $routeInfo = $dispatcher->dispatch($request->getMethod(), $request->getUriPath());
+        $routeInfo = $dispatcher->dispatch($request->getMethod(),
+          $request->getUriPath());
 
         [$handler, $variables] = $this->giveRouteInfoOrFail($routeInfo);
 
@@ -53,4 +64,5 @@ class Router implements RouteInterface
                 throw new HttpNotFoundException('404 | Not Found', 404);
         }
     }
+
 }

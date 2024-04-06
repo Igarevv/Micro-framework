@@ -1,0 +1,19 @@
+{
+  "name": "igarevv/micro-framework",
+  "authors": [
+    {
+      "name": "Igarevv",
+      "email": "forstudy757@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": {
+      "Igarevv\\MicroFramework\\": "src"
+    }
+  },
+  "require": {
+    "nikic/fast-route": "^1.3",
+    "league/container": "^4.2.2"
+  }
+}

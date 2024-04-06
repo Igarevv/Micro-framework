@@ -1,9 +1,10 @@
 <?php
 
-namespace Ihor\MicroFramework\Http;
+namespace Igarevv\MicroFramework\Http;
 
 class Response
 {
+
     public function __construct(
       private mixed $content,
       private int $status = 200,
@@ -15,4 +16,5 @@ class Response
 
         echo $this->content;
     }
+
 }

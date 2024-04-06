@@ -1,6 +1,6 @@
 <?php
 
-namespace Ihor\MicroFramework\Http\Exceptions;
+namespace Igarevv\MicroFramework\Http\Exceptions;
 
 class HttpException extends \Exception
 {

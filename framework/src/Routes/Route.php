@@ -1,9 +1,10 @@
 <?php
 
-namespace Ihor\MicroFramework\Routes;
+namespace Igarevv\MicroFramework\Routes;
 
 class Route
 {
+
     public static function get(string $uri, array|callable $action): array
     {
         return ['GET', $uri, $action];
@@ -13,4 +14,5 @@ class Route
     {
         return ['POST', $uri, $action];
     }
+
 }

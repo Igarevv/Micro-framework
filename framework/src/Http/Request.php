@@ -1,9 +1,10 @@
 <?php
 
-namespace Ihor\MicroFramework\Http;
+namespace Igarevv\MicroFramework\Http;
 
 class Request
 {
+
     public function __construct(
       private readonly array $post,
       private readonly array $get,
