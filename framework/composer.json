@@ -1,19 +1,21 @@
 {
   "name": "igarevv/micro-framework",
+  "description": "Framework created as a part of education",
+  "minimum-stability": "dev",
   "authors": [
     {
-      "name": "Igarevv",
+      "name": "ihor",
       "email": "forstudy757@gmail.com"
     }
   ],
-  "minimum-stability": "dev",
   "autoload": {
     "psr-4": {
-      "Igarevv\\MicroFramework\\": "src"
+      "Igarevv\\Micrame\\": "src"
     }
   },
   "require": {
-    "nikic/fast-route": "^1.3",
-    "league/container": "^4.2.2"
+    "nikic/fast-route": "^1.3.0",
+    "league/container": "^4.2.0",
+    "twig/twig": "^3.5.0"
   }
 }

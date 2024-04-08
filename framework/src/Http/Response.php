@@ -1,20 +1,26 @@
 <?php
 
-namespace Igarevv\MicroFramework\Http;
+namespace Igarevv\Micrame\Http;
 
 class Response
 {
 
     public function __construct(
-      private mixed $content,
-      private int $status = 200,
+      protected string $content = '',
+      protected int $status = 200
     ) {}
 
-    public function send()
+    public function send(): void
     {
         http_response_code($this->status);
 
         echo $this->content;
     }
 
+    public function json(): Response
+    {
+        $this->content = json_encode($this->content, JSON_THROW_ON_ERROR);
+
+        return $this;
+    }
 }

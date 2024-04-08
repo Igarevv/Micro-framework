@@ -1,44 +1,29 @@
 <?php
 
-namespace Igarevv\MicroFramework\Http;
+namespace Igarevv\Micrame\Http;
 
-class Request
+final class Request
 {
 
     public function __construct(
       private readonly array $post,
       private readonly array $get,
       private readonly array $server,
-      private readonly array $cookies,
-      private readonly array $files,
+      private readonly array $cookie,
+      private readonly array $files
     ) {}
 
-    public static function createFromGlobals(): Request
+    public static function createFromRequest(): self
     {
         return new self($_POST, $_GET, $_SERVER, $_COOKIE, $_FILES);
     }
 
-    public function post(string $key, $default = null): mixed
-    {
-        return $this->post[$key] ?? $default;
-    }
-
-    public function get(string $key, $default = null): mixed
-    {
-        return $this->get[$key] ?? $default;
-    }
-
-    public function getUriPath(): string
+    public function uri(): string
     {
         return strtok($this->server['REQUEST_URI'], '?');
     }
 
-    public function getUrlQuery(): string
-    {
-        return $this->server['QUERY_STRING'] ?? '';
-    }
-
-    public function getMethod(): string
+    public function method(): string
     {
         return $this->server['REQUEST_METHOD'];
     }
