@@ -2,3 +2,6 @@
 .idea
 composer.lock
 phpunit.xml
+/framework/.gitignore
+/framework/vendor
+/framework/composer.lock

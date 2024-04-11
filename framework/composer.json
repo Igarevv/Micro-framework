@@ -19,4 +19,8 @@
     "twig/twig": "^3.5.0",
     "doctrine/dbal": "^4.0.0"
   }
+  ,
+  "require-dev": {
+    "roave/security-advisories": "dev-latest"
+  }
 }

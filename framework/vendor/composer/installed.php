@@ -3,7 +3,7 @@
         'name' => 'igarevv/micro-framework',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '3dc38d156116f83dfa44049242df3e35165f579f',
+        'reference' => '678cd7a9f988d6fdea0154353dcb1b4fa39a2941',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -31,7 +31,7 @@
         'igarevv/micro-framework' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '3dc38d156116f83dfa44049242df3e35165f579f',
+            'reference' => '678cd7a9f988d6fdea0154353dcb1b4fa39a2941',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -99,6 +99,17 @@
                 0 => '3.x-dev',
             ),
             'dev_requirement' => false,
+        ),
+        'roave/security-advisories' => array(
+            'pretty_version' => 'dev-latest',
+            'version' => 'dev-latest',
+            'reference' => '31f373849a62ccfe23cba594e91b488e3ec2270b',
+            'type' => 'metapackage',
+            'install_path' => null,
+            'aliases' => array(
+                0 => '9999999-dev',
+            ),
+            'dev_requirement' => true,
         ),
         'symfony/deprecation-contracts' => array(
             'pretty_version' => 'dev-main',
