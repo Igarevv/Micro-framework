@@ -14,7 +14,7 @@ class Kernel
     public function __construct(
       private RouterInterface $router,
       private ContainerInterface $container,
-      private Request $request
+      private RequestInterface $request
     ) {
         $this->appStatus = $this->container->get('APP_ENV');
     }

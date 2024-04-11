@@ -3,17 +3,35 @@
         'name' => 'igarevv/micro-framework',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '5594af61d49f74d6ae1155c72b1cabcc1fbf13b3',
+        'reference' => '3dc38d156116f83dfa44049242df3e35165f579f',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
+        'doctrine/dbal' => array(
+            'pretty_version' => '4.1.x-dev',
+            'version' => '4.1.9999999.9999999-dev',
+            'reference' => '140ecec05f91bb3425dd7e5931227d5ce29a47c6',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../doctrine/dbal',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'doctrine/deprecations' => array(
+            'pretty_version' => '1.1.x-dev',
+            'version' => '1.1.9999999.9999999-dev',
+            'reference' => 'dfbaa3c2d2e9a9df1118213f3b8b0c597bb99fab',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../doctrine/deprecations',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'igarevv/micro-framework' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '5594af61d49f74d6ae1155c72b1cabcc1fbf13b3',
+            'reference' => '3dc38d156116f83dfa44049242df3e35165f579f',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -43,6 +61,17 @@
                 0 => '~2.0',
             ),
         ),
+        'psr/cache' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '0a7c67d0d1c8167b342eb74339d6f961663826ce',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../psr/cache',
+            'aliases' => array(
+                0 => '3.0.x-dev',
+            ),
+            'dev_requirement' => false,
+        ),
         'psr/container' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
@@ -59,6 +88,17 @@
             'provided' => array(
                 0 => '^1.0',
             ),
+        ),
+        'psr/log' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => 'fe5ea303b0887d5caefd3d431c3e61ad47037001',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../psr/log',
+            'aliases' => array(
+                0 => '3.x-dev',
+            ),
+            'dev_requirement' => false,
         ),
         'symfony/deprecation-contracts' => array(
             'pretty_version' => 'dev-main',

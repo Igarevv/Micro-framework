@@ -2,7 +2,7 @@
 
 namespace Igarevv\Micrame\Http;
 
-final class Request
+final class Request implements RequestInterface
 {
 
     public function __construct(
@@ -13,17 +13,17 @@ final class Request
       private readonly array $files
     ) {}
 
-    public static function createFromRequest(): self
+    public static function createFromGlobals(): self
     {
         return new self($_POST, $_GET, $_SERVER, $_COOKIE, $_FILES);
     }
 
-    public function uri(): string
+    public function getUri(): string
     {
         return strtok($this->server['REQUEST_URI'], '?');
     }
 
-    public function method(): string
+    public function getMethod(): string
     {
         return $this->server['REQUEST_METHOD'];
     }

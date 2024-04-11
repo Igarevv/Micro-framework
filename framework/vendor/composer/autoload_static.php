@@ -31,7 +31,9 @@ class ComposerStaticInitb06849ee0bfb6f5210008270e965b9da
         ),
         'P' => 
         array (
+            'Psr\\Log\\' => 8,
             'Psr\\Container\\' => 14,
+            'Psr\\Cache\\' => 10,
         ),
         'L' => 
         array (
@@ -44,6 +46,11 @@ class ComposerStaticInitb06849ee0bfb6f5210008270e965b9da
         'F' => 
         array (
             'FastRoute\\' => 10,
+        ),
+        'D' => 
+        array (
+            'Doctrine\\Deprecations\\' => 22,
+            'Doctrine\\DBAL\\' => 14,
         ),
     );
 
@@ -64,9 +71,17 @@ class ComposerStaticInitb06849ee0bfb6f5210008270e965b9da
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
         ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/src',
+        ),
         'Psr\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
+        'Psr\\Cache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/cache/src',
         ),
         'League\\Container\\' => 
         array (
@@ -79,6 +94,14 @@ class ComposerStaticInitb06849ee0bfb6f5210008270e965b9da
         'FastRoute\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/fast-route/src',
+        ),
+        'Doctrine\\Deprecations\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/deprecations/lib/Doctrine/Deprecations',
+        ),
+        'Doctrine\\DBAL\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/dbal/src',
         ),
     );
 

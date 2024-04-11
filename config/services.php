@@ -9,6 +9,7 @@ use League\Container\Argument\Literal\ArrayArgument;
 use League\Container\Argument\Literal\StringArgument;
 use League\Container\Container;
 use League\Container\ReflectionContainer;
+use Symfony\Component\Dotenv\Dotenv;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -16,10 +17,14 @@ use Twig\Loader\FilesystemLoader;
  * Application parameters
  */
 
-$request = Request::createFromRequest();
+$env = new Dotenv();
+$env->load(APP_PATH . '/.env');
+
+$request = Request::createFromGlobals();
 $routes = require APP_PATH . '/config/web.php';
 $envStatus = $_ENV['APP_ENV'];
 $views = APP_PATH . '/views';
+
 
 /**
  * Dependencies bindings

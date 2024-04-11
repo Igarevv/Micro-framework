@@ -10,8 +10,12 @@ return array(
     'Symfony\\Polyfill\\Php80\\' => array($vendorDir . '/symfony/polyfill-php80'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Polyfill\\Ctype\\' => array($vendorDir . '/symfony/polyfill-ctype'),
+    'Psr\\Log\\' => array($vendorDir . '/psr/log/src'),
     'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
+    'Psr\\Cache\\' => array($vendorDir . '/psr/cache/src'),
     'League\\Container\\' => array($vendorDir . '/league/container/src'),
     'Igarevv\\Micrame\\' => array($baseDir . '/src'),
     'FastRoute\\' => array($vendorDir . '/nikic/fast-route/src'),
+    'Doctrine\\Deprecations\\' => array($vendorDir . '/doctrine/deprecations/lib/Doctrine/Deprecations'),
+    'Doctrine\\DBAL\\' => array($vendorDir . '/doctrine/dbal/src'),
 );

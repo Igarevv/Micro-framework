@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+
+<?php
+
+use Igarevv\Micrame\Console\ConsoleKernel;
+use League\Container\Container;
+
+const APP_PATH = __DIR__;
+
+require APP_PATH . '/vendor/autoload.php';
+
+/** @var Container $container */
+$container = require APP_PATH . '/config/console.php';
+
+$kernel = $container->get(ConsoleKernel::class);
+
+$status = $kernel->handle();
