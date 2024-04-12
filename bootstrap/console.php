@@ -3,6 +3,7 @@
 use Igarevv\Micrame\Console\Commands\MigrateCommand;
 use Igarevv\Micrame\Console\ConsoleApplication;
 use Igarevv\Micrame\Console\ConsoleKernel;
+use League\Container\Argument\Literal\StringArgument;
 use League\Container\Container;
 use Symfony\Component\Dotenv\Dotenv;
 use Igarevv\Micrame\Database\DatabaseConnection;
@@ -15,6 +16,7 @@ use Doctrine\DBAL\Connection;
 $env = new Dotenv();
 $env->load(APP_PATH . '/.env');
 
+$migrationPath = APP_PATH.'/database/migrations';
 $container = new Container();
 
 $connectionParams = [
@@ -43,7 +45,8 @@ $container->addShared(Connection::class, function () use ($container): Connectio
     return $container->get(DatabaseConnection::class)->connect();
 });
 
-$container->add('migrate', MigrateCommand::class)
-    ->addArgument(Connection::class);
+$container->add('migration:migrate', MigrateCommand::class)
+    ->addArgument(Connection::class)
+    ->addArgument(new StringArgument($migrationPath));
 
 return $container;

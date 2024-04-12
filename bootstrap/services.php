@@ -21,7 +21,7 @@ $env = new Dotenv();
 $env->load(APP_PATH . '/.env');
 
 $request = Request::createFromGlobals();
-$routes = require APP_PATH . '/config/web.php';
+$routes = require APP_PATH . '/bootstrap/web.php';
 $envStatus = $_ENV['APP_ENV'];
 $views = APP_PATH . '/views';
 

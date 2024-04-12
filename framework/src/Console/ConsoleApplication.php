@@ -16,18 +16,19 @@ class ConsoleApplication
     {
         $argv = $_SERVER['argv'];
 
-        $command = $argv[1] ?? null;
+        $commandType = $argv[1] ?? null;
+        $action = $argv[2] ?? null;
 
-        if ( ! $command){
-            throw new NullCommandException('Command name is required');
+        if ( ! $commandType && ! $action){
+            throw new NullCommandException('Command line required type and action');
         }
 
-        $params = array_slice($argv, 2);
+        $params = array_slice($argv, 3);
         $options = $this->parseParamsFromConsole($params);
 
         /** @var CommandInterface $commandExecutor*/
 
-        $commandExecutor = $this->container->get($command);
+        $commandExecutor = $this->container->get("{$commandType}:{$action}");
 
         return $commandExecutor->execute($options);
     }

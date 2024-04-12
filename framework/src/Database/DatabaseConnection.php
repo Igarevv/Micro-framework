@@ -13,6 +13,8 @@ class DatabaseConnection
 
     public function connect(): Connection
     {
-        return DriverManager::getConnection($this->params);
+        $connection = DriverManager::getConnection($this->params);
+
+        return $connection;
     }
 }
