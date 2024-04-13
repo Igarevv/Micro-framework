@@ -15,3 +15,4 @@ $container = require APP_PATH . '/bootstrap/console.php';
 $kernel = $container->get(ConsoleKernel::class);
 
 $status = $kernel->handle();
+

@@ -8,22 +8,25 @@ use Psr\Container\ContainerInterface;
 
 class ConsoleKernel
 {
-    private string $commandType;
+
+    private ?string $commandType;
 
     public function __construct(
       private ContainerInterface $container,
       private ConsoleApplication $application
-    ) {
-        $this->commandType = $_SERVER['argv'][1] ?? null;
-        if (! $this->commandType){
-            throw new NullCommandException('Command line required type and action');
-        }
-    }
+    ) {}
 
     public function handle(): int
     {
-        $this->registerSystemCommands();
-        return $this->application->run();
+        try {
+            $this->registerSystemCommands();
+
+            $status = $this->application->run();
+        } catch (\Throwable $e) {
+            echo $e->getMessage();
+            return 1;
+        }
+        return $status;
     }
 
     private function registerSystemCommands(): void
@@ -31,6 +34,12 @@ class ConsoleKernel
         $directoryIterator = new \DirectoryIterator(__DIR__.'/Commands');
 
         $namespace = 'Igarevv\\Micrame\\Console\\Commands\\';
+
+        $this->commandType = $_SERVER['argv'][1] ?? null;
+
+        if ( ! $this->commandType) {
+            throw new NullCommandException('Command line required type and action');
+        }
 
         /** @var \DirectoryIterator $file */
         foreach ($directoryIterator as $file) {
@@ -46,7 +55,8 @@ class ConsoleKernel
                   ->getProperty('action')
                   ->getDefaultValue();
 
-                $this->container->add("{$this->commandType}:{$value}", $commandNamespace);
+                $this->container->add("{$this->commandType}:{$value}",
+                  $commandNamespace);
             }
         }
     }

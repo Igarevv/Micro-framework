@@ -34,7 +34,7 @@ class MigrateCommand implements CommandInterface
 
             echo "Migration process completed successfully".PHP_EOL;
             return 0;
-        } catch (\Throwable $e){
+        } catch (\Throwable $e) {
             $this->connection->rollBack();
 
             throw $e;
@@ -44,6 +44,7 @@ class MigrateCommand implements CommandInterface
     private function executeMigration(Schema $schema): void
     {
         $arraySql = $schema->toSql($this->connection->getDatabasePlatform());
+
         foreach ($arraySql as $sql) {
             $this->connection->executeQuery($sql);
         }
@@ -51,19 +52,28 @@ class MigrateCommand implements CommandInterface
 
     private function prepareNewSchema(array $diffBetweenMigrations): Schema
     {
-        if (! $diffBetweenMigrations){
+        if ( ! $diffBetweenMigrations) {
             throw new MigrationException('All migrations is up to date');
         }
 
         $schema = new Schema();
+
+        $numOfTablesInSchema = 0;
+
         foreach ($diffBetweenMigrations as $migration) {
             $migrationClass = require $this->migrationPath."/{$migration}";
 
+            ++$numOfTablesInSchema;
+
             $migrationClass->up($schema);
 
-            $this->addMigrationToDb($migration);
+            if (count($schema->getTables()) === $numOfTablesInSchema) {
+                $this->addMigrationToDb($migration);
+            } else {
+                --$numOfTablesInSchema;
+                echo "Migration {$migration} does not have execution code and will be skipped".PHP_EOL;
+            }
         }
-
         return $schema;
     }
 
@@ -120,8 +130,9 @@ class MigrateCommand implements CommandInterface
 
         $builder->insert(self::MIGRATION_TABLE_NAME)
           ->values(['migration' => ':migration'])
-          ->setParameter('migration', $migration)
-          ->executeQuery();
+          ->setParameter('migration', $migration);
+
+        $builder->executeQuery();
     }
 
 }
