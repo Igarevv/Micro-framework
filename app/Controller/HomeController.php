@@ -10,7 +10,7 @@ class HomeController extends Controller
 
     public function index(): Response
     {
-        return $this->render('home.html.twig');
+        return $this->render('home.admin.main.twig');
     }
 
 }

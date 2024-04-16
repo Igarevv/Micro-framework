@@ -26,14 +26,14 @@ class Kernel
               $this->container);
 
             $response = call_user_func_array($handler, $args);
-        } catch (\Throwable $e) {
+        } catch (\Exception|\Throwable $e) {
             $response = $this->handleErrorByAppStatus($e);
         }
 
         return $response;
     }
 
-    private function handleErrorByAppStatus(\Throwable $e): Response
+    private function handleErrorByAppStatus(\Throwable|\Exception $e): Response
     {
         if (in_array($this->appStatus, ['local', 'dev', 'test'])) {
             throw $e;

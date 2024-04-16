@@ -1,0 +1,50 @@
+{% extends '/admin/admin.main.twig' %}
+
+{% block main %}
+    <div class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-center align-items-center h-100 mt-4 bg-light">
+            <form class="w-75">
+                <div class="form-group">
+                    <label class="text-primary" for="exampleInputEmail1">Book title</label>
+                    <input type="text" class="form-control" name="book_name" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter book name" required>
+                </div>
+                <div class="d-flex justify-content-center" style="gap: 10%">
+                    <div class="form-group">
+                        <label class="text-primary" for="exampleInputFirstName">Author first name</label>
+                        <input type="text" class="form-control" name="first_name" id="exampleInputFirstName" aria-describedby="emailHelp" placeholder="Enter first name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="text-primary" for="exampleInputLastName">Author last name</label>
+                        <input type="text" class="form-control" name="last_name" id="exampleInputLastName" aria-describedby="emailHelp" placeholder="Enter last name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="text-primary" for="exampleInputLastName">Publication year (ex. 2000)</label>
+                        <input type="text" class="form-control" name="year" id="exampleInputLastName" aria-describedby="emailHelp" placeholder="2000" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="text-primary" for="exampleFormControlSelect2">Example multiple select</label>
+                    <select multiple class="form-control" id="exampleFormControlSelect2" required>
+                        <option value="horror">Horror</option>
+                        <option value="drama">Drama</option>
+                        <option value="fantasy">Fantasy</option>
+                        <option value="roman">Roman</option>
+                        <option value="comedy">Comedy</option>
+                        <option value="adventure">Adventure</option>
+                        <option value="documentary">Documentary</option>
+                    </select>
+                    <small id="emailHelp" class="form-text text-muted">Hold CTRL for multiply choice.</small>
+                </div>
+                <div class="form-group">
+                    <label class="text-primary" for="exampleFormControlTextarea1">Description</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="text-primary" for="exampleFormControlFile1">Book image</label>
+                    <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

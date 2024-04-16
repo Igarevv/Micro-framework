@@ -4,6 +4,7 @@ namespace Igarevv\Micrame\Router;
 
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
+use Igarevv\Micrame\Controller\Controller;
 use Igarevv\Micrame\Exceptions\Http\HttpNotFoundException;
 use Igarevv\Micrame\Exceptions\Http\MethodNotAllowedException;
 
@@ -27,6 +28,10 @@ class Router implements RouterInterface
             [$controllerName, $method] = $handler;
 
             $controller = $container->get($controllerName);
+
+            if (is_subclass_of($controller, Controller::class)){
+                $controller->setRequest($request);
+            }
 
             $handler = [$controller, $method];
         }

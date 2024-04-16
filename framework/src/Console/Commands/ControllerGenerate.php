@@ -7,6 +7,8 @@ use Igarevv\Micrame\Console\Exceptions\GeneratorException;
 class ControllerGenerate implements CommandInterface
 {
 
+    private string $type = 'controller';
+
     private string $action = 'generate';
 
     private array $config;

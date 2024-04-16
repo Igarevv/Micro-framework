@@ -9,8 +9,6 @@ use Psr\Container\ContainerInterface;
 class ConsoleKernel
 {
 
-    private ?string $commandType;
-
     public function __construct(
       private ContainerInterface $container,
       private ConsoleApplication $application
@@ -18,11 +16,12 @@ class ConsoleKernel
 
     public function handle(): int
     {
+
         try {
             $this->registerSystemCommands();
 
             $status = $this->application->run();
-        } catch (\Throwable $e) {
+        } catch (\Throwable|\Exception $e) {
             echo $e->getMessage();
             return 1;
         }
@@ -35,12 +34,6 @@ class ConsoleKernel
 
         $namespace = 'Igarevv\\Micrame\\Console\\Commands\\';
 
-        $this->commandType = $_SERVER['argv'][1] ?? null;
-
-        if ( ! $this->commandType) {
-            throw new NullCommandException('Command line required type and action');
-        }
-
         /** @var \DirectoryIterator $file */
         foreach ($directoryIterator as $file) {
             if ( ! $file->isFile()) {
@@ -51,11 +44,12 @@ class ConsoleKernel
                 PATHINFO_FILENAME);
 
             if (is_subclass_of($commandNamespace, CommandInterface::class)) {
-                $value = (new \ReflectionClass($commandNamespace))
-                  ->getProperty('action')
-                  ->getDefaultValue();
+                $reflection = new \ReflectionClass($commandNamespace);
 
-                $this->container->add("{$this->commandType}:{$value}",
+                $type = $reflection->getProperty('type')->getDefaultValue();
+                $action = $reflection->getProperty('action')->getDefaultValue();
+
+                $this->container->add("{$type}:{$action}",
                   $commandNamespace);
             }
         }

@@ -2,6 +2,7 @@
 
 namespace Igarevv\Micrame\Controller;
 
+use Igarevv\Micrame\Http\RequestInterface;
 use Igarevv\Micrame\Http\Response;
 use Psr\Container\ContainerInterface;
 use Twig\Environment;
@@ -9,6 +10,7 @@ use Twig\Environment;
 abstract class Controller
 {
     private ?ContainerInterface $container = null;
+    private RequestInterface $request;
 
     public function setContainer(ContainerInterface $container)
     {
@@ -20,6 +22,15 @@ abstract class Controller
         return $this->container;
     }
 
+    public function setRequest(RequestInterface $request)
+    {
+        $this->request = $request;
+    }
+
+    protected function request(): RequestInterface
+    {
+        return $this->request;
+    }
     public function render(string $path, array $arguments = []): Response
     {
         /** @var Environment $twig */

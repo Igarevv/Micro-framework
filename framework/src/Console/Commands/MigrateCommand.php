@@ -10,6 +10,8 @@ use Igarevv\Micrame\Console\Exceptions\MigrationException;
 class MigrateCommand implements CommandInterface
 {
 
+    private string $type = 'migration';
+
     private string $action = 'migrate';
 
     private const MIGRATION_TABLE_NAME = 'migrations';
@@ -21,24 +23,30 @@ class MigrateCommand implements CommandInterface
 
     public function execute(array $params = []): int
     {
+        $this->createMigrationTable();
+
+        $this->connection->setAutoCommit(false);
+
+        $this->connection->beginTransaction();
         try {
-            $this->createMigrationTable();
-
-            $this->connection->beginTransaction();
-
             $appliedMigrations = $this->getAppliedMigrations();
+
             $migrationFiles = $this->getUnappliedMigrations($appliedMigrations);
 
             $schema = $this->prepareNewSchema($migrationFiles);
+
             $this->executeMigration($schema);
 
             echo "Migration process completed successfully".PHP_EOL;
-            return 0;
+
+            $this->connection->commit();
         } catch (\Throwable $e) {
             $this->connection->rollBack();
-
-            throw $e;
         }
+        finally {
+            $this->connection->setAutoCommit(true);
+        }
+        return 0;
     }
 
     private function executeMigration(Schema $schema): void
@@ -58,19 +66,18 @@ class MigrateCommand implements CommandInterface
 
         $schema = new Schema();
 
-        $numOfTablesInSchema = 0;
-
         foreach ($diffBetweenMigrations as $migration) {
             $migrationClass = require $this->migrationPath."/{$migration}";
 
-            ++$numOfTablesInSchema;
+            $tablesBeforeMigration = count($schema->getTables());
 
             $migrationClass->up($schema);
 
-            if (count($schema->getTables()) === $numOfTablesInSchema) {
+            $tablesAfterMigration = count($schema->getTables());
+
+            if ($tablesBeforeMigration !== $tablesAfterMigration) {
                 $this->addMigrationToDb($migration);
             } else {
-                --$numOfTablesInSchema;
                 echo "Migration {$migration} does not have execution code and will be skipped".PHP_EOL;
             }
         }

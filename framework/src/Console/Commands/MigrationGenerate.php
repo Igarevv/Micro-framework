@@ -5,6 +5,8 @@ namespace Igarevv\Micrame\Console\Commands;
 class MigrationGenerate implements CommandInterface
 {
 
+    private string $type = 'migration';
+
     private string $action = 'generate';
 
     private array $config;
