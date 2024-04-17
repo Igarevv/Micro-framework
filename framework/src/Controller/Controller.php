@@ -10,7 +10,7 @@ use Twig\Environment;
 abstract class Controller
 {
     private ?ContainerInterface $container = null;
-    private RequestInterface $request;
+    public readonly RequestInterface $request;
 
     public function setContainer(ContainerInterface $container)
     {
@@ -27,10 +27,6 @@ abstract class Controller
         $this->request = $request;
     }
 
-    protected function request(): RequestInterface
-    {
-        return $this->request;
-    }
     public function render(string $path, array $arguments = []): Response
     {
         /** @var Environment $twig */

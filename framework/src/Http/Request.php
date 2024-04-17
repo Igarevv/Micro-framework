@@ -2,6 +2,8 @@
 
 namespace Igarevv\Micrame\Http;
 
+use Igarevv\Micrame\Exceptions\Http\HttpException;
+
 final class Request implements RequestInterface
 {
 
@@ -26,6 +28,33 @@ final class Request implements RequestInterface
     public function getMethod(): string
     {
         return $this->server['REQUEST_METHOD'];
+    }
+
+    public function getPost(array $keys = []): array
+    {
+        if (! $keys){
+            return $this->post;
+        }
+        return array_intersect_key($this->post, array_flip($keys));
+    }
+
+    public function getGet(array $keys = []): array
+    {
+        if (! $keys){
+            return $this->get;
+        }
+        return array_intersect_key($this->get, array_flip($keys));
+    }
+
+    public function getFiles(?string $key = null): array
+    {
+        if (! $key){
+            return $this->files;
+        }
+        if ($this->files[$key]['error'] !== UPLOAD_ERR_OK){
+            throw new HttpException("File error " . $this->files[$key]['error']);
+        }
+        return $this->files[$key];
     }
 
 }

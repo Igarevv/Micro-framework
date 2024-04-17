@@ -1,6 +1,10 @@
 <?php
 
+use App\Repository\AbstractRepository;
+use App\Repository\Interfaces\BookInterface;
+use Doctrine\DBAL\Connection;
 use Igarevv\Micrame\Controller\Controller;
+use Igarevv\Micrame\Database\DatabaseConnection;
 use Igarevv\Micrame\Http\Kernel;
 use Igarevv\Micrame\Http\Request;
 use Igarevv\Micrame\Router\Router;
@@ -25,6 +29,14 @@ $routes = require APP_PATH . '/bootstrap/web.php';
 $envStatus = $_ENV['APP_ENV'];
 $views = APP_PATH . '/views';
 
+$connectionParams = [
+  'dbname' => $_ENV['DB_NAME'],
+  'user' => $_ENV['DB_USER'],
+  'password' => $_ENV['DB_PASS'],
+  'host' => $_ENV['DB_HOST'],
+  'driver' => $_ENV['DB_DRIVER'],
+];
+
 
 /**
  * Dependencies bindings
@@ -40,6 +52,16 @@ $container->add(Kernel::class)
     ->addArgument(RouterInterface::class)
     ->addArgument($container)
     ->addArgument($request);
+
+$container->add(DatabaseConnection::class)
+    ->addArgument($connectionParams);
+
+$container->addShared(Connection::class, function () use ($container){
+    return $container->get(DatabaseConnection::class)->connect();
+});
+
+$container->inflector(AbstractRepository::class)
+  ->invokeMethod('setConnection', [$container->get(Connection::class)]);
 
 $container->add('APP_ENV', new StringArgument($envStatus));
 

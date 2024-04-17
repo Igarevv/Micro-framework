@@ -25,10 +25,7 @@ class MigrateCommand implements CommandInterface
     {
         $this->createMigrationTable();
 
-        $this->connection->setAutoCommit(false);
-
-        $this->connection->beginTransaction();
-        try {
+        $this->connection->transactional(function (){
             $appliedMigrations = $this->getAppliedMigrations();
 
             $migrationFiles = $this->getUnappliedMigrations($appliedMigrations);
@@ -38,14 +35,8 @@ class MigrateCommand implements CommandInterface
             $this->executeMigration($schema);
 
             echo "Migration process completed successfully".PHP_EOL;
+        });
 
-            $this->connection->commit();
-        } catch (\Throwable $e) {
-            $this->connection->rollBack();
-        }
-        finally {
-            $this->connection->setAutoCommit(true);
-        }
         return 0;
     }
 

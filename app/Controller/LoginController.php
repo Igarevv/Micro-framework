@@ -9,7 +9,7 @@ class LoginController extends Controller
 {
     public function signUpIndex(): Response
     {
-        return $this->render('register.admin.main.twig');
+        return $this->render('register.html.twig');
     }
 
     public function register(): Response

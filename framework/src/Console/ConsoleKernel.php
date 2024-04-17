@@ -3,6 +3,7 @@
 namespace Igarevv\Micrame\Console;
 
 use Igarevv\Micrame\Console\Commands\CommandInterface;
+use Igarevv\Micrame\Console\Exceptions\ConsoleException;
 use Igarevv\Micrame\Console\Exceptions\NullCommandException;
 use Psr\Container\ContainerInterface;
 
@@ -22,8 +23,7 @@ class ConsoleKernel
 
             $status = $this->application->run();
         } catch (\Throwable|\Exception $e) {
-            echo $e->getMessage();
-            return 1;
+            $this->displayException($e);
         }
         return $status;
     }
@@ -53,6 +53,16 @@ class ConsoleKernel
                   $commandNamespace);
             }
         }
+    }
+
+    private function displayException(\Exception|\Throwable $exception): void
+    {
+        if ($exception instanceof ConsoleException){
+            echo $exception->getMessage();
+            exit();
+        }
+
+        throw $exception;
     }
 
 }

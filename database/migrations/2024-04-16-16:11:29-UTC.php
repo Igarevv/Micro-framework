@@ -50,9 +50,7 @@ return new class
         $book_author_genre->addColumn('author_id', Types::INTEGER,[
           'unsigned' => true
         ]);
-        $book_author_genre->addColumn('genre', Types::STRING, [
-          'length' => 255
-        ]);
+        $book_author_genre->addColumn('genre', Types::JSON);
         $book_author_genre->setPrimaryKey(['id']);
         $book_author_genre->addForeignKeyConstraint('book', ['book_id'], ['id'], ['onDelete' => 'CASCADE']);
         $book_author_genre->addForeignKeyConstraint('author', ['author_id'], ['id'], ['onDelete' => 'CASCADE']);
