@@ -3,10 +3,11 @@
 namespace App\Repository;
 
 use App\Entities\BookCollection;
-use App\Repository\Interfaces\BookInterface;
+use App\Repository\Interfaces\BookRepositoryInterface;
 use Doctrine\DBAL\Query\QueryBuilder;
 
-class BookRepository extends AbstractRepository implements BookInterface
+class BookRepository extends AbstractRepository implements
+  BookRepositoryInterface
 {
 
     public function save(BookCollection $bookCollection): void
@@ -17,48 +18,87 @@ class BookRepository extends AbstractRepository implements BookInterface
 
             $authorId = $this->saveAuthor($builder, $bookCollection);
 
-            $builder->insert('book_genre_author')
-              ->values(['book_id' => '?', 'author_id' => '?', 'genre' => '?'])
+            $builder->insert('book_author')
+              ->values(['book_id' => '?', 'author_id' => '?'])
               ->setParameter(0, $bookId)
               ->setParameter(1, $authorId)
-              ->setParameter(2, $bookCollection->book->getGenre())
               ->executeQuery();
         });
     }
 
-    public function findAll()
+    public function findAllBookForTable(): array
     {
-        // TODO: Implement findAll() method.
+        $builder = $this->db()->createQueryBuilder();
+
+        $builder->select(
+          'b.id',
+          'b.title',
+          'b.year',
+          'b.isbn',
+          'a.last_name',
+          'a.first_name',
+          'a.last_name',
+          'ba.created_at'
+        )->from('book', 'b')
+          ->join('b', 'book_author', 'ba', 'b.id = ba.book_id')
+          ->join('ba', 'author', 'a', 'a.id = ba.author_id');
+        $books = $builder->fetchAllAssociative();
+
+        return $books ?? [];
     }
 
-    private function saveBook(
-      QueryBuilder $builder,
-      BookCollection $bookCollection
-    ): string|int {
+    public function findAll() {}
+
+    public function deleteBook(mixed $id): void
+    {
+        $this->db()->transactional(function () use ($id){
+            $builder = $this->db()->createQueryBuilder();
+
+            $builder->delete('book_author')
+                ->where('book_id = ?')
+                ->setParameter(0, $id)
+                ->executeQuery();
+        });
+    }
+
+    public function getBookImageId(mixed $id): string|false
+    {
+        $builder = $this->db()->createQueryBuilder();
+
+        $builder->select('image_cdn_id')
+            ->from('book', 'b')
+            ->where('b.id = ?')
+            ->setParameter(0, $id);
+
+        return $builder->fetchOne();
+    }
+
+    private function saveBook(QueryBuilder $builder, BookCollection $bookCollection): string|int
+    {
         $builder->insert('book')
           ->values([
-            'title'        => ':title',
-            'year'         => ':year',
-            'description'  => ':description',
+            'title' => ':title',
+            'year' => ':year',
+            'description' => ':description',
             'image_cdn_id' => ':image_cdn_id',
-            'isbn'         => ':isbn'
+            'isbn' => ':isbn',
+            'genre' => ':genre',
           ])
           ->setParameters([
-            'title'        => $bookCollection->book->getTitle(),
-            'year'         => $bookCollection->book->getYear(),
-            'description'  => $bookCollection->book->getDescription(),
+            'title' => $bookCollection->book->getTitle(),
+            'year' => $bookCollection->book->getYear(),
+            'description' => $bookCollection->book->getDescription(),
             'image_cdn_id' => $bookCollection->book->getImage(),
-            'isbn'         => $bookCollection->book->getIsbn()
+            'isbn' => $bookCollection->book->getIsbn(),
+            'genre' => $bookCollection->book->getGenre(),
           ])
           ->executeQuery();
 
         return $this->db()->lastInsertId();
     }
 
-    private function saveAuthor(
-      QueryBuilder $builder,
-      BookCollection $bookCollection
-    ): string|int {
+    private function saveAuthor(QueryBuilder $builder, BookCollection $bookCollection): string|int
+    {
         $builder->insert('author')
           ->values(['first_name' => '?', 'last_name' => '?'])
           ->setParameter(0, $bookCollection->author->firstName())

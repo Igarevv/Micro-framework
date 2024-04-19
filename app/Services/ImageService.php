@@ -4,13 +4,34 @@ namespace App\Services;
 
 use App\DTO\Image;
 use App\Exceptions\ImageException;
+use App\Repository\Interfaces\ImageRepositoryInterface;
 
 class ImageService
 {
 
-    public function uploadImage() {}
+    public function __construct(
+      protected ImageRepositoryInterface $repository
+    ) {}
 
-    public function image(array $imageData): Image
+    public function uploadImage(Image $image): bool
+    {
+        $response = $this->repository->save($image);
+        if (! $response){
+            throw new ImageException('Service Cloudinary unavailable', 500);
+        }
+        return true;
+    }
+
+    public function deleteImage(string $imageId): bool
+    {
+        if ($this->repository->delete($imageId)){
+            throw new ImageException('Image was not deleted');
+        }
+
+        return true;
+    }
+
+    public function imageDto(array $imageData): Image
     {
         if ( ! $this->allowedExtension($imageData['name'])) {
             throw new ImageException("Please choose file with image file type",

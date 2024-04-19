@@ -53,7 +53,6 @@ class Router implements RouterInterface
         });
 
         $routeInfo = $dispatcher->dispatch($request->getMethod(), $request->getUri());
-
         [$controllerInfo, $args] = $this->findRouteOrFail($routeInfo);
 
         return [$controllerInfo, $args];

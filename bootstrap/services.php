@@ -1,7 +1,11 @@
 <?php
 
 use App\Repository\AbstractRepository;
-use App\Repository\Interfaces\BookInterface;
+use App\Repository\BookRepository;
+use App\Repository\ImageCloudinaryRepository;
+use App\Repository\Interfaces\BookRepositoryInterface;
+use App\Repository\Interfaces\ImageRepositoryInterface;
+use Cloudinary\Cloudinary;
 use Doctrine\DBAL\Connection;
 use Igarevv\Micrame\Controller\Controller;
 use Igarevv\Micrame\Database\DatabaseConnection;
@@ -37,6 +41,13 @@ $connectionParams = [
   'driver' => $_ENV['DB_DRIVER'],
 ];
 
+$cloudinary = new Cloudinary([
+  'cloud' => [
+    'cloud_name' => $_ENV['CLOUD_NAME'],
+    'api_key'    => $_ENV['CLOUD_API'],
+    'api_secret' => $_ENV['API_SECRET'],
+  ],
+]);
 
 /**
  * Dependencies bindings
@@ -76,5 +87,9 @@ $container->addShared('twig-file-loader', FilesystemLoader::class)
 
 $container->addShared('twig', Environment::class)
     ->addArgument('twig-file-loader');
+
+$container->add(BookRepositoryInterface::class, BookRepository::class);
+$container->add(ImageRepositoryInterface::class, ImageCloudinaryRepository::class)
+    ->addArgument($cloudinary);
 
 return $container;

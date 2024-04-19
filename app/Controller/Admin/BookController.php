@@ -2,12 +2,11 @@
 
 namespace App\Controller\Admin;
 
-use App\Entities\Author;
-use App\Entities\Book;
 use App\Services\BookService;
 use App\Services\ImageService;
 use Igarevv\Micrame\Controller\Controller;
 use Igarevv\Micrame\Http\Response;
+use Igarevv\Micrame\Http\RedirectResponse;
 
 class BookController extends Controller
 {
@@ -21,24 +20,34 @@ class BookController extends Controller
     {
         $authorData = $this->request->getPost(['first_name', 'last_name']);
         $bookData = $this->request->getPost([
-          'title', 'year', 'genre', 'description',
+          'title', 'year', 'genre', 'description', 'isbn',
         ]);
         $imageData = $this->request->getFiles('image');
 
         try {
-            $image = $this->imageService->image($imageData);
+            $image = $this->imageService->imageDto($imageData);
 
-            $bookCollection = $this->bookService->createBook($bookData,
+            $bookCollection = $this->bookService->createFullBookEntity($bookData,
               $authorData, $image);
 
-            $this->bookService->save($bookCollection);
-
+            $this->bookService->save($bookCollection, $this->imageService);
 
         } catch (\Exception $e) {
-            throw $e;
+            return new RedirectResponse('/admin/add-book');
+        }
+
+        return new RedirectResponse('/admin/list');
+    }
+
+    public function delete(int $id): Response
+    {
+        try {
+            $this->bookService->deleteBook($id, $this->imageService);
+
+        } catch (\Throwable $e){
+            return new RedirectResponse('/admin/list');
         }
 
         return new Response();
     }
-
 }

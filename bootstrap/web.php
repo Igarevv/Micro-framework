@@ -12,5 +12,7 @@ return [
   Route::post('/sign-up', [LoginController::class, 'register']),
   Route::get('/admin/add-book', [AdminController::class, 'showBookForm']),
   Route::post('/admin/add-book', [BookController::class, 'add']),
-  Route::get('/admin/main', [AdminController::class, 'index'])
+  Route::get('/admin/main', [AdminController::class, 'index']),
+  Route::get('/admin/list', [AdminController::class, 'showBookList']),
+  Route::delete('/admin/book/{id}', [BookController::class, 'delete']),
 ];

@@ -21,9 +21,10 @@ class Book
       array|string $genre,
       string $description,
       string $image,
+      int $isbn,
       ?int $id = null
-    ) {
-        return new static($title, $year, $genre, $description, $image, $id);
+    ):static {
+        return new static($title, $year, $genre, $description, $image, $isbn, $id);
     }
 
     public function getId(): ?int
