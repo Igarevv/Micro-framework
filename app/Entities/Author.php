@@ -11,7 +11,7 @@ class Author
       private readonly ?int $id = null
     ) {}
 
-    public static function fromCreate(
+    public static function fromState(
       string $name,
       string $surname,
       ?int $id = null

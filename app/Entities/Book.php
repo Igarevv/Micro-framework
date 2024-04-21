@@ -15,7 +15,7 @@ class Book
       private readonly ?int $id = null
     ) {}
 
-    public static function fromCreate(
+    public static function fromState(
       string $title,
       int $year,
       array|string $genre,

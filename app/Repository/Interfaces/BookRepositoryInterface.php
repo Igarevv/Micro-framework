@@ -10,9 +10,11 @@ interface BookRepositoryInterface
 
     public function findAll();
 
-    public function findAllBookForTable();
+    public function findAllBooksForTable(): array;
 
     public function deleteBook(mixed $id);
 
     public function getBookImageId(mixed $id): string|false;
+
+    public function getAllBooksForHomePage(): array;
 }

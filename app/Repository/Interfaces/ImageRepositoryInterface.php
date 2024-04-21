@@ -9,4 +9,6 @@ interface ImageRepositoryInterface
     public function save(Image $image);
 
     public function delete(string $imageId);
+
+    public function getImage(string $id);
 }

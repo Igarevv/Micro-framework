@@ -5,6 +5,7 @@ namespace App\Services;
 use App\DTO\Image;
 use App\Exceptions\ImageException;
 use App\Repository\Interfaces\ImageRepositoryInterface;
+use Ramsey\Uuid\Uuid;
 
 class ImageService
 {
@@ -31,6 +32,11 @@ class ImageService
         return true;
     }
 
+    public function getImageUrl(string $imageId)
+    {
+        return $this->repository->getImage($imageId);
+    }
+
     public function imageDto(array $imageData): Image
     {
         if ( ! $this->allowedExtension($imageData['name'])) {
@@ -40,12 +46,10 @@ class ImageService
 
         $extension = pathinfo($imageData['name'], PATHINFO_EXTENSION);
 
-        $id = uniqid('', true);
-        $randInt = random_int(0, 1000);
-        $newFileName = "{$id}{$randInt}";
+        $imageId = Uuid::uuid4()->toString();
 
         return new Image(
-          name: $newFileName,
+          name: $imageId,
           tmpPath: $imageData['tmp_name'],
           type: $extension
         );

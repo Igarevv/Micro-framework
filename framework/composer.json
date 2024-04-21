@@ -18,7 +18,8 @@
     "league/container": "^4.2.0",
     "twig/twig": "^3.5.0",
     "doctrine/dbal": "^4.0.0",
-    "cloudinary/cloudinary_php": "^2"
+    "cloudinary/cloudinary_php": "^2",
+    "ramsey/uuid": "^4.7.5"
   }
   ,
   "require-dev": {

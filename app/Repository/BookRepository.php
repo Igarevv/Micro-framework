@@ -4,11 +4,16 @@ namespace App\Repository;
 
 use App\Entities\BookCollection;
 use App\Repository\Interfaces\BookRepositoryInterface;
+use App\Repository\Mappers\BookMapper;
 use Doctrine\DBAL\Query\QueryBuilder;
 
 class BookRepository extends AbstractRepository implements
   BookRepositoryInterface
 {
+
+    public function __construct(
+      private BookMapper $mapper
+    ) {}
 
     public function save(BookCollection $bookCollection): void
     {
@@ -26,7 +31,7 @@ class BookRepository extends AbstractRepository implements
         });
     }
 
-    public function findAllBookForTable(): array
+    public function findAllBooksForTable(): array
     {
         $builder = $this->db()->createQueryBuilder();
 
@@ -37,27 +42,46 @@ class BookRepository extends AbstractRepository implements
           'b.isbn',
           'a.last_name',
           'a.first_name',
-          'a.last_name',
           'ba.created_at'
         )->from('book', 'b')
           ->join('b', 'book_author', 'ba', 'b.id = ba.book_id')
           ->join('ba', 'author', 'a', 'a.id = ba.author_id');
         $books = $builder->fetchAllAssociative();
 
-        return $books ?? [];
+        return $this->mapper->convertDataToBookCollectionForTable($books);
     }
 
     public function findAll() {}
 
+    public function getAllBooksForHomePage(): array
+    {
+        $builder = $this->db()->createQueryBuilder();
+
+        $builder->select(
+          'b.id',
+          'b.title',
+          'b.image_cdn_id',
+          'a.first_name',
+          'a.last_name'
+        )
+          ->from('book', 'b')
+          ->join('b', 'book_author', 'ba', 'b.id = ba.book_id')
+          ->join('ba', 'author', 'a', 'a.id = ba.author_id');
+
+        $books = $builder->fetchAllAssociative();
+
+        return $books ?? [];
+    }
+
     public function deleteBook(mixed $id): void
     {
-        $this->db()->transactional(function () use ($id){
+        $this->db()->transactional(function () use ($id) {
             $builder = $this->db()->createQueryBuilder();
 
             $builder->delete('book_author')
-                ->where('book_id = ?')
-                ->setParameter(0, $id)
-                ->executeQuery();
+              ->where('book_id = ?')
+              ->setParameter(0, $id)
+              ->executeQuery();
         });
     }
 
@@ -66,15 +90,17 @@ class BookRepository extends AbstractRepository implements
         $builder = $this->db()->createQueryBuilder();
 
         $builder->select('image_cdn_id')
-            ->from('book', 'b')
-            ->where('b.id = ?')
-            ->setParameter(0, $id);
+          ->from('book', 'b')
+          ->where('b.id = ?')
+          ->setParameter(0, $id);
 
         return $builder->fetchOne();
     }
 
-    private function saveBook(QueryBuilder $builder, BookCollection $bookCollection): string|int
-    {
+    private function saveBook(
+      QueryBuilder $builder,
+      BookCollection $bookCollection
+    ): string|int {
         $builder->insert('book')
           ->values([
             'title' => ':title',
@@ -97,8 +123,10 @@ class BookRepository extends AbstractRepository implements
         return $this->db()->lastInsertId();
     }
 
-    private function saveAuthor(QueryBuilder $builder, BookCollection $bookCollection): string|int
-    {
+    private function saveAuthor(
+      QueryBuilder $builder,
+      BookCollection $bookCollection
+    ): string|int {
         $builder->insert('author')
           ->values(['first_name' => '?', 'last_name' => '?'])
           ->setParameter(0, $bookCollection->author->firstName())

@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
+use App\DTO\BookPreviewDto;
 use App\DTO\Image;
-use App\DTO\TableBookData;
 use App\Entities\Author;
 use App\Entities\Book;
 use App\Entities\BookCollection;
@@ -17,39 +17,9 @@ class BookService
       protected BookRepositoryInterface $repository
     ) {}
 
-    public function save(BookCollection $bookCollection, ImageService $imageService): void
+    public function save(BookCollection $bookCollection): void
     {
-        try {
-            $this->repository->save($bookCollection);
-
-            $imageService->uploadImage($bookCollection->image);
-        } catch (\Throwable $e){
-            throw $e;
-        }
-    }
-
-    public function getBooksForTable(): array
-    {
-        $booksFromDb = $this->repository->findAllBookForTable();
-
-        if (! $booksFromDb){
-            throw new BookException('Books not found');
-        }
-
-        $booksInstance = [];
-        foreach ($this->getBook($booksFromDb) as $book){
-            $booksInstance[] = new TableBookData(
-              bookId: $book['id'],
-              title: $book['title'],
-              firstName: $book['first_name'],
-              lastName: $book['last_name'],
-              isbn: $book['isbn'],
-              year: $book['year'],
-              time: $book['created_at']
-            );
-        }
-
-        return $booksInstance;
+        $this->repository->save($bookCollection);
     }
 
     public function deleteBook(int $id, ImageService $imageService): void
@@ -59,10 +29,44 @@ class BookService
 
             $this->repository->deleteBook($id);
 
-            $result = $imageService->deleteImage($imageId);
+            $imageService->deleteImage($imageId);
         } catch (\Throwable $e){
             throw $e;
         }
+    }
+
+    public function getBooksForTable(): array
+    {
+        $booksFromDb = $this->repository->findAllBooksForTable();
+
+        if (! $booksFromDb){
+            throw new BookException('Books not found');
+        }
+
+        return $booksFromDb;
+    }
+
+    public function getBookForHomePage(ImageService $service): array
+    {
+        $booksFromDb = $this->repository->getAllBooksForHomePage();
+
+        if (! $booksFromDb){
+            throw new BookException('Books not found');
+        }
+
+        $collection = [];
+        foreach ($booksFromDb as $item){
+            $url = $service->getImageUrl($item['image_cdn_id']);
+            $collection[] = new BookPreviewDto(
+              title: $item['title'],
+              firstName: $item['first_name'],
+              lastName: $item['last_name'],
+              imageUrl: $url,
+              bookId: $item['id']
+            );
+        }
+
+        return $collection;
     }
 
     public function getImageId(mixed $id): string
@@ -78,7 +82,7 @@ class BookService
 
     public function bookEntity(array $bookData, string $image): Book
     {
-        return Book::fromCreate(
+        return Book::fromState(
           title: $bookData['title'],
           year: $bookData['year'],
           genre: $bookData['genre'],
@@ -88,10 +92,9 @@ class BookService
         );
     }
 
-
     public function authorEntity(array $authorData): Author
     {
-        return Author::fromCreate(
+        return Author::fromState(
           name: $authorData['first_name'],
           surname: $authorData['last_name']
         );
@@ -105,7 +108,6 @@ class BookService
         return new BookCollection(
           book: $book,
           author: $author,
-          image: $image
         );
     }
 

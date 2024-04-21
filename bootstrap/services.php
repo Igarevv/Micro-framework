@@ -5,6 +5,7 @@ use App\Repository\BookRepository;
 use App\Repository\ImageCloudinaryRepository;
 use App\Repository\Interfaces\BookRepositoryInterface;
 use App\Repository\Interfaces\ImageRepositoryInterface;
+use App\Repository\Mappers\BookMapper;
 use Cloudinary\Cloudinary;
 use Doctrine\DBAL\Connection;
 use Igarevv\Micrame\Controller\Controller;
@@ -88,7 +89,9 @@ $container->addShared('twig-file-loader', FilesystemLoader::class)
 $container->addShared('twig', Environment::class)
     ->addArgument('twig-file-loader');
 
-$container->add(BookRepositoryInterface::class, BookRepository::class);
+$container->add(BookRepositoryInterface::class, BookRepository::class)
+    ->addArgument(BookMapper::class);
+
 $container->add(ImageRepositoryInterface::class, ImageCloudinaryRepository::class)
     ->addArgument($cloudinary);
 

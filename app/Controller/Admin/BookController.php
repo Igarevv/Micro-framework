@@ -30,8 +30,8 @@ class BookController extends Controller
             $bookCollection = $this->bookService->createFullBookEntity($bookData,
               $authorData, $image);
 
-            $this->bookService->save($bookCollection, $this->imageService);
-
+            $this->bookService->save($bookCollection);
+            $this->imageService->uploadImage($image);
         } catch (\Exception $e) {
             return new RedirectResponse('/admin/add-book');
         }
@@ -43,11 +43,11 @@ class BookController extends Controller
     {
         try {
             $this->bookService->deleteBook($id, $this->imageService);
-
-        } catch (\Throwable $e){
+        } catch (\Throwable $e) {
             return new RedirectResponse('/admin/list');
         }
 
         return new Response();
     }
+
 }
