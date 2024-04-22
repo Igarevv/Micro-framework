@@ -66,7 +66,7 @@ class Session implements SessionInterface
 
     public function hasFlash(string $type): bool
     {
-        return array_key_exists($type, $_SESSION[self::FLASH]);
+        return isset($_SESSION[self::FLASH][$type]);
     }
 
     public function clearFlash(string $type): void
