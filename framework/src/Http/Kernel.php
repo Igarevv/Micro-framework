@@ -7,6 +7,7 @@ use Igarevv\Micrame\Exceptions\Http\HttpException;
 use Igarevv\Micrame\Http\Middleware\RequestHandlerInterface;
 use Igarevv\Micrame\Http\Request\RequestInterface;
 use Igarevv\Micrame\Http\Response\Response;
+use Igarevv\Micrame\Session\Session;
 use Psr\Container\ContainerInterface;
 
 class Kernel
@@ -31,6 +32,11 @@ class Kernel
         }
 
         return $response;
+    }
+
+    public function cleanUp(): void
+    {
+        $this->request->session()?->clearFlash(Session::FLASH);
     }
 
     private function handleErrorByAppStatus(\Throwable|\Exception $e): Response

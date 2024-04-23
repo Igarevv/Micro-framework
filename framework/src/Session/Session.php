@@ -5,7 +5,7 @@ namespace Igarevv\Micrame\Session;
 class Session implements SessionInterface
 {
 
-    private const FLASH = 'flash';
+    public const FLASH = 'flash';
 
     public function start(): void
     {
