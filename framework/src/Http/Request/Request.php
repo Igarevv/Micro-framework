@@ -1,11 +1,14 @@
 <?php
 
-namespace Igarevv\Micrame\Http;
+namespace Igarevv\Micrame\Http\Request;
 
 use Igarevv\Micrame\Exceptions\Http\HttpException;
+use Igarevv\Micrame\Session\SessionInterface;
 
 final class Request implements RequestInterface
 {
+
+    private SessionInterface $session;
 
     public function __construct(
       private readonly array $post,
@@ -32,7 +35,7 @@ final class Request implements RequestInterface
 
     public function getPost(array $keys = []): array
     {
-        if (! $keys){
+        if ( ! $keys) {
             return $this->post;
         }
         return array_intersect_key($this->post, array_flip($keys));
@@ -40,7 +43,7 @@ final class Request implements RequestInterface
 
     public function getGet(array $keys = []): array
     {
-        if (! $keys){
+        if ( ! $keys) {
             return $this->get;
         }
         return array_intersect_key($this->get, array_flip($keys));
@@ -48,13 +51,23 @@ final class Request implements RequestInterface
 
     public function getFiles(?string $key = null): array
     {
-        if (! $key){
+        if ( ! $key) {
             return $this->files;
         }
-        if ($this->files[$key]['error'] !== UPLOAD_ERR_OK){
-            throw new HttpException("File error " . $this->files[$key]['error']);
+        if ($this->files[$key]['error'] !== UPLOAD_ERR_OK) {
+            throw new HttpException("File error ".$this->files[$key]['error']);
         }
         return $this->files[$key];
+    }
+
+    public function setSession(SessionInterface $session): void
+    {
+        $this->session = $session;
+    }
+
+    public function session(): SessionInterface
+    {
+        return $this->session;
     }
 
 }

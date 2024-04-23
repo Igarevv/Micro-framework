@@ -2,7 +2,7 @@
 
 namespace Igarevv\Micrame\Router;
 
-use Igarevv\Micrame\Http\Request;
+use Igarevv\Micrame\Http\Request\RequestInterface;
 use Psr\Container\ContainerInterface;
 
 interface RouterInterface
@@ -10,6 +10,6 @@ interface RouterInterface
 
     public function setRoutes(array $routes): void;
 
-    public function dispatch(Request $request, ContainerInterface $container);
+    public function dispatch(RequestInterface $request, ContainerInterface $container);
 
 }

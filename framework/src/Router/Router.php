@@ -7,10 +7,8 @@ use FastRoute\RouteCollector;
 use Igarevv\Micrame\Controller\Controller;
 use Igarevv\Micrame\Exceptions\Http\HttpNotFoundException;
 use Igarevv\Micrame\Exceptions\Http\MethodNotAllowedException;
-
-use Igarevv\Micrame\Http\RequestInterface;
+use Igarevv\Micrame\Http\Request\RequestInterface;
 use Psr\Container\ContainerInterface;
-
 use function FastRoute\simpleDispatcher;
 
 class Router implements RouterInterface
@@ -18,10 +16,8 @@ class Router implements RouterInterface
 
     private array $routes = [];
 
-    public function dispatch(
-      RequestInterface $request,
-      ContainerInterface $container
-    ): array {
+    public function dispatch(RequestInterface $request, ContainerInterface $container): array
+    {
         [$handler, $args] = $this->routeInfo($request);
 
         if (is_array($handler)) {

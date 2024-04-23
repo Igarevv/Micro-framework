@@ -2,8 +2,8 @@
 
 namespace Igarevv\Micrame\Controller;
 
-use Igarevv\Micrame\Http\RequestInterface;
-use Igarevv\Micrame\Http\Response;
+use Igarevv\Micrame\Http\Request\RequestInterface;
+use Igarevv\Micrame\Http\Response\Response;
 use Igarevv\Micrame\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
 use Twig\Environment;
@@ -12,8 +12,6 @@ abstract class Controller
 {
     private ?ContainerInterface $container = null;
     public readonly RequestInterface $request;
-
-    public readonly SessionInterface $session;
 
     public function setContainer(ContainerInterface $container)
     {
@@ -28,11 +26,6 @@ abstract class Controller
     public function setRequest(RequestInterface $request)
     {
         $this->request = $request;
-    }
-
-    public function setSession(SessionInterface $session): void
-    {
-        $this->session = $session;
     }
 
     public function render(string $path, array $arguments = []): Response

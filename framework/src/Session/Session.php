@@ -7,7 +7,7 @@ class Session implements SessionInterface
 
     private const FLASH = 'flash';
 
-    public function __construct()
+    public function start(): void
     {
         if (session_status() !== PHP_SESSION_ACTIVE){
             session_start();

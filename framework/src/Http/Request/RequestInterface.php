@@ -1,6 +1,8 @@
 <?php
 
-namespace Igarevv\Micrame\Http;
+namespace Igarevv\Micrame\Http\Request;
+
+use Igarevv\Micrame\Session\SessionInterface;
 
 interface RequestInterface
 {
@@ -14,4 +16,9 @@ interface RequestInterface
     public function getGet(array $keys = []): array;
 
     public function getFiles(?string $key = null): array;
+
+    public function setSession(SessionInterface $session): void;
+
+    public function session(): SessionInterface;
+
 }

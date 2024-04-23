@@ -1,1 +1,0 @@
-{"version":1,"defects":{"Unit\\ServiceTest::test_extension":8,"Unit\\ImageServiceTest::test_image_delete":8},"times":{"Unit\\ServiceTest::test_extension":0.004,"Unit\\ImageServiceTest::test_image_delete":0.013}}

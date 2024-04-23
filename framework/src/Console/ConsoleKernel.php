@@ -4,7 +4,6 @@ namespace Igarevv\Micrame\Console;
 
 use Igarevv\Micrame\Console\Commands\CommandInterface;
 use Igarevv\Micrame\Console\Exceptions\ConsoleException;
-use Igarevv\Micrame\Console\Exceptions\NullCommandException;
 use Psr\Container\ContainerInterface;
 
 class ConsoleKernel

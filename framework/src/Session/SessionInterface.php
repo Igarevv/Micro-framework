@@ -4,6 +4,8 @@ namespace Igarevv\Micrame\Session;
 
 interface SessionInterface
 {
+    public function start(): void;
+
     public function get(string $key, mixed $default = null): mixed;
 
     public function set(string $key, mixed $value): void;

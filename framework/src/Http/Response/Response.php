@@ -1,6 +1,6 @@
 <?php
 
-namespace Igarevv\Micrame\Http;
+namespace Igarevv\Micrame\Http\Response;
 
 class Response
 {
