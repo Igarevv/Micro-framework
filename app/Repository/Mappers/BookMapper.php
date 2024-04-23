@@ -2,11 +2,10 @@
 
 namespace App\Repository\Mappers;
 
-use App\DTO\BookPreviewDto;
+use App\DTO\Author;
+use App\DTO\Book;
+use App\DTO\BookCollection;
 use App\DTO\TableBookDto;
-use App\Entities\Author;
-use App\Entities\Book;
-use App\Entities\BookCollection;
 
 class BookMapper
 {
@@ -44,7 +43,7 @@ class BookMapper
               lastName: $item['last_name'],
               isbn: $item['isbn'],
               year: $item['year'],
-              time: $item['created_at']
+              time: $item['created_at'],
             );
         }
 
@@ -59,23 +58,6 @@ class BookMapper
             $collection[] = new BookCollection(
               $this->convertDataToBook($item),
               $this->convertDataToAuthor($item)
-            );
-        }
-
-        return $collection;
-    }
-
-    public function convertDataToBookCollectionPreview(array $data): array
-    {
-        $collection = [];
-
-        foreach ($data as $item) {
-            $collection[] = new BookPreviewDto(
-              title: $item['title'],
-              firstName: $item['first_name'],
-              lastName: $item['last_name'],
-              imageId: $item['image_cdn_id'],
-              bookId: $item['id']
             );
         }
 

@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entities\BookCollection;
+use App\DTO\BookCollection;
 use App\Repository\Interfaces\BookRepositoryInterface;
 use App\Repository\Mappers\BookMapper;
 use Doctrine\DBAL\Query\QueryBuilder;
@@ -42,7 +42,7 @@ class BookRepository extends AbstractRepository implements
           'b.isbn',
           'a.last_name',
           'a.first_name',
-          'ba.created_at'
+          'ba.created_at',
         )->from('book', 'b')
           ->join('b', 'book_author', 'ba', 'b.id = ba.book_id')
           ->join('ba', 'author', 'a', 'a.id = ba.author_id');

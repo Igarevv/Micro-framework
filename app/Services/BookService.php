@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
+use App\DTO\Author;
+use App\DTO\Book;
+use App\DTO\BookCollection;
 use App\DTO\BookPreviewDto;
 use App\DTO\Image;
-use App\Entities\Author;
-use App\Entities\Book;
-use App\Entities\BookCollection;
 use App\Exceptions\BookException;
 use App\Repository\Interfaces\BookRepositoryInterface;
 

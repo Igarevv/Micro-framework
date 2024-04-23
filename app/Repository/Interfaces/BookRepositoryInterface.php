@@ -2,7 +2,7 @@
 
 namespace App\Repository\Interfaces;
 
-use App\Entities\BookCollection;
+use App\DTO\BookCollection;
 
 interface BookRepositoryInterface
 {

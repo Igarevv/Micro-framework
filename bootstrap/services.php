@@ -14,6 +14,9 @@ use Igarevv\Micrame\Http\Kernel;
 use Igarevv\Micrame\Http\Request;
 use Igarevv\Micrame\Router\Router;
 use Igarevv\Micrame\Router\RouterInterface;
+use Igarevv\Micrame\Session\Session;
+use Igarevv\Micrame\Session\SessionInterface;
+use Igarevv\Micrame\View\TwigFactory;
 use League\Container\Argument\Literal\ArrayArgument;
 use League\Container\Argument\Literal\StringArgument;
 use League\Container\Container;
@@ -27,12 +30,12 @@ use Twig\Loader\FilesystemLoader;
  */
 
 $env = new Dotenv();
-$env->load(APP_PATH . '/.env');
+$env->load(APP_PATH.'/.env');
 
 $request = Request::createFromGlobals();
-$routes = require APP_PATH . '/bootstrap/web.php';
+$routes = require APP_PATH.'/bootstrap/web.php';
 $envStatus = $_ENV['APP_ENV'];
-$views = APP_PATH . '/views';
+$views = APP_PATH.'/views';
 
 $connectionParams = [
   'dbname' => $_ENV['DB_NAME'],
@@ -45,7 +48,7 @@ $connectionParams = [
 $cloudinary = new Cloudinary([
   'cloud' => [
     'cloud_name' => $_ENV['CLOUD_NAME'],
-    'api_key'    => $_ENV['CLOUD_API'],
+    'api_key' => $_ENV['CLOUD_API'],
     'api_secret' => $_ENV['API_SECRET'],
   ],
 ]);
@@ -58,41 +61,62 @@ $container = new Container();
 
 $container->delegate(new ReflectionContainer(true));
 
+$container->add('APP_ENV', new StringArgument($envStatus));
+
+$container->add(SessionInterface::class, Session::class);
+
+/**
+ * For kernel and start app
+ */
+
 $container->add(RouterInterface::class, Router::class);
 
 $container->add(Kernel::class)
-    ->addArgument(RouterInterface::class)
-    ->addArgument($container)
-    ->addArgument($request);
+  ->addArgument(RouterInterface::class)
+  ->addArgument($container)
+  ->addArgument($request);
+$container->extend(RouterInterface::class)
+  ->addMethodCall('setRoutes', [new ArrayArgument($routes)]);
+
+$container->inflector(Controller::class)
+  ->invokeMethod('setContainer', [$container])
+  ->invokeMethod('setSession', [$container->get(SessionInterface::class)]);
+
+/**
+ * For database layer
+ */
 
 $container->add(DatabaseConnection::class)
-    ->addArgument($connectionParams);
+  ->addArgument($connectionParams);
 
-$container->addShared(Connection::class, function () use ($container){
+$container->addShared(Connection::class, function () use ($container) {
     return $container->get(DatabaseConnection::class)->connect();
 });
 
 $container->inflector(AbstractRepository::class)
   ->invokeMethod('setConnection', [$container->get(Connection::class)]);
 
-$container->add('APP_ENV', new StringArgument($envStatus));
+/**
+ * For Twig
+ */
 
-$container->extend(RouterInterface::class)
-    ->addMethodCall('setRoutes', [new ArrayArgument($routes)]);
+$container->add('twig-factory', TwigFactory::class)
+    ->addArgument($views)
+    ->addArgument(SessionInterface::class);
 
-$container->inflector(Controller::class)
-    ->invokeMethod('setContainer', [$container]);
+$container->addShared('twig', function () use ($container) {
+    return $container->get('twig-factory')->initialize();
+});
 
-$container->addShared('twig-file-loader', FilesystemLoader::class)
-    ->addArgument($views);
-
-$container->addShared('twig', Environment::class)
-    ->addArgument('twig-file-loader');
+/**
+ * Custom database dependencies
+ */
 
 $container->add(BookRepositoryInterface::class, BookRepository::class)
-    ->addArgument(BookMapper::class);
+  ->addArgument(BookMapper::class);
 
-$container->add(ImageRepositoryInterface::class, ImageCloudinaryRepository::class)
-    ->addArgument($cloudinary);
+$container->add(ImageRepositoryInterface::class,
+  ImageCloudinaryRepository::class)
+  ->addArgument($cloudinary);
 
 return $container;

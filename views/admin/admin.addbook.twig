@@ -2,6 +2,13 @@
 
 {% block main %}
     <div class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+        {% if session().hasFlash('error') %}
+            {% for message in session().flash('error') %}
+                <div class="alert alert-danger mt-2" role="alert">
+                    <p class="mb-0 text-bold">{{ message }}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
         <div class="d-flex justify-content-center align-items-center h-100 mt-4 bg-light">
             <form class="w-75" method="post" action="/admin/add-book" enctype="multipart/form-data">
                 <div class="form-group">

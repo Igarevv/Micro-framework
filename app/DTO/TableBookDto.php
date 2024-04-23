@@ -11,7 +11,7 @@ class TableBookDto
       public readonly string $lastName,
       public readonly int $isbn,
       public readonly int $year,
-      public readonly string $time
+      public readonly string $time,
     ) {}
 
     public function getFullName(): string

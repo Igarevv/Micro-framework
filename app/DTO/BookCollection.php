@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Entities;
-
-use App\DTO\Image;
+namespace App\DTO;
 
 class BookCollection
 {
