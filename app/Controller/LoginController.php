@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use Igarevv\Micrame\Controller\Controller;
-use Igarevv\Micrame\Http\Response;
+use Igarevv\Micrame\Http\Response\Response;
 
 class LoginController extends Controller
 {

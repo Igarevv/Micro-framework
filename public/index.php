@@ -8,8 +8,12 @@ require APP_PATH . '/vendor/autoload.php';
 
 $container = require APP_PATH . '/bootstrap/services.php';
 
+/** @var Kernel $kernel */
 $kernel = $container->get(Kernel::class);
 
 $response = $kernel->handle();
-
+phpinfo();
+exit;
 $response->send();
+
+$kernel->cleanUp();

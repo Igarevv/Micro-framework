@@ -5,8 +5,8 @@ namespace App\Controller\Admin;
 use App\Services\BookService;
 use App\Services\ImageService;
 use Igarevv\Micrame\Controller\Controller;
-use Igarevv\Micrame\Http\Response;
-use Igarevv\Micrame\Http\RedirectResponse;
+use Igarevv\Micrame\Http\Response\Response;
+use Igarevv\Micrame\Http\Response\RedirectResponse;
 
 class BookController extends Controller
 {
@@ -33,11 +33,11 @@ class BookController extends Controller
             $this->bookService->save($bookCollection);
             $this->imageService->uploadImage($image);
         } catch (\Exception $e) {
-            $this->session->setFlash('error', "Error: {$e->getMessage()}");
+            $this->request->session()->setFlash('error', "Error: {$e->getMessage()}");
             return new RedirectResponse('/admin/add-book');
         }
 
-        $this->session->setFlash('success', 'Book was successfully added');
+        $this->request->session()->setFlash('success', 'Book was successfully added');
 
         return new RedirectResponse('/admin/list');
     }

@@ -3,9 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Services\BookService;
-use Doctrine\DBAL\Connection;
 use Igarevv\Micrame\Controller\Controller;
-use Igarevv\Micrame\Http\Response;
+use Igarevv\Micrame\Http\Response\Response;
 
 class AdminController extends Controller
 {

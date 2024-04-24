@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Services\BookService;
 use App\Services\ImageService;
 use Igarevv\Micrame\Controller\Controller;
-use Igarevv\Micrame\Http\Response;
+use Igarevv\Micrame\Http\Response\Response;
 
 class HomeController extends Controller
 {

@@ -11,7 +11,10 @@ use Doctrine\DBAL\Connection;
 use Igarevv\Micrame\Controller\Controller;
 use Igarevv\Micrame\Database\DatabaseConnection;
 use Igarevv\Micrame\Http\Kernel;
-use Igarevv\Micrame\Http\Request;
+use Igarevv\Micrame\Http\Middleware\Default\RouteMiddleware;
+use Igarevv\Micrame\Http\Middleware\RequestHandler;
+use Igarevv\Micrame\Http\Middleware\RequestHandlerInterface;
+use Igarevv\Micrame\Http\Request\Request;
 use Igarevv\Micrame\Router\Router;
 use Igarevv\Micrame\Router\RouterInterface;
 use Igarevv\Micrame\Session\Session;
@@ -22,8 +25,6 @@ use League\Container\Argument\Literal\StringArgument;
 use League\Container\Container;
 use League\Container\ReflectionContainer;
 use Symfony\Component\Dotenv\Dotenv;
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
 
 /**
  * Application parameters
@@ -69,18 +70,29 @@ $container->add(SessionInterface::class, Session::class);
  * For kernel and start app
  */
 
+$container->add(RequestHandlerInterface::class, RequestHandler::class)
+  ->addArgument($container);
+
 $container->add(RouterInterface::class, Router::class);
 
 $container->add(Kernel::class)
-  ->addArgument(RouterInterface::class)
-  ->addArgument($container)
-  ->addArgument($request);
+  ->addArguments([
+    $container,
+    $request,
+    RequestHandlerInterface::class
+  ]);
+
 $container->extend(RouterInterface::class)
   ->addMethodCall('setRoutes', [new ArrayArgument($routes)]);
 
 $container->inflector(Controller::class)
-  ->invokeMethod('setContainer', [$container])
-  ->invokeMethod('setSession', [$container->get(SessionInterface::class)]);
+  ->invokeMethod('setContainer', [$container]);
+
+$container->add(RouteMiddleware::class)
+    ->addArguments([
+      $container,
+      RouterInterface::class
+    ]);
 
 /**
  * For database layer
