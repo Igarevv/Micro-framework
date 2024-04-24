@@ -12,8 +12,7 @@ $container = require APP_PATH . '/bootstrap/services.php';
 $kernel = $container->get(Kernel::class);
 
 $response = $kernel->handle();
-phpinfo();
-exit;
+
 $response->send();
 
 $kernel->cleanUp();

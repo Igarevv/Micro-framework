@@ -1,7 +1,13 @@
-FROM nginx:latest
+FROM php:8.2-fpm
 
-RUN rm /etc/nginx/conf.d/default.conf
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    git
 
-COPY /docker/nginx/nginx.conf /etc/nginx/conf.d/nginx.conf
+RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+    && docker-php-ext-install pgsql pdo pdo_pgsql
 
 COPY . /var/www
+
+WORKDIR /var/www
+

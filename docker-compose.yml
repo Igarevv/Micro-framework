@@ -5,14 +5,14 @@ networks:
 services:
   app:
     container_name: nginx
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: nginx:latest
     restart: always
     ports:
       - "8000:80"
     volumes:
       - ./:/var/www
+      - ./docker/nginx:/etc/nginx/conf.d
+      - ./logs:/var/log/nginx/micrame
     depends_on:
       - fpm
       - postgresql
@@ -22,7 +22,7 @@ services:
     container_name: php-fpm
     build:
       context: .
-      dockerfile: docker/php/Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "9000:9000"
     volumes:
@@ -37,13 +37,15 @@ services:
       - pg_data:/var/lib/postgresql/data
       - ./docker/pgsql:/docker-entrypoint-initdb.d/
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 0375Ihor_
-      POSTGRES_DB: book_web
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
     networks:
       - php-pg-nginx
     ports:
       - "5433:5432"
+    env_file:
+      - .env
   composer:
     image: composer:latest
     container_name: composer
