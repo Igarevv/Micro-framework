@@ -14,22 +14,34 @@ class BookService
 {
 
     public function __construct(
-      protected BookRepositoryInterface $repository
+      protected BookRepositoryInterface $repository,
+      protected ImageService $imageService
     ) {}
 
-    public function save(BookCollection $bookCollection): void
+    public function save(BookCollection $bookCollection, Image $image): void
     {
-        $this->repository->save($bookCollection);
+        $bookId = $this->repository->save($bookCollection);
+
+        try {
+            $isUpload = $this->imageService->uploadImage($image);
+
+            if (! $isUpload){
+                $this->repository->deleteBook($bookId);
+            }
+        } catch (\Exception $e){
+            $this->repository->deleteBook($bookId);
+            throw $e;
+        }
     }
 
-    public function deleteBook(int $id, ImageService $imageService): void
+    public function deleteBook(int $id): void
     {
         try {
             $imageId = $this->getImageId($id);
 
             $this->repository->deleteBook($id);
 
-            $imageService->deleteImage($imageId);
+            $this->imageService->deleteImage($imageId);
         } catch (\Throwable $e){
             throw $e;
         }
@@ -46,7 +58,7 @@ class BookService
         return $booksFromDb;
     }
 
-    public function getBookForHomePage(ImageService $service): array
+    public function getBookForHomePage(): array
     {
         $booksFromDb = $this->repository->getAllBooksForHomePage();
 
@@ -56,7 +68,7 @@ class BookService
 
         $collection = [];
         foreach ($booksFromDb as $item){
-            $url = $service->getImageUrl($item['image_cdn_id']);
+            $url = $this->imageService->getImageUrl($item['image_cdn_id']);
             $collection[] = new BookPreviewDto(
               title: $item['title'],
               firstName: $item['first_name'],
@@ -80,7 +92,7 @@ class BookService
         return $imageId;
     }
 
-    public function bookEntity(array $bookData, string $image): Book
+    public function bookDto(array $bookData, string $image): Book
     {
         return Book::fromState(
           title: $bookData['title'],
@@ -92,7 +104,7 @@ class BookService
         );
     }
 
-    public function authorEntity(array $authorData): Author
+    public function authorDto(array $authorData): Author
     {
         return Author::fromState(
           name: $authorData['first_name'],
@@ -100,11 +112,13 @@ class BookService
         );
     }
 
-    public function createFullBookEntity(array $bookData, array $authorData, Image $image): BookCollection
+    public function imageDto(array $imageData): Image
     {
-        $author = $this->authorEntity($authorData);
-        $book = $this->bookEntity($bookData, $image->getFileName());
+        return $this->imageService->imageDto($imageData);
+    }
 
+    public function createFullBookEntity(Book $book, Author $author): BookCollection
+    {
         return new BookCollection(
           book: $book,
           author: $author,

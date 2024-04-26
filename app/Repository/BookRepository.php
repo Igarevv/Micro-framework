@@ -15,10 +15,11 @@ class BookRepository extends AbstractRepository implements
       private BookMapper $mapper
     ) {}
 
-    public function save(BookCollection $bookCollection): void
+    public function save(BookCollection $bookCollection): int
     {
         $builder = $this->db()->createQueryBuilder();
-        $this->db()->transactional(function () use ($builder, $bookCollection) {
+
+        $lastBookId = $this->db()->transactional(function () use ($builder, $bookCollection): int {
             $bookId = $this->saveBook($builder, $bookCollection);
 
             $authorId = $this->saveAuthor($builder, $bookCollection);
@@ -28,7 +29,11 @@ class BookRepository extends AbstractRepository implements
               ->setParameter(0, $bookId)
               ->setParameter(1, $authorId)
               ->executeQuery();
+
+            return $bookId;
         });
+
+        return $lastBookId;
     }
 
     public function findAllBooksForTable(): array

@@ -6,7 +6,7 @@ use App\DTO\BookCollection;
 
 interface BookRepositoryInterface
 {
-    public function save(BookCollection $bookCollection): void;
+    public function save(BookCollection $bookCollection): int;
 
     public function findAll();
 
