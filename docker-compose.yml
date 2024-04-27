@@ -5,14 +5,15 @@ networks:
 services:
   app:
     container_name: nginx
-    image: nginx:latest
+    image: nginx:lastest
     restart: always
     ports:
       - "8000:80"
+    working_dir: /var/www/nginx/micro-framework
     volumes:
-      - ./:/var/www
-      - ./docker/nginx:/etc/nginx/conf.d
       - ./logs:/var/log/nginx/micrame
+      - ./docker/nginx:/etc/nginx/conf.d
+      - .:/var/www/nginx/micro-framework
     depends_on:
       - fpm
       - postgresql
@@ -25,8 +26,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "9000:9000"
+    working_dir: /var/www/nginx/micro-framework
     volumes:
-      - ./:/var/www
+      - .:/var/www/nginx/micro-framework
     networks:
       - php-pg-nginx
   postgresql:
@@ -35,7 +37,7 @@ services:
     restart: always
     volumes:
       - pg_data:/var/lib/postgresql/data
-      - ./docker/pgsql:/docker-entrypoint-initdb.d/
+      - ./docker/pgsql:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASS}
@@ -50,7 +52,7 @@ services:
     image: composer:latest
     container_name: composer
     volumes:
-      - ./:/var/www
-    working_dir: /var/www
+      - ./:/var/www/nginx/micro-framework
+    working_dir: /var/www/nginx/micro-framework
 volumes:
   pg_data:
