@@ -5,15 +5,15 @@ networks:
 services:
   app:
     container_name: nginx
-    image: nginx:lastest
+    image: nginx:alpine
     restart: always
     ports:
       - "8000:80"
-    working_dir: /var/www/nginx/micro-framework
+    working_dir: /var/www
     volumes:
       - ./logs:/var/log/nginx/micrame
       - ./docker/nginx:/etc/nginx/conf.d
-      - .:/var/www/nginx/micro-framework
+      - .:/var/www
     depends_on:
       - fpm
       - postgresql
@@ -25,15 +25,15 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "9000:9000"
-    working_dir: /var/www/nginx/micro-framework
+      - "9001:9000"
+    working_dir: /var/www
     volumes:
-      - .:/var/www/nginx/micro-framework
+      - .:/var/www
     networks:
       - php-pg-nginx
   postgresql:
     container_name: postgres
-    image: postgres:latest
+    image: postgres:15-alpine
     restart: always
     volumes:
       - pg_data:/var/lib/postgresql/data
@@ -48,11 +48,5 @@ services:
       - "5433:5432"
     env_file:
       - .env
-  composer:
-    image: composer:latest
-    container_name: composer
-    volumes:
-      - ./:/var/www/nginx/micro-framework
-    working_dir: /var/www/nginx/micro-framework
 volumes:
   pg_data:
