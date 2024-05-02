@@ -14,12 +14,14 @@ use Doctrine\DBAL\Connection;
 use Igarevv\Micrame\Controller\Controller;
 use Igarevv\Micrame\Database\DatabaseConnection;
 use Igarevv\Micrame\Http\Kernel;
+use Igarevv\Micrame\Http\Middleware\Default\RouteInfoMiddleware;
 use Igarevv\Micrame\Http\Middleware\Default\RouteMiddleware;
 use Igarevv\Micrame\Http\Middleware\RequestHandler;
 use Igarevv\Micrame\Http\Middleware\RequestHandlerInterface;
 use Igarevv\Micrame\Http\Request\Request;
 use Igarevv\Micrame\Router\Router;
 use Igarevv\Micrame\Router\RouterInterface;
+use Igarevv\Micrame\Session\AuthSession;
 use Igarevv\Micrame\Session\Session;
 use Igarevv\Micrame\Session\SessionInterface;
 use Igarevv\Micrame\View\TwigFactory;
@@ -78,15 +80,15 @@ $container->add(RequestHandlerInterface::class, RequestHandler::class)
 
 $container->add(RouterInterface::class, Router::class);
 
+$container->add(RouteInfoMiddleware::class)
+    ->addArgument($routes);
+
 $container->add(Kernel::class)
   ->addArguments([
     $container,
     $request,
     RequestHandlerInterface::class
   ]);
-
-$container->extend(RouterInterface::class)
-  ->addMethodCall('setRoutes', [new ArrayArgument($routes)]);
 
 $container->inflector(Controller::class)
   ->invokeMethod('setContainer', [$container]);
@@ -117,7 +119,8 @@ $container->inflector(AbstractRepository::class)
 
 $container->add('twig-factory', TwigFactory::class)
     ->addArgument($views)
-    ->addArgument(SessionInterface::class);
+    ->addArgument(SessionInterface::class)
+    ->addArgument(AuthSession::class);
 
 $container->addShared('twig', function () use ($container) {
     return $container->get('twig-factory')->initialize();

@@ -3,6 +3,7 @@
 namespace Igarevv\Micrame\Http\Middleware;
 
 use Igarevv\Micrame\Enums\HttpEnum;
+use Igarevv\Micrame\Http\Middleware\Default\RouteInfoMiddleware;
 use Igarevv\Micrame\Http\Middleware\Default\RouteMiddleware;
 use Igarevv\Micrame\Http\Middleware\Default\SessionMiddleware;
 use Igarevv\Micrame\Http\Request\RequestInterface;
@@ -12,7 +13,9 @@ use Psr\Container\ContainerInterface;
 class RequestHandler implements RequestHandlerInterface
 {
 
+
     private array $middlewares = [
+      RouteInfoMiddleware::class,
       SessionMiddleware::class,
       RouteMiddleware::class
     ];
@@ -33,6 +36,11 @@ class RequestHandler implements RequestHandlerInterface
         $middlewareInstance = $this->container->get($middlewareClass);
 
         return $middlewareInstance->process($request, $this);
+    }
+
+    public function addMiddleware(array $middleware): void
+    {
+        array_splice($this->middlewares, 0, 0, $middleware);
     }
 
 }

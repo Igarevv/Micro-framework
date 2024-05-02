@@ -7,6 +7,8 @@ class Session implements SessionInterface
 
     public const FLASH = 'flash';
 
+    public const AUTH  = 'user';
+
     public function start(): void
     {
         if (session_status() !== PHP_SESSION_ACTIVE){
@@ -77,6 +79,11 @@ class Session implements SessionInterface
     public function regenerate(): void
     {
         session_regenerate_id();
+    }
+
+    public function close(): void
+    {
+        session_destroy();
     }
 
 }

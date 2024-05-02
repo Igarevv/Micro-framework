@@ -15,8 +15,14 @@
         <a class="py-2 d-none d-md-inline-block" href="#">Pricing</a>
         <a class="py-2 d-none d-md-inline-block" href="#">Cart</a>
         <div class="text-end">
-            <a href="/sign-in" class="btn btn-outline-light text-secondary">Login</a>
-            <a href="/sign-up" class="btn btn-warning">Sign-up</a>
+            {% if auth().isAuth() %}
+                <form action="/logout" method="post">
+                    <button class="btn btn-warning">Logout</button>
+                </form>
+            {% else %}
+                <a href="/sign-in" class="btn btn-outline-light text-secondary">Login</a>
+                <a href="/sign-up" class="btn btn-warning">Sign-up</a>
+            {% endif %}
         </div>
     </div>
 </nav>

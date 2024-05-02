@@ -10,6 +10,10 @@ final class Request implements RequestInterface
 
     private SessionInterface $session;
 
+    private array $handler;
+
+    private array $routeArgs;
+
     public function __construct(
       private readonly array $post,
       private readonly array $get,
@@ -68,6 +72,21 @@ final class Request implements RequestInterface
     public function session(): SessionInterface
     {
         return $this->session;
+    }
+
+    public function setRouteHandler(array $handler): void
+    {
+        $this->handler = $handler;
+    }
+
+    public function setRouteArgs(array $args): void
+    {
+        $this->routeArgs = $args;
+    }
+
+    public function getRouteHandlerAndArgs(): array
+    {
+        return [$this->handler, $this->routeArgs];
     }
 
 }

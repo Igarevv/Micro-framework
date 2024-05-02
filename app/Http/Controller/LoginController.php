@@ -8,12 +8,15 @@ use App\Services\AuthService;
 use Igarevv\Micrame\Controller\Controller;
 use Igarevv\Micrame\Http\Response\RedirectResponse;
 use Igarevv\Micrame\Http\Response\Response;
+use Igarevv\Micrame\Session\AuthSession;
+use Igarevv\Micrame\Session\Session;
 
 class LoginController extends Controller
 {
 
     public function __construct(
-      private AuthService $service
+      private AuthService $service,
+      private AuthSession $auth
     ) {}
 
     public function signUpIndex(): Response
@@ -39,7 +42,7 @@ class LoginController extends Controller
               'errors' => $errors,
               'firstName' => $form->getInputFirstName(),
               'lastName'  => $form->getInputLastName(),
-              'email'     => $form->getInputEmail()
+              'email'     => $form->getInputEmail(),
             ]);
 
             return new RedirectResponse('/sign-up');
@@ -53,7 +56,7 @@ class LoginController extends Controller
             $this->request->session()->setFlash('error', [
               'errors'    => $e->getMessage(),
               'firstName' => $form->getInputFirstName(),
-              'lastName'  => $form->getInputLastName()
+              'lastName'  => $form->getInputLastName(),
             ]);
 
             return new RedirectResponse('/sign-up');
@@ -76,7 +79,7 @@ class LoginController extends Controller
         if ($isAuth){
             $this->request->session()->regenerate();
 
-            $this->request->session()->set('user', $this->service->getUser());
+            $this->request->session()->set(Session::AUTH, $this->service->getUser());
 
             return new RedirectResponse('/');
         }
@@ -84,6 +87,13 @@ class LoginController extends Controller
         $this->request->session()->setFlash('error', 'Login failed. Please check email or password!');
 
         return new RedirectResponse('/sign-in');
+    }
+
+    public function logout(): Response
+    {
+        $this->auth->logout();
+
+        return new RedirectResponse('/');
     }
 
 }

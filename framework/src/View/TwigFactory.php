@@ -2,6 +2,7 @@
 
 namespace Igarevv\Micrame\View;
 
+use Igarevv\Micrame\Session\AuthSession;
 use Igarevv\Micrame\Session\SessionInterface;
 use Twig\Environment;
 use Twig\Extension\DebugExtension;
@@ -13,7 +14,8 @@ class TwigFactory
 
     public function __construct(
       private string $pathToViews,
-      private SessionInterface $session
+      private SessionInterface $session,
+      private AuthSession $auth
     ) {}
 
     public function initialize(): Environment
@@ -27,12 +29,19 @@ class TwigFactory
 
         $twig->addExtension(new DebugExtension());
         $twig->addFunction(new TwigFunction('session', [$this, 'getSession']));
+        $twig->addFunction(new TwigFunction('auth', [$this, 'getAuth']));
+
         return $twig;
     }
 
     public function getSession(): SessionInterface
     {
         return $this->session;
+    }
+
+    public function getAuth(): AuthSession
+    {
+        return $this->auth;
     }
 
 }

@@ -10,4 +10,6 @@ interface RequestHandlerInterface
 
     public function handle(RequestInterface $request): Response;
 
+    public function addMiddleware(array $middleware);
+
 }
