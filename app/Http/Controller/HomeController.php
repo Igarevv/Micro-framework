@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace App\Http\Controller;
 
 use App\Services\BookService;
-use App\Services\ImageService;
 use Igarevv\Micrame\Controller\Controller;
 use Igarevv\Micrame\Http\Response\Response;
 

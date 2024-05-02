@@ -2,6 +2,33 @@
 
 {% block content %}
     {{ include('/templates/basenav.html.twig') }}
+    {% if session().hasFlash('success-register') %}
+        {% set message = session().flash('success-register')[0] %}
+        <script>
+          window.onload = function() {
+            $('#reg-success').modal('show');
+            setTimeout(function() {
+              $('#reg-success').modal('hide');
+            }, 2000);
+          };
+        </script>
+    {% endif %}
+    <div class="modal fade bd-example-modal-lg" id="reg-success" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Welcome,
+                            <span style="color: limegreen" class="fw-bolder text-decoration-underline">{{ message['name'] }}</span>!
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <p>{{ message['message'] }}</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
     <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
         <div class="col-md-5 p-lg-5 mx-auto my-5">
             <h1 class="display-4 font-weight-normal">Punny headline</h1>
@@ -13,7 +40,6 @@
         <div class="product-device shadow-sm d-none d-md-block"></div>
         <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
     </div>
-
     {% if books is empty %}
         <div style="margin-top: 10%; margin-bottom: 10%" class="col-md-12 text-center">
             <h2 class="text-danger">Books not found.</h2>

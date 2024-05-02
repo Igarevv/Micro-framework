@@ -1,7 +1,7 @@
-FROM nginx:latest
+FROM nginx:alpine
 
 WORKDIR /var/www
 
-COPY /docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --link /docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY ./././ /var/www
+COPY ./views /var/www

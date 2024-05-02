@@ -9,67 +9,83 @@
                     <div class="col-12">
                         <div class="mb-5">
                             <h2 class="display-5 fw-bold text-center text-light">Sign up</h2>
-                            <p class="text-center text-white-50 m-0">Already have an account? <a href="#!"
+                            <p class="text-center text-white-50 m-0">Already have an account? <a href="/sign-in"
                                                                                    class="link-primary text-decoration-none">Sign
                                     in</a></p>
                         </div>
                     </div>
                 </div>
+                {% set flash = session().flash('error')[0] %}
+                {% set errors = flash['errors'] %}
                 <div class="row justify-content-center">
                     <div class="col-12 col-lg-10 col-xl-8">
                         <div class="row gy-5 justify-content-center">
                             <div class="col-12 col-lg-5">
-                                <form action="/sign-up" method="post">
-                                    <div class="row gy-3 overflow-hidden">
-                                        <div class="col-12">
-                                            <div class="form-floating mb-3">
-                                                <input type="text" class="form-control border-0 border-bottom rounded-0"
-                                                       name="firstName" id="firstName" placeholder="First Name" required value="Nickname">
-                                                <label for="firstName" class="form-label">Last Name</label>
+                                    <form action="" method="post">
+                                        <div style="gap: 15px" class="row gy-3 overflow-hidden">
+                                            <div class="col-12">
+                                                <div class="form-floating">
+                                                    <input type="text" class="form-control border-0 border-bottom rounded-0"
+                                                           name="firstName" id="firstName" placeholder="First Name" required value="{{ flash['firstName'] }}">
+                                                    <label for="firstName" class="form-label mb-0">First Name</label>
+                                                    <p style="font-size: 14px; color: #ffda48" class="mb-0">{{ errors['firstName'] }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-floating">
+                                                    <input type="text" class="form-control border-0 border-bottom rounded-0"
+                                                           name="lastName" id="lastName" placeholder="Last Name" required value="{{ flash['lastName'] }}">
+                                                    <label for="lastName" class="form-label mb-0">Last Name</label>
+                                                    <p style="font-size: 14px; color: #ffda48" class="mb-0">{{ errors['lastName'] }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-floating">
+                                                    <input type="email"
+                                                           class="form-control border-0 border-bottom rounded-0"
+                                                           name="email" id="email" placeholder="name@example.com" value="{{ flash['email'] }}" required>
+                                                    <label for="email" class="form-label mb-0">Email</label>
+                                                    <p style="font-size: 14px; color: #ffda48" class="mb-0">{{ errors['email'] ?: flash['errors'] }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-floating">
+                                                    <input type="password"
+                                                           class="form-control border-0 border-bottom rounded-0"
+                                                           name="password" id="password" value="" placeholder="Password"
+                                                           required>
+                                                    <label for="password" class="form-label mb-0">Password</label>
+                                                    <p style="font-size: 14px;" class="text-warning mb-0">{{ errors['password'] }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-floating">
+                                                    <input type="password"
+                                                           class="form-control border-0 border-bottom rounded-0"
+                                                           name="passwordConfirm" id="password" value="" placeholder="Password"
+                                                           required>
+                                                    <label for="password" class="form-label mb-0">Repeat password</label>
+                                                    <p style="font-size: 14px; color: #ffda48" class="mb-0">{{ errors['same'] }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="true" name="iAgree"
+                                                           id="iAgree" required>
+                                                    <label class="form-check-label text-light" for="iAgree">
+                                                        I agree to the <a href="#!"
+                                                                          class="link-warning text-decoration-none">terms
+                                                            and conditions</a>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="d-grid">
+                                                    <button class="btn btn-primary btn-lg" type="submit">Sign up</button>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-12">
-                                            <div class="form-floating mb-3">
-                                                <input type="text" class="form-control border-0 border-bottom rounded-0"
-                                                       name="lastName" id="lastName" placeholder="Last Name" required value="Nickname">
-                                                <label for="lastName" class="form-label">Last Name</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="form-floating mb-3">
-                                                <input type="email"
-                                                       class="form-control border-0 border-bottom rounded-0"
-                                                       name="email" id="email" placeholder="name@example.com" required>
-                                                <label for="email" class="form-label">Email</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="form-floating mb-3">
-                                                <input type="password"
-                                                       class="form-control border-0 border-bottom rounded-0"
-                                                       name="password" id="password" value="" placeholder="Password"
-                                                       required>
-                                                <label for="password" class="form-label">Password</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="true" name="iAgree"
-                                                       id="iAgree" required>
-                                                <label class="form-check-label text-light" for="iAgree">
-                                                    I agree to the <a href="#!"
-                                                                      class="link-warning text-decoration-none">terms
-                                                        and conditions</a>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="d-grid">
-                                                <button class="btn btn-primary btn-lg" type="submit">Sign up</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+                                    </form>
                             </div>
                             <div class="col-12 col-lg-2 d-flex align-items-center justify-content-center gap-3 flex-lg-column">
                                 <div class="bg-dark h-100 d-none d-lg-block"

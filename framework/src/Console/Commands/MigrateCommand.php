@@ -25,12 +25,14 @@ class MigrateCommand implements CommandInterface
     {
         $this->createMigrationTable();
 
-        $this->connection->transactional(function (){
+        $this->connection->transactional(function () {
             $appliedMigrations = $this->getAppliedMigrations();
 
-            $migrationFiles = $this->getUnappliedMigrations($appliedMigrations);
+            $newMigrations = $this->getUnappliedMigrations($appliedMigrations);
 
-            $schema = $this->prepareNewSchema($migrationFiles);
+            $this->showCompletedMigrations($appliedMigrations, $newMigrations);
+
+            $schema = $this->prepareNewSchema($newMigrations);
 
             $this->executeMigration($schema);
 
@@ -69,7 +71,7 @@ class MigrateCommand implements CommandInterface
             if ($tablesBeforeMigration !== $tablesAfterMigration) {
                 $this->addMigrationToDb($migration);
             } else {
-                echo "Migration {$migration} does not have execution code and will be skipped".PHP_EOL;
+                echo "Migration {$migration} does not have execution code and will be skipped.".PHP_EOL;
             }
         }
         return $schema;
@@ -131,6 +133,15 @@ class MigrateCommand implements CommandInterface
           ->setParameter('migration', $migration);
 
         $builder->executeQuery();
+    }
+
+    private function showCompletedMigrations(array $appliedMigrations, array $newMigrations): void
+    {
+        $completedMigrations = array_diff($appliedMigrations, $newMigrations);
+        if ($completedMigrations){
+            $inLine = implode(', ', $completedMigrations);
+            echo "Migration(s) {$inLine} is completed and will be skipped.".PHP_EOL;
+        }
     }
 
 }

@@ -1,19 +1,19 @@
-version: "3"
+version: "3.7"
 networks:
   php-pg-nginx:
 
 services:
   app:
     container_name: nginx
-    image: nginx:alpine
-    restart: always
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
     ports:
       - "8000:80"
     working_dir: /var/www
     volumes:
       - ./logs:/var/log/nginx/micrame
-      - ./docker/nginx:/etc/nginx/conf.d
-      - .:/var/www
+      - ./views:/var/www
     depends_on:
       - fpm
       - postgresql
@@ -25,12 +25,12 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "9001:9000"
-    working_dir: /var/www
+      - "9000:9000"
     volumes:
       - .:/var/www
     networks:
       - php-pg-nginx
+    restart: unless-stopped
   postgresql:
     container_name: postgres
     image: postgres:15-alpine
@@ -45,7 +45,7 @@ services:
     networks:
       - php-pg-nginx
     ports:
-      - "5433:5432"
+      - "5432:5432"
     env_file:
       - .env
 volumes:

@@ -5,7 +5,10 @@ use App\Repository\BookRepository;
 use App\Repository\ImageCloudinaryRepository;
 use App\Repository\Interfaces\BookRepositoryInterface;
 use App\Repository\Interfaces\ImageRepositoryInterface;
+use App\Repository\Interfaces\UserRepositoryInterface;
 use App\Repository\Mappers\BookMapper;
+use App\Repository\Mappers\UserMapper;
+use App\Repository\UserRepository;
 use Cloudinary\Cloudinary;
 use Doctrine\DBAL\Connection;
 use Igarevv\Micrame\Controller\Controller;
@@ -130,5 +133,8 @@ $container->add(BookRepositoryInterface::class, BookRepository::class)
 $container->add(ImageRepositoryInterface::class,
   ImageCloudinaryRepository::class)
   ->addArgument($cloudinary);
+
+$container->add(UserRepositoryInterface::class, UserRepository::class)
+    ->addArgument(UserMapper::class);
 
 return $container;

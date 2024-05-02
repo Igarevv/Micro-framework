@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Http\Controller\Admin;
 
 use App\Services\BookService;
 use Igarevv\Micrame\Controller\Controller;

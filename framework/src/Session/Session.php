@@ -55,7 +55,7 @@ class Session implements SessionInterface
         return [];
     }
 
-    public function setFlash(string $type, string $message): void
+    public function setFlash(string $type, string|array $message): void
     {
         $flash = $this->get(self::FLASH, []);
 
@@ -72,6 +72,11 @@ class Session implements SessionInterface
     public function clearFlash(string $type): void
     {
         unset($_SESSION[self::FLASH]);
+    }
+
+    public function regenerate(): void
+    {
+        session_regenerate_id();
     }
 
 }
