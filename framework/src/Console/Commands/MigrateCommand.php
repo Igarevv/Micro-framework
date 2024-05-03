@@ -139,8 +139,12 @@ class MigrateCommand implements CommandInterface
     {
         $completedMigrations = array_diff($appliedMigrations, $newMigrations);
         if ($completedMigrations){
-            $inLine = implode(', ', $completedMigrations);
-            echo "Migration(s) {$inLine} is completed and will be skipped.".PHP_EOL;
+            echo "Migrations:".PHP_EOL.PHP_EOL;
+            foreach ($completedMigrations as $migration){
+                echo $migration . PHP_EOL;
+            }
+            echo PHP_EOL;
+            echo "is completed and will be skipped.".PHP_EOL;
         }
     }
 

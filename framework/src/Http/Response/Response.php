@@ -25,8 +25,28 @@ class Response
         return $this;
     }
 
-    public function getHeader(string $key): string
+    public function getHeader(?string $key = null): string|array
     {
+        if (! $key){
+            return $this->headers;
+        }
+
         return $this->headers[$key];
     }
+
+    public function setHeader(string $key, mixed $value): void
+    {
+        $this->headers[$key] = $value;
+    }
+
+    public function getContent(): string
+    {
+        return $this->content;
+    }
+
+    public function getStatusCode(): int
+    {
+        return $this->status;
+    }
+
 }

@@ -13,6 +13,7 @@ use Cloudinary\Cloudinary;
 use Doctrine\DBAL\Connection;
 use Igarevv\Micrame\Controller\Controller;
 use Igarevv\Micrame\Database\DatabaseConnection;
+use Igarevv\Micrame\Events\EventDispatcher;
 use Igarevv\Micrame\Http\Kernel;
 use Igarevv\Micrame\Http\Middleware\Default\RouteInfoMiddleware;
 use Igarevv\Micrame\Http\Middleware\Default\RouteMiddleware;
@@ -75,6 +76,8 @@ $container->add(SessionInterface::class, Session::class);
  * For kernel and start app
  */
 
+$container->addShared(EventDispatcher::class);
+
 $container->add(RequestHandlerInterface::class, RequestHandler::class)
   ->addArgument($container);
 
@@ -87,7 +90,8 @@ $container->add(Kernel::class)
   ->addArguments([
     $container,
     $request,
-    RequestHandlerInterface::class
+    RequestHandlerInterface::class,
+    EventDispatcher::class
   ]);
 
 $container->inflector(Controller::class)

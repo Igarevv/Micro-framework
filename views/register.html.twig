@@ -45,7 +45,9 @@
                                                            class="form-control border-0 border-bottom rounded-0"
                                                            name="email" id="email" placeholder="name@example.com" value="{{ flash['email'] }}" required>
                                                     <label for="email" class="form-label mb-0">Email</label>
-                                                    <p style="font-size: 14px; color: #ffda48" class="mb-0">{{ errors['email'] ?: flash['errors'] }}</p>
+                                                    <p style="font-size: 14px; color: #ffda48" class="mb-0">
+                                                        {{ errors['email'] ?: flash['error'] }}
+                                                    </p>
                                                 </div>
                                             </div>
                                             <div class="col-12">

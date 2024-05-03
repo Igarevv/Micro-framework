@@ -3,7 +3,9 @@
 namespace Igarevv\Micrame\Http;
 
 use Igarevv\Micrame\Enums\HttpEnum;
+use Igarevv\Micrame\Events\EventDispatcher;
 use Igarevv\Micrame\Exceptions\Http\HttpException;
+use Igarevv\Micrame\Http\Events\ResponseEvent;
 use Igarevv\Micrame\Http\Middleware\RequestHandlerInterface;
 use Igarevv\Micrame\Http\Request\RequestInterface;
 use Igarevv\Micrame\Http\Response\Response;
@@ -18,7 +20,8 @@ class Kernel
     public function __construct(
       private ContainerInterface $container,
       private RequestInterface $request,
-      private RequestHandlerInterface $handler
+      private RequestHandlerInterface $handler,
+      private EventDispatcher $eventDispatcher
     ) {
         $this->appStatus = $this->container->get('APP_ENV');
     }
@@ -30,6 +33,8 @@ class Kernel
         } catch (\Exception|\Throwable $e) {
             $response = $this->handleErrorByAppStatus($e);
         }
+
+        $this->eventDispatcher->dispatch(new ResponseEvent($this->request, $response));
 
         return $response;
     }

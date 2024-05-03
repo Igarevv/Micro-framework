@@ -54,7 +54,7 @@ class LoginController extends Controller
             $this->service->saveToDb($user);
         } catch (UserException $e) {
             $this->request->session()->setFlash('error', [
-              'errors'    => $e->getMessage(),
+              'error'    => $e->getMessage(),
               'firstName' => $form->getInputFirstName(),
               'lastName'  => $form->getInputLastName(),
             ]);
