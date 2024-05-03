@@ -15,7 +15,15 @@ class Response
     {
         http_response_code($this->status);
 
+        ob_start();
+
+        foreach ($this->headers as $key => $header) {
+            header("{$key}:{$header}");
+        }
+
         echo $this->content;
+
+        ob_end_flush();
     }
 
     public function json(): Response

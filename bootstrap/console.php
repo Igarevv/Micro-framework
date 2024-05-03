@@ -13,10 +13,12 @@ use Doctrine\DBAL\Connection;
  * Console parameters
  */
 
-$env = new Dotenv();
-$env->load(APP_PATH . '/.env');
+$basePath = dirname(__DIR__);
 
-$migrationPath = APP_PATH.'/database/migrations';
+$env = new Dotenv();
+$env->load($basePath. '/.env');
+
+$migrationPath = $basePath.'/database/migrations';
 $container = new Container();
 
 $connectionParams = [
@@ -30,6 +32,8 @@ $connectionParams = [
 /**
  * Console dependencies
  */
+
+$container->add('base-path', new StringArgument($basePath));
 
 $container->add(ConsoleApplication::class)
   ->addArgument($container);

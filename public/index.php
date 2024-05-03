@@ -10,6 +10,8 @@ require APP_PATH . '/vendor/autoload.php';
 /** @var Container $container */
 $container = require APP_PATH . '/bootstrap/services.php';
 
+require APP_PATH . '/bootstrap/bootstrap.php';
+
 /** @var Kernel $kernel */
 $kernel = $container->get(Kernel::class);
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Providers\ServiceProvider;
 use App\Repository\AbstractRepository;
 use App\Repository\BookRepository;
 use App\Repository\ImageCloudinaryRepository;
@@ -37,12 +38,17 @@ use Symfony\Component\Dotenv\Dotenv;
  */
 
 $env = new Dotenv();
-$env->load(APP_PATH.'/.env');
+$env->load(dirname(__DIR__).'/.env');
+
+$basePath = dirname(__DIR__);
 
 $request = Request::createFromGlobals();
+
 $routes = require APP_PATH.'/bootstrap/web.php';
+
 $envStatus = $_ENV['APP_ENV'];
-$views = APP_PATH.'/views';
+
+$views = $basePath.'/views';
 
 $connectionParams = [
   'dbname' => $_ENV['DB_NAME'],
@@ -66,11 +72,16 @@ $cloudinary = new Cloudinary([
 
 $container = new Container();
 
+$container->add('base-path', new StringArgument($basePath));
+
 $container->delegate(new ReflectionContainer(true));
 
 $container->add('APP_ENV', new StringArgument($envStatus));
 
 $container->add(SessionInterface::class, Session::class);
+
+$container->add(ServiceProvider::class)
+    ->addArgument(EventDispatcher::class);
 
 /**
  * For kernel and start app
