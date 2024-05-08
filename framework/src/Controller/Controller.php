@@ -4,7 +4,6 @@ namespace Igarevv\Micrame\Controller;
 
 use Igarevv\Micrame\Http\Request\RequestInterface;
 use Igarevv\Micrame\Http\Response\Response;
-use Igarevv\Micrame\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
 use Twig\Environment;
 

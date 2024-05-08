@@ -9,6 +9,7 @@ use App\DTO\BookPreviewDto;
 use App\DTO\Image;
 use App\Exceptions\BookException;
 use App\Repository\Interfaces\BookRepositoryInterface;
+use Cloudinary\Api\Admin\AdminApi;
 
 class BookService
 {
@@ -66,14 +67,20 @@ class BookService
             throw new BookException('Books not found');
         }
 
-        $collection = [];
+        $imageIdsFromDb = [];
         foreach ($booksFromDb as $item){
-            $url = $this->imageService->getImageUrl($item['image_cdn_id']);
+            $imageIdsFromDb[] = $item['image_cdn_id'];
+        }
+
+        $urls = $this->imageService->getImageUrls($imageIdsFromDb);
+
+        $collection = [];
+        foreach ($booksFromDb as $key => $item){
             $collection[] = new BookPreviewDto(
               title: $item['title'],
               firstName: $item['first_name'],
               lastName: $item['last_name'],
-              imageUrl: $url,
+              imageUrl: $urls[$key]['url'],
               bookId: $item['id']
             );
         }

@@ -21,13 +21,13 @@ use Igarevv\Micrame\Http\Middleware\Default\RouteMiddleware;
 use Igarevv\Micrame\Http\Middleware\RequestHandler;
 use Igarevv\Micrame\Http\Middleware\RequestHandlerInterface;
 use Igarevv\Micrame\Http\Request\Request;
+use Igarevv\Micrame\Http\Request\RequestInterface;
 use Igarevv\Micrame\Router\Router;
 use Igarevv\Micrame\Router\RouterInterface;
 use Igarevv\Micrame\Session\AuthSession;
 use Igarevv\Micrame\Session\Session;
 use Igarevv\Micrame\Session\SessionInterface;
 use Igarevv\Micrame\View\TwigFactory;
-use League\Container\Argument\Literal\ArrayArgument;
 use League\Container\Argument\Literal\StringArgument;
 use League\Container\Container;
 use League\Container\ReflectionContainer;
@@ -40,9 +40,9 @@ use Symfony\Component\Dotenv\Dotenv;
 $env = new Dotenv();
 $env->load(dirname(__DIR__).'/.env');
 
-$basePath = dirname(__DIR__);
-
 $request = Request::createFromGlobals();
+
+$basePath = dirname(__DIR__);
 
 $routes = require APP_PATH.'/bootstrap/web.php';
 
@@ -71,6 +71,8 @@ $cloudinary = new Cloudinary([
  */
 
 $container = new Container();
+
+$container->add(RequestInterface::class, $request);
 
 $container->add('base-path', new StringArgument($basePath));
 

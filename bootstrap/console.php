@@ -5,9 +5,9 @@ use Igarevv\Micrame\Console\ConsoleApplication;
 use Igarevv\Micrame\Console\ConsoleKernel;
 use League\Container\Argument\Literal\StringArgument;
 use League\Container\Container;
-use Symfony\Component\Dotenv\Dotenv;
 use Igarevv\Micrame\Database\DatabaseConnection;
 use Doctrine\DBAL\Connection;
+use Symfony\Component\Dotenv\Dotenv;
 
 /**
  * Console parameters

@@ -32,9 +32,9 @@ class ImageService
         return true;
     }
 
-    public function getImageUrl(string $imageId)
+    public function getImageUrls(array $imageId)
     {
-        return $this->repository->getImage($imageId);
+        return $this->repository->getImagesUrl($imageId);
     }
 
     public function imageDto(array $imageData): Image

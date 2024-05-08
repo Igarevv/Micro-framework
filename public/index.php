@@ -1,6 +1,7 @@
 <?php
 
 use Igarevv\Micrame\Http\Kernel;
+use Igarevv\Micrame\Http\Request\RequestInterface;
 use League\Container\Container;
 
 define('APP_PATH', dirname(__DIR__));
@@ -19,4 +20,4 @@ $response = $kernel->handle();
 
 $response->send();
 
-$kernel->cleanUp();
+$kernel->cleanUp($container->get(RequestInterface::class));

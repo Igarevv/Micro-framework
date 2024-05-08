@@ -17,17 +17,17 @@ class Route
 
     public static function patch(string $path, array|callable $action, array $middleware = []): array
     {
-        return ['PATCH', $path, $action, $middleware];
+        return ['PATCH', $path, [$action, $middleware]];
     }
 
     public static function put(string $path, array|callable $action, array $middleware = []): array
     {
-        return ['PUT', $path, $action, $middleware];
+        return ['PUT', $path, [$action, $middleware]];
     }
 
     public static function delete(string $path, array|callable $action, array $middleware = []): array
     {
-        return ['DELETE', $path, $action, $middleware];
+        return ['DELETE', $path, [$action, $middleware]];
     }
 
 }

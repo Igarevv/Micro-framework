@@ -37,13 +37,11 @@ class ImageCloudinaryRepository extends AbstractRepository implements
         return $result->headers['Status'][0] === '200 OK';
     }
 
-    public function getImage(string $id): string
+    public function getImagesUrl(array $ids): array
     {
-        $url = $this->cloudinary->image($id)
-          ->resize(Resize::fill(400, 400))
-          ->toUrl();
+        $urls = $this->api->assetsByIds($ids)->getArrayCopy();
 
-        return $url;
+        return $urls['resources'];
     }
 
 }
