@@ -59,23 +59,25 @@ class BookService
         return $booksFromDb;
     }
 
-    public function getBookForHomePage(): array
+    public function getBooksForHomePage(int $page, int $limit): array
     {
-        $booksFromDb = $this->repository->getAllBooksForHomePage();
+        $offset = ($page - 1) * $limit;
 
-        if (! $booksFromDb){
+        $booksFromDb = $this->repository->getBooksForHomePage($limit, $offset);
+
+        if (! $booksFromDb['data']){
             throw new BookException('Books not found');
         }
 
         $imageIdsFromDb = [];
-        foreach ($booksFromDb as $item){
+        foreach ($booksFromDb['data'] as $item){
             $imageIdsFromDb[] = $item['image_cdn_id'];
         }
 
         $urls = $this->imageService->getImageUrls($imageIdsFromDb);
 
         $collection = [];
-        foreach ($booksFromDb as $key => $item){
+        foreach ($booksFromDb['data'] as $key => $item){
             $collection[] = new BookPreviewDto(
               title: $item['title'],
               firstName: $item['first_name'],
@@ -84,8 +86,9 @@ class BookService
               bookId: $item['id']
             );
         }
+        $pagesCount = ceil($booksFromDb['count'] / $limit);
 
-        return $collection;
+        return ['collection' => $collection, 'pages' => $pagesCount];
     }
 
     public function getImageId(mixed $id): string

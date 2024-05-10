@@ -11,9 +11,9 @@ interface RequestInterface
 
     public function getUri(): string;
 
-    public function getPost(array $keys = []): array;
+    public function getPost(array|string $keys = []): mixed;
 
-    public function getGet(array $keys = []): array;
+    public function getGet(array|string $keys = []): mixed;
 
     public function getFiles(?string $key = null): array;
 

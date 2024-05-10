@@ -16,5 +16,5 @@ interface BookRepositoryInterface
 
     public function getBookImageId(mixed $id): string|false;
 
-    public function getAllBooksForHomePage(): array;
+    public function getBooksForHomePage(int $limit, int $offset): array;
 }

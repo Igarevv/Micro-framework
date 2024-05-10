@@ -41,7 +41,9 @@ class Kernel
 
     public function cleanUp(RequestInterface $request): void
     {
-        $request->session()?->clearFlash(Session::FLASH);
+        if ($request->session()?->hasFlash(Session::FLASH)){
+            $request->session()?->clearFlash(Session::FLASH);
+        }
     }
 
     private function handleErrorByAppStatus(\Throwable|\Exception $e): Response

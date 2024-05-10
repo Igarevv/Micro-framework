@@ -15,14 +15,21 @@ class HomeController extends Controller
 
     public function index(): Response
     {
-        try {
-            $books = $this->bookService->getBookForHomePage();
+        $page = $this->request->getGet('page') ?: 1;
+        $limit = 6;
 
-        } catch (\Throwable $e){
+        try {
+            $books = $this->bookService->getBooksForHomePage($page, $limit);
+
+        } catch (\Throwable $e) {
             return $this->render('home.html.twig');
         }
 
-        return $this->render('home.html.twig', ['books' => $books]);
+        return $this->render('home.html.twig', [
+          'books'       => $books['collection'],
+          'pagesCount'  => $books['pages'],
+          'currentPage' => $page
+        ]);
     }
 
 }

@@ -19,7 +19,10 @@ class BookRepository extends AbstractRepository implements
     {
         $builder = $this->db()->createQueryBuilder();
 
-        $lastBookId = $this->db()->transactional(function () use ($builder, $bookCollection): int {
+        $lastBookId = $this->db()->transactional(function () use (
+          $builder,
+          $bookCollection
+        ): int {
             $bookId = $this->saveBook($builder, $bookCollection);
 
             $authorId = $this->saveAuthor($builder, $bookCollection);
@@ -58,7 +61,7 @@ class BookRepository extends AbstractRepository implements
 
     public function findAll() {}
 
-    public function getAllBooksForHomePage(): array
+    public function getBooksForHomePage(int $limit, int $offset): array
     {
         $builder = $this->db()->createQueryBuilder();
 
@@ -71,9 +74,14 @@ class BookRepository extends AbstractRepository implements
         )
           ->from('book', 'b')
           ->join('b', 'book_author', 'ba', 'b.id = ba.book_id')
-          ->join('ba', 'author', 'a', 'a.id = ba.author_id');
+          ->join('ba', 'author', 'a', 'a.id = ba.author_id')
+          ->setFirstResult($offset)
+          ->setMaxResults($limit);
 
-        $books = $builder->fetchAllAssociative();
+        $books = [
+          'data' => $builder->fetchAllAssociative(),
+          'count' => $this->countBooks(),
+        ];
 
         return $books ?? [];
     }
@@ -139,6 +147,16 @@ class BookRepository extends AbstractRepository implements
           ->executeQuery();
 
         return $this->db()->lastInsertId();
+    }
+
+    private function countBooks(): int
+    {
+        $builder = $this->db()->createQueryBuilder();
+
+        $builder->select("COUNT(id) as count")
+          ->from('book');
+
+        return $builder->fetchOne();
     }
 
 }

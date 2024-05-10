@@ -5,21 +5,23 @@
     {% if session().hasFlash('success-register') %}
         {% set message = session().flash('success-register')[0] %}
         <script>
-          window.onload = function() {
+          window.onload = function () {
             $('#reg-success').modal('show');
-            setTimeout(function() {
+            setTimeout(function () {
               $('#reg-success').modal('hide');
             }, 2000);
           };
         </script>
     {% endif %}
-    <div class="modal fade bd-example-modal-lg" id="reg-success" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal fade bd-example-modal-lg" id="reg-success" tabindex="-1" role="dialog"
+         aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">
                         Welcome,
-                            <span style="color: limegreen" class="fw-bolder text-decoration-underline">{{ message['name'] }}</span>!
+                        <span style="color: limegreen"
+                              class="fw-bolder text-decoration-underline">{{ message['name'] }}</span>!
                     </h5>
                 </div>
                 <div class="modal-body">
@@ -58,12 +60,46 @@
                         </div>
                         <div class="bg-light shadow-sm mx-auto"
                              style="width: 80%; height: 300px; border-radius: 21px 21px 0 0;">
-                            <img style="width: 400px; height: 400px;" class="img-rounded img-thumbnail mt-2 shadow-lg" src="{{ book.imageUrl }}" alt="book">
+                            <img style="width: 400px; height: 400px;" class="img-rounded img-thumbnail mt-2 shadow-lg"
+                                 src="{{ book.imageUrl }}" alt="book">
                         </div>
                     </div>
                 {% endfor %}
             </div>
         {% endfor %}
+        <div class="d-flex justify-content-center">
+            <nav aria-label="...">
+                <ul class="pagination">
+                    {% if currentPage > 1 %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1" tabindex="-1">First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ currentPage - 1 }}">Prev</a>
+                        </li>
+                    {% endif %}
+                    {% for page in 1..pagesCount %}
+                        {% if page == currentPage %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ page }} <span class="sr-only">(current)</span></span>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if currentPage < pagesCount %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ currentPage + 1 }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ pagesCount }}">Last</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
     {% endif %}
     {{ include('/templates/basefooter.html.twig') }}
 {% endblock %}

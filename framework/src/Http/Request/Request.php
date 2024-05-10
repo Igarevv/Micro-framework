@@ -37,20 +37,30 @@ final class Request implements RequestInterface
         return $this->server['REQUEST_METHOD'];
     }
 
-    public function getPost(array $keys = []): array
+    public function getPost(array|string $keys = []): mixed
     {
         if ( ! $keys) {
             return $this->post;
         }
-        return array_intersect_key($this->post, array_flip($keys));
+
+        if (is_array($keys)){
+            return array_intersect_key($this->post, array_flip($keys));
+        }
+
+        return $this->post[$keys] ?? [];
     }
 
-    public function getGet(array $keys = []): array
+    public function getGet(array|string $keys = []): mixed
     {
         if ( ! $keys) {
             return $this->get;
         }
-        return array_intersect_key($this->get, array_flip($keys));
+
+        if (is_array($keys)){
+            return array_intersect_key($this->get, array_flip($keys));
+        }
+
+        return $this->get[$keys] ?? [];
     }
 
     public function getFiles(?string $key = null): array
