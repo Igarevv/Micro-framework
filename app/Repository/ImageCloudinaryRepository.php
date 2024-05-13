@@ -8,8 +8,7 @@ use Cloudinary\Api\Admin\AdminApi;
 use Cloudinary\Cloudinary;
 use Cloudinary\Transformation\Resize;
 
-class ImageCloudinaryRepository extends AbstractRepository implements
-  ImageRepositoryInterface
+class ImageCloudinaryRepository implements ImageRepositoryInterface
 {
 
     private AdminApi $api;

@@ -110,10 +110,7 @@ class BookRepository extends AbstractRepository implements
         return $builder->fetchOne();
     }
 
-    private function saveBook(
-      QueryBuilder $builder,
-      BookCollection $bookCollection
-    ): string|int {
+    private function saveBook(QueryBuilder $builder, BookCollection $bookCollection): string|int {
         $builder->insert('book')
           ->values([
             'title' => ':title',
