@@ -1,0 +1,25 @@
+{
+    "autoload": {
+        "psr-4": {
+            "App\\": "app"
+        }
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest",
+        "symfony/dotenv": "^6.4",
+        "symfony/var-dumper": "^6.4",
+        "phpunit/phpunit": "^11.1",
+        "itsgoingd/clockwork": "^5.2"
+    },
+    "repositories": [{
+        "type": "path",
+        "url": "framework"
+    }],
+    "require": {
+        "php": "^8.2",
+        "igarevv/micro-framework": "dev-master",
+        "doctrine/orm": "^3.1",
+        "symfony/cache": "^7.0",
+        "doctrine/dbal": "^4.0"
+    }
+}

@@ -1,0 +1,105 @@
+{% extends '/templates/base.html.twig' %}
+
+{% block content %}
+    {{ include('/templates/basenav.html.twig') }}
+    {% if session().hasFlash('success-register') %}
+        {% set message = session().flash('success-register')[0] %}
+        <script>
+          window.onload = function () {
+            $('#reg-success').modal('show');
+            setTimeout(function () {
+              $('#reg-success').modal('hide');
+            }, 2000);
+          };
+        </script>
+    {% endif %}
+    <div class="modal fade bd-example-modal-lg" id="reg-success" tabindex="-1" role="dialog"
+         aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Welcome,
+                        <span style="color: limegreen"
+                              class="fw-bolder text-decoration-underline">{{ message['name'] }}</span>!
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <p>{{ message['message'] }}</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
+        <div class="col-md-5 p-lg-5 mx-auto my-5">
+            <h1 class="display-4 font-weight-normal">Punny headline</h1>
+            <p class="lead font-weight-normal">And an even wittier subheading to boot. Jumpstart your marketing efforts
+                with
+                this example based on Apple’s marketing pages.</p>
+            <a class="btn btn-outline-secondary" href="#">Coming soon</a>
+        </div>
+        <div class="product-device shadow-sm d-none d-md-block"></div>
+        <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+    </div>
+    {% if collection is empty %}
+        <div style="margin-top: 10%; margin-bottom: 10%" class="col-md-12 text-center">
+            <h2 class="text-danger">Books not found.</h2>
+            <p>
+                Books were stolen by a <span class="text-primary">UFO</span>, please wait until we negotiate with them.
+            </p>
+        </div>
+    {% else %}
+        {% for books_batch in collection|batch(2) %}
+            <div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
+                {% for book in books_batch %}
+                    <div class="bg-dark mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
+                        <div class="my-3 py-3">
+                            <h2 class="display-5">{{ book.title }}</h2>
+                            <p class="lead">{{ book.authorName }}</p>
+                        </div>
+                        <div class="bg-light shadow-sm mx-auto"
+                             style="width: 80%; height: 300px; border-radius: 21px 21px 0 0;">
+                            <img style="width: 400px; height: 400px;" class="img-rounded img-thumbnail mt-2 shadow-lg"
+                                 src="{{ book.imageUrl }}" alt="{{ book.title }}">
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <div class="d-flex mt-3 justify-content-center">
+            <nav aria-label="...">
+                <ul class="pagination">
+                    {% if page > 1 %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1" tabindex="-1">First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page - 1 }}">Prev</a>
+                        </li>
+                    {% endif %}
+                    {% for pageNum in 1..count %}
+                        {% if pageNum == page %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ pageNum }} <span class="sr-only">(current)</span></span>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ pageNum }}">{{ pageNum }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page < count %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page + 1 }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ count }}">Last</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    {% endif %}
+    {{ include('/templates/basefooter.html.twig') }}
+{% endblock %}

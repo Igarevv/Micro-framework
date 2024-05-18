@@ -1,0 +1,51 @@
+version: "3.7"
+networks:
+  php-pg-nginx:
+
+services:
+  app:
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    ports:
+      - "8000:80"
+    working_dir: /var/www
+    volumes:
+      - ./views:/var/www
+    depends_on:
+      - fpm
+      - postgresql
+    networks:
+      - php-pg-nginx
+  fpm:
+    container_name: php-fpm
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9000:9000"
+    volumes:
+      - .:/var/www
+    networks:
+      - php-pg-nginx
+    restart: unless-stopped
+  postgresql:
+    container_name: postgres
+    image: postgres:15-alpine
+    restart: always
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./docker/pgsql:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+    networks:
+      - php-pg-nginx
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+volumes:
+  pg_data:
