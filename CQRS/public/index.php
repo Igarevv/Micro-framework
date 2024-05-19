@@ -1,6 +1,5 @@
 <?php
 
-use Clockwork\Support\Vanilla\Clockwork;
 use Igarevv\Micrame\Http\Kernel;
 use Igarevv\Micrame\Http\Request\RequestInterface;
 use League\Container\Container;
@@ -11,8 +10,6 @@ require APP_PATH . '/vendor/autoload.php';
 
 /** @var Container $container */
 $container = require APP_PATH . '/bootstrap/services.php';
-
-require APP_PATH . '/bootstrap/bootstrap.php';
 
 /** @var Kernel $kernel */
 $kernel = $container->get(Kernel::class);

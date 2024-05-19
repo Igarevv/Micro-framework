@@ -51,7 +51,7 @@ class BookRepository implements BookRepositoryInterface
 
     public function getPaginated(int $limit, int $offset): Paginator
     {
-        $dql = "SELECT b, a, ba
+        $dql = "SELECT ba, b, a
             FROM App\Infrastructure\Persistence\Entity\Book b
             JOIN b.bookAuthors ba
             JOIN ba.author a

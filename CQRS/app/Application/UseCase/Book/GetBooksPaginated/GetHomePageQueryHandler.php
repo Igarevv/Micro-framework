@@ -41,9 +41,10 @@ class GetHomePageQueryHandler implements QueryHandleInterface
         $paginatedBooks = $this->bookRepository->getPaginated($limit,
           $this->showNumber);
 
-        if ( ! $paginatedBooks->getIterator()) {
+        if (! count($paginatedBooks->getIterator())) {
             throw BookException::booksNotFound();
         }
+
         return $this->makePresentation($paginatedBooks);
     }
 
