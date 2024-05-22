@@ -18,7 +18,12 @@ class AdminController extends Controller
 
     public function index(): Response
     {
-        return $this->render('/admin/admin.main.twig');
+        return $this->render('/admin/admin.home.twig');
+    }
+
+    public function showUnreadyBooks(): Response
+    {
+        return $this->render('/admin/admin.unready.twig');
     }
 
     public function showBookForm(): Response
@@ -39,7 +44,7 @@ class AdminController extends Controller
             $this->request->session()->setFlash('error', [
               'error' => $e->getMessage(),
             ]);
-            return new RedirectResponse('/admin/add-book');
+            return new RedirectResponse('/admin/book');
         }
 
         return $this->render('/admin/admin.list.twig', $books);

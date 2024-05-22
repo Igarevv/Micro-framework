@@ -15,10 +15,11 @@ interface RequestInterface
 
     public function getGet(array|string $keys = []): mixed;
 
-    public function getFiles(?string $key = null): array;
+    public function getFile(?string $key = null): array;
 
     public function setSession(SessionInterface $session): void;
 
     public function session(): SessionInterface;
 
+    public function getFiles(?string $key = null): array;
 }

@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\Table;
 
@@ -19,9 +20,11 @@ class BookAuthor implements DatabaseEntity
     private ?int $id;
 
     #[ManyToOne(cascade: ['persist', 'remove'], inversedBy: 'bookAuthors')]
+    #[JoinColumn(name: 'book_id', referencedColumnName: 'id')]
     private Book $book;
 
     #[ManyToOne(cascade: ['persist', 'remove'], inversedBy: 'bookAuthors')]
+    #[JoinColumn(name: 'author_id', referencedColumnName: 'id')]
     private Author $author;
 
     #[Column(name: 'created_at')]

@@ -31,7 +31,7 @@ class BookController extends Controller
               ->session()
               ->setFlash('error', ['error' => $e->getMessage()]);
 
-            return new RedirectResponse('/admin/add-book');
+            return new RedirectResponse('/admin/book');
         }
 
         $this->request

@@ -2,7 +2,7 @@
 
 namespace App\Domain\Book\ValueObject;
 
-use App\Based\Exception\InvalidFormat;
+use App\Domain\Based\Exception\InvalidFormat;
 use App\Domain\Based\ValueObject\IntegerValue;
 
 class Isbn extends IntegerValue

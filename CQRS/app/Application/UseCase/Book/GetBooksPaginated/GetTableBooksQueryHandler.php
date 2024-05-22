@@ -6,9 +6,8 @@ use App\Application\Presenter\TableBookPresenter;
 use App\Domain\Based\Bus\Query\QueryHandleInterface;
 use App\Domain\Based\Bus\Query\QueryInterface;
 use App\Domain\Book\Enum\PagePaginator;
-use App\Domain\Book\Exception\BookException;
 use App\Domain\Book\Repository\BookRepositoryInterface;
-use Doctrine\ORM\Tools\Pagination\Paginator;
+use App\Infrastructure\Services\Paginator;
 
 class GetTableBooksQueryHandler implements QueryHandleInterface
 {
@@ -26,7 +25,6 @@ class GetTableBooksQueryHandler implements QueryHandleInterface
 
     /**
      * @var GetPaginatedBooksCommand $command
-     * @throws \App\Domain\Book\Exception\BookException
      */
     public function handle(QueryInterface $command): array
     {
@@ -36,10 +34,6 @@ class GetTableBooksQueryHandler implements QueryHandleInterface
 
         $paginatedBooks = $this->repository->getPaginated($limit,
           $this->showNumber);
-
-        if (! count($paginatedBooks->getIterator())) {
-            throw BookException::booksNotFound();
-        }
 
         return $this->makePresentation($paginatedBooks);
     }
@@ -68,7 +62,9 @@ class GetTableBooksQueryHandler implements QueryHandleInterface
     {
         $books = [];
 
-        foreach ($paginatedBooks as $book) {
+        $collection= $paginatedBooks->getArrayData();
+
+        foreach ($collection as $book) {
             $data = $book->getBookAuthors()->getValues()[0];
 
             $books[PagePaginator::COLLECTION->value][] = (new TableBookPresenter($data))->toBase();

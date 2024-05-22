@@ -3,6 +3,7 @@
 use App\Application\Mappers\UserMapper;
 use App\Domain\Book\Repository\BookRepositoryInterface;
 use App\Domain\Book\Repository\ImageRepositoryInterface;
+use App\Domain\Book\Service\CsvValidatorServiceInterface;
 use App\Domain\User\Repository\UserRepositoryInterface;
 use App\Infrastructure\Bus\Command\CommandBus;
 use App\Infrastructure\Bus\Command\CommandBusInterface;
@@ -19,6 +20,7 @@ use App\Infrastructure\Persistence\Types\LastNameType;
 use App\Infrastructure\Persistence\Types\YearType;
 use App\Infrastructure\Services\EntityManager\Contracts\EntityManagerServiceInterface;
 use App\Infrastructure\Services\EntityManager\EntityManagerService;
+use App\Infrastructure\Services\Validators\CsvBookValidator;
 use App\Providers\ServiceProvider;
 use App\Repository\AbstractRepository;
 use Cloudinary\Cloudinary;
@@ -170,7 +172,6 @@ $container->addShared(EntityManagerInterface::class,
       );
   });
 
-
 $container->addShared(EntityManagerServiceInterface::class,
   EntityManagerService::class)
   ->addArgument(EntityManagerInterface::class);
@@ -202,6 +203,8 @@ $container->addShared(CommandBusInterface::class, CommandBus::class)
 
 $container->addShared(QueryBusInterface::class, QueryBus::class)
   ->addArgument($container);
+
+$container->add(CsvValidatorServiceInterface::class, CsvBookValidator::class);
 
 /**
  * For Twig

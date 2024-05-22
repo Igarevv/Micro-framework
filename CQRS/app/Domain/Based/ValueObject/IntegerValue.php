@@ -8,13 +8,13 @@ abstract class IntegerValue
 {
     protected function __construct(protected string|int $value) {}
 
-    public static function fromStringToInt(string|int $value): static
+    public static function fromString(string|int $value): static
     {
         if (! is_numeric($value)){
             throw new InvalidFormat("Value: {$value} must be numeric");
         }
 
-        return new static((int) $value);
+        return new static($value);
     }
 
     public function value(): string
@@ -29,7 +29,7 @@ abstract class IntegerValue
 
     public function isEqual(self|string|int $other): bool
     {
-        return (int) $this === (int) $other;
+        return (string) $this === (string) $other;
     }
 
 }

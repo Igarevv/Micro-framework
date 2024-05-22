@@ -1,89 +1,98 @@
 {% extends '/admin/admin.main.twig' %}
 
 {% block main %}
-    <div class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-        {% if session().hasFlash('success') %}
-            {% for message in session().flash('success') %}
-                <div class="alert alert-success mt-2" role="alert">
-                    <p class="mb-0 text-bold">{{ message }}</p>
+    {% if session().hasFlash('success') %}
+        {% for message in session().flash('success') %}
+            <div class="alert alert-success mt-2" role="alert">
+                <p class="mb-0 text-bold">{{ message }}</p>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="dropdown d-flex align-items-center mt-3">
+        <p class="text-bold mr-3 mb-0">Show</p>
+        <select id="book-to-show" class="form-select form-select-sm" data-page-id="{{ books['page'] }}"
+                aria-label=".form-select-sm example">
+            <option selected value="10">10</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+        </select>
+        <p class="text-bold ml-3 mb-0">books</p>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title m-b-0 text-primary">Published books</h5>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="thead-light">
+                            <tr>
+                                <th class="text-primary" scope="col">Id</th>
+                                <th class="text-primary" scope="col">Title</th>
+                                <th class="text-primary" scope="col">Author</th>
+                                <th class="text-primary" scope="col">Year</th>
+                                <th class="text-primary" scope="col">ISBN</th>
+                                <th class="text-primary" scope="col">Created At</th>
+                                <th class="text-center text-primary" scope="col">Delete book</th>
+                            </tr>
+                            </thead>
+                            <tbody class="customizable">
+                            {% for book in collection %}
+                                <tr id="book-{{ book.bookId }}">
+                                    <th scope="row">{{ book.bookId }}</th>
+                                    <td>{{ book.title }}</td>
+                                    <td>{{ book.authorName }}</td>
+                                    <td>{{ book.year }}</td>
+                                    <td>{{ book.isbn }}</td>
+                                    <td>{{ book.createdAt }}</td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-danger" data-book-id="{{ book.bookId }}"
+                                                onclick="deleteBook(this)">Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            {% endfor %}
-        {% endif %}
-        <div class="dropdown d-flex align-items-center mt-3">
-            <p class="text-bold mr-3 mb-0">Show</p>
-            <select id="book-to-show" class="form-select form-select-sm" data-page-id="{{ books['page'] }}" aria-label=".form-select-sm example">
-                <option selected value="10">10</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-                <option value="200">200</option>
-            </select>
-            <p class="text-bold ml-3 mb-0">books</p>
-        </div>
-
-        <div class="mt-4 pb-0.5 bg-light">
-            <table class="table table-sm">
-                <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Author</th>
-                    <th scope="col">Year</th>
-                    <th scope="col">ISBN</th>
-                    <th scope="col">Created At</th>
-                    <th class="text-center" scope="col">Delete book</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for book in collection %}
-                    <tr id="book-{{ book.bookId }}">
-                        <th scope="row">{{ book.bookId }}</th>
-                        <td>{{ book.title }}</td>
-                        <td>{{ book.authorName }}</td>
-                        <td>{{ book.year }}</td>
-                        <td>{{ book.isbn }}</td>
-                        <td>{{ book.createdAt}}</td>
-                        <td class="text-center">
-                            <button type="button" class="btn btn-danger" data-book-id="{{ book.bookId }}"
-                                    onclick="deleteBook(this)">Delete
-                            </button>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <div class="d-flex mt-3 justify-content-end">
-            <nav aria-label="...">
-                <ul class="pagination">
-                    {% if page > 1 %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page=1" tabindex="-1">First</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page - 1 }}">Prev</a>
-                        </li>
-                    {% endif %}
-                    {% for pageNum in 1..count %}
-                        {% if pageNum == page %}
-                            <li class="page-item active">
-                                <span class="page-link">{{ pageNum }} <span class="sr-only">(current)</span></span>
-                            </li>
-                        {% else %}
+            </div>
+            <div class="d-flex mt-3 justify-content-end">
+                <nav aria-label="...">
+                    <ul class="pagination">
+                        {% if page > 1 %}
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ pageNum }}">{{ pageNum }}</a>
+                                <a class="page-link" href="?page=1" tabindex="-1">First</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page - 1 }}">Prev</a>
                             </li>
                         {% endif %}
-                    {% endfor %}
-                    {% if page < count %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page + 1 }}">Next</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ count }}">Last</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </nav>
+                        {% for pageNum in 1..count %}
+                            {% if pageNum == page %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ pageNum }} <span class="sr-only">(current)</span></span>
+                                </li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ pageNum }}">{{ pageNum }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if page < count %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page + 1 }}">Next</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ count }}">Last</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
         </div>
     </div>
     <script src="/views/assets/js/deleteBook.js"></script>

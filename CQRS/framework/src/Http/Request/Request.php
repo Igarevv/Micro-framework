@@ -43,7 +43,7 @@ final class Request implements RequestInterface
             return $this->post;
         }
 
-        if (is_array($keys)){
+        if (is_array($keys)) {
             return array_intersect_key($this->post, array_flip($keys));
         }
 
@@ -56,23 +56,50 @@ final class Request implements RequestInterface
             return $this->get;
         }
 
-        if (is_array($keys)){
+        if (is_array($keys)) {
             return array_intersect_key($this->get, array_flip($keys));
         }
 
         return $this->get[$keys] ?? [];
     }
 
-    public function getFiles(?string $key = null): array
+    public function getFile(?string $key = null): array
     {
-        if ( ! $key) {
-            return $this->files;
+        if ($key === null) {
+            throw new HttpException('File key not provided');
         }
-        if ($this->files[$key]['error'] !== UPLOAD_ERR_OK) {
-            throw new HttpException("File error ".$this->files[$key]['error']);
+
+        if (! isset($this->files[$key])) {
+            throw new HttpException("File with key {$key} not found");
         }
+
+        $this->validateFile($this->files[$key]);
+
         return $this->files[$key];
     }
+
+    public function getFiles(?string $key = null): array
+    {
+        if ($key === null) {
+            return $this->files;
+        }
+
+        if (!isset($this->files[$key])) {
+            throw new HttpException("Files with key {$key} not found");
+        }
+
+        foreach ($this->files[$key]['error'] as $index => $error) {
+            if ($error === UPLOAD_ERR_NO_FILE) {
+                throw new HttpException("File not provided");
+            }
+            if ($error !== UPLOAD_ERR_OK) {
+                throw new HttpException("Error uploading file {$this->files[$key]['name'][$index]} with error code {$error}");
+            }
+        }
+
+        return $this->files[$key];
+    }
+
 
     public function setSession(SessionInterface $session): void
     {
@@ -97,6 +124,17 @@ final class Request implements RequestInterface
     public function getRouteHandlerAndArgs(): array
     {
         return [$this->handler, $this->routeArgs];
+    }
+
+    private function validateFile(array $file): void
+    {
+        if ($file['error'] === UPLOAD_ERR_NO_FILE) {
+            throw new HttpException('File not provided');
+        }
+
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            throw new HttpException("Error uploading file {$file['name']} with error code {$file['error']}");
+        }
     }
 
 }

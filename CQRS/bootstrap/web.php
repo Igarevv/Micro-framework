@@ -15,9 +15,11 @@ return [
   Route::get('/sign-in', [AuthController::class, 'signInIndex'], [Guest::class]),
   Route::post('/sign-in', [AuthController::class, 'login']),
   Route::post('/logout', [AuthController::class, 'logout']),
-  Route::get('/admin/add-book', [AdminController::class, 'showBookForm'], [Authenticate::class]),
-  Route::post('/admin/add-book', [BookController::class, 'save']),
-  Route::get('/admin/main', [AdminController::class, 'index']),
-  Route::get('/admin/list', [AdminController::class, 'showTable']),
-  Route::delete('/admin/book/{id}', [BookController::class, 'delete']),
+  Route::get('/admin/book', [AdminController::class, 'showBookForm'], [Authenticate::class]),
+  Route::post('/admin/book/add', [BookController::class, 'save'], [Authenticate::class]),
+  Route::get('/admin/list', [AdminController::class, 'showTable'], [Authenticate::class]),
+  Route::delete('/admin/book/{id}', [BookController::class, 'delete'], [Authenticate::class]),
+  Route::get('/admin/book/unready', [AdminController::class, 'showUnreadyBooks'], [Authenticate::class]),
+  Route::post('/admin/book/add/csv', [BookController::class, 'saveCsv'], [Authenticate::class]),
+  Route::get('/admin/home', [AdminController::class, 'index'], [Authenticate::class])
 ];

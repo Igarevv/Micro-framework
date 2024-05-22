@@ -1,0 +1,28 @@
+{% extends '/admin/admin.main.twig' %}
+
+{% block main %}
+    <div class="container align-items-center">
+        <p class="display-1 text-primary text-center fw-bold">Good day admin,
+            <span class="font-italic">user</span></p>
+        <div class="dashboard">
+            <a href="/admin/list" class="cardblock color">
+                <h2>Book list</h2>
+                <hr/>
+                <span class="text-primary">Go to page</span>
+            </a>
+
+            <a href="/admin/book" class="cardblock color">
+                <h2>Add book data</h2>
+                <hr/>
+                <span class="text-primary">Go to page</span>
+            </a>
+
+            <a href="/admin/book/unready" class="cardblock color">
+                <h2>Show books for preparation</h2>
+                <hr/>
+                <span class="text-primary">Go to page</span>
+            </a>
+
+        </div>
+    </div>
+{% endblock %}

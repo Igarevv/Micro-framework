@@ -6,10 +6,9 @@ use App\Application\Presenter\HomePagePresenter;
 use App\Domain\Based\Bus\Query\QueryHandleInterface;
 use App\Domain\Based\Bus\Query\QueryInterface;
 use App\Domain\Book\Enum\PagePaginator;
-use App\Domain\Book\Exception\BookException;
 use App\Domain\Book\Repository\BookRepositoryInterface;
 use App\Domain\Book\Repository\ImageRepositoryInterface;
-use Doctrine\ORM\Tools\Pagination\Paginator;
+use App\Infrastructure\Services\Paginator;
 
 class GetHomePageQueryHandler implements QueryHandleInterface
 {
@@ -29,7 +28,6 @@ class GetHomePageQueryHandler implements QueryHandleInterface
     /**
      * @param  GetPaginatedBooksCommand  $command
      *
-     * @throws \App\Domain\Book\Exception\BookException
      * @throws \Exception
      */
     public function handle(QueryInterface $command): array
@@ -40,10 +38,6 @@ class GetHomePageQueryHandler implements QueryHandleInterface
 
         $paginatedBooks = $this->bookRepository->getPaginated($limit,
           $this->showNumber);
-
-        if (! count($paginatedBooks->getIterator())) {
-            throw BookException::booksNotFound();
-        }
 
         return $this->makePresentation($paginatedBooks);
     }
@@ -72,22 +66,25 @@ class GetHomePageQueryHandler implements QueryHandleInterface
     {
         $books = [];
 
-        $imageUrls = $this->getImageUrls($paginatedBooks);
+        $collection = $paginatedBooks->getArrayData();
 
-        foreach ($paginatedBooks as $key => $book) {
+        $imageUrls = $this->getImageUrls($collection);
+
+
+        foreach ($collection as $key => $book) {
             $bookAuthor = $book->getBookAuthors()->getValues()[0];
 
             $books[PagePaginator::COLLECTION->value][] = (new HomePagePresenter($bookAuthor,
               $imageUrls[$key]['url']))->toBase();
         }
 
-        $books[PagePaginator::PAGES_COUNT->value] = ceil(count($paginatedBooks) / $this->showNumber);
+        $books[PagePaginator::PAGES_COUNT->value] = ceil($paginatedBooks->count() / $this->showNumber);
         $books[PagePaginator::PAGE->value] = $this->pageNumber;
 
         return $books;
     }
 
-    private function getImageUrls(Paginator $paginatedBooks): array
+    private function getImageUrls(array $paginatedBooks): array
     {
         $imageUrls = [];
 

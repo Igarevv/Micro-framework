@@ -1,0 +1,16 @@
+{% extends '/admin/admin.main.twig' %}
+
+{% block main %}
+    <div class="d-flex align-items-center justify-content-center vh-100">
+        <div class="text-center">
+            <h1 style="color: limegreen" class="display-2 fw-bold">All is okay!</h1>
+            <p class="fs-2">All books are completely filled.</p>
+            <p class="lead">
+                Some of the actions you can do for now
+            </p>
+            <a href="/admin/list" class="btn btn-primary">Go to books table</a>
+            <a href="/admin/book" class="btn btn-primary">Add new book</a>
+            <a href="/admin/home" class="btn btn-primary">Admin home page</a>
+        </div>
+    </div>
+{% endblock %}

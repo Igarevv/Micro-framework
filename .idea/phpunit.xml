@@ -7,8 +7,8 @@
         <option value="$PROJECT_DIR$/framework/tests" />
         <option value="$PROJECT_DIR$/Onion/tests" />
         <option value="$PROJECT_DIR$/CQRS/tests" />
-        <option value="$PROJECT_DIR$/Onion/framework/tests" />
         <option value="$PROJECT_DIR$/CQRS/framework/tests" />
+        <option value="$PROJECT_DIR$/Onion/framework/tests" />
       </list>
     </option>
   </component>

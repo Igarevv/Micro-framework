@@ -21,4 +21,6 @@ interface RequestInterface
 
     public function session(): SessionInterface;
 
+    public function getFile(?string $key = null): array;
+
 }

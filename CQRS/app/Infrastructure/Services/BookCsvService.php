@@ -1,0 +1,76 @@
+<?php
+
+namespace App\Infrastructure\Services;
+
+use App\Application\DTO\UploadCsvBooksDto;
+use App\Domain\Based\Exception\InvalidFormat;
+use App\Domain\Based\ValueObject\FirstName;
+use App\Domain\Based\ValueObject\LastName;
+use App\Domain\Book\Service\CsvValidatorServiceInterface;
+use App\Domain\Book\ValueObject\Isbn;
+use App\Domain\Book\ValueObject\Year;
+
+class BookCsvService
+{
+
+    public function __construct(
+      private CsvValidatorServiceInterface $validatorService
+    ) {}
+
+    /**
+     * @throws \App\Domain\Based\Exception\InvalidFormat
+     */
+    public function getBooksData(array $filesInfo): array
+    {
+        $this->validatorService->isCsvFormat($filesInfo);
+
+        $books = [];
+        $filesCount = count($filesInfo['name']);
+
+        for($i = 0; $i < $filesCount; ++$i){
+            $books[$filesInfo['name'][$i]] = $this->getArrayFromFiles($filesInfo['tmp_name'][$i]);
+        }
+
+        $this->validatorService->ensureIsbnIsUniqueInEachFile($books);
+
+        return $books;
+    }
+
+    private function getArrayFromFiles(string $filePath): array
+    {
+        $file = fopen($filePath, 'rb');
+
+        $data = [];
+
+        $lineNum = 0;
+
+        while (($rows = fgetcsv($file, separator: ';')) !== false) {
+            $lineNum++;
+
+            [
+              $title, $firstName, $lastName, $year, $isbn, $desc, $genres,
+            ] = $rows;
+
+            $genreStr = preg_replace('/\s+/', '', $genres);
+
+            $genre = explode(',', strtolower($genreStr));
+
+            try {
+                $data[] = new UploadCsvBooksDto(
+                  title: $title,
+                  firstName: FirstName::fromString($firstName),
+                  lastName: LastName::fromString($lastName),
+                  year: Year::fromString($year),
+                  isbn: Isbn::fromString($isbn),
+                  description: $desc,
+                  genre: $genre
+                );
+            } catch (\Throwable $e){
+                throw new InvalidFormat("Error uploading file: {$e->getMessage()} on line {$lineNum}");
+            }
+        }
+
+        return $data;
+    }
+
+}

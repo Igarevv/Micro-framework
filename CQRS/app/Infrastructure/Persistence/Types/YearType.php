@@ -16,7 +16,7 @@ class YearType extends Type
 
     public function convertToPHPValue($value, AbstractPlatform $platform): Year
     {
-        return Year::fromStringToInt($value);
+        return Year::fromString($value);
     }
 
 }

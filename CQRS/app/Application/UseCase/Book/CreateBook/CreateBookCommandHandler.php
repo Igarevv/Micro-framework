@@ -29,7 +29,7 @@ class CreateBookCommandHandler implements CommandHandlerInterface
      */
     public function handle(CommandInterface $command): ?int
     {
-        $isbn = Isbn::fromStringToInt($command->getIsbn());
+        $isbn = Isbn::fromString($command->getIsbn());
 
         $this->ensureBookExists($isbn);
 
@@ -40,7 +40,7 @@ class CreateBookCommandHandler implements CommandHandlerInterface
 
         $book = Book::create(
           title: $command->getTitle(),
-          year: Year::fromStringToInt($command->getYear()),
+          year: Year::fromString($command->getYear()),
           description: $command->getDescription(),
           imageId: $command->getImageId(),
           genre: $command->getGenres(),

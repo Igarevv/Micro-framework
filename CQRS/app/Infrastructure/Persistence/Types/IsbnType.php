@@ -16,7 +16,7 @@ class IsbnType extends Type
 
     public function convertToPHPValue($value, AbstractPlatform $platform): Isbn
     {
-        return Isbn::fromStringToInt($value);
+        return Isbn::fromString($value);
     }
 
 }

@@ -5,7 +5,7 @@ namespace App\Domain\Book\Repository;
 use App\Domain\Book\ValueObject\Isbn;
 use App\Infrastructure\Persistence\Entity\Book;
 use App\Infrastructure\Persistence\Entity\BookAuthor;
-use Doctrine\ORM\Tools\Pagination\Paginator;
+use App\Infrastructure\Services\Paginator;
 
 interface BookRepositoryInterface
 {

@@ -7,8 +7,8 @@ use App\Domain\Book\ValueObject\Isbn;
 use App\Infrastructure\Persistence\Entity\Book;
 use App\Infrastructure\Persistence\Entity\BookAuthor;
 use App\Infrastructure\Services\EntityManager\Contracts\EntityManagerServiceInterface;
+use App\Infrastructure\Services\Paginator;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class BookRepository implements BookRepositoryInterface
 {
