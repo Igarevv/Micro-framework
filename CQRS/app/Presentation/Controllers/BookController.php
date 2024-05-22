@@ -70,14 +70,16 @@ class BookController extends Controller
 
             $this->commandBus->dispatch(new SaveCsvBookCommand($fileData),
               SaveCsvBookHandler::class);
-        } catch (InvalidFormat|HttpException $e) {
+        } catch (InvalidFormat|HttpException|BookException $e) {
             $this->request->session()->setFlash('errorCsv', [
               'error' => $e->getMessage()
             ]);
             return new RedirectResponse('/admin/book');
         }
 
-        return new Response();
+        $this->request->session()->setFlash('success', 'Books was successfully added');
+
+        return new RedirectResponse('/admin/book/unready');
     }
 
     private function getMergedBookData(): array

@@ -110,17 +110,17 @@
                                 <div id="fileList" class="file-list"></div>
                                 <div class="upload-footer d-flex justify-content-between">
                                     <button id="clearBtn" class=" btn btn-danger" disabled>Clear all</button>
-                                    <button id="uploadBtn" class=" btn btn-secondary" disabled>Upload</button>
+                                    <button id="uploadBtn" class=" btn btn-secondary">Upload</button>
                                 </div>
                             </form>
+                            {% if session().hasFlash('errorCsv') %}
+                                {% set output = session().flash('errorCsv')[0] %}
+                                {% set data = output['data'] %}
+                                <div class="alert alert-danger mt-4" role="alert">
+                                    <p class="mb-0 text-bold">{{ output['error'] }}</p>
+                                </div>
+                            {% endif %}
                         </div>
-                        {% if session().hasFlash('errorCsv') %}
-                            {% set output = session().flash('errorCsv')[0] %}
-                            {% set data = output['data'] %}
-                            <div class="alert alert-danger mt-2" role="alert">
-                                <p class="mb-0 text-bold">{{ output['error'] }}</p>
-                            </div>
-                        {% endif %}
                     </div>
                 </div>
             </div>

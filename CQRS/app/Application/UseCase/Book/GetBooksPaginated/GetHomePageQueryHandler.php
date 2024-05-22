@@ -3,6 +3,7 @@
 namespace App\Application\UseCase\Book\GetBooksPaginated;
 
 use App\Application\Presenter\HomePagePresenter;
+use App\Application\Traits\PaginatorTrait;
 use App\Domain\Based\Bus\Query\QueryHandleInterface;
 use App\Domain\Based\Bus\Query\QueryInterface;
 use App\Domain\Book\Enum\PagePaginator;
@@ -13,6 +14,8 @@ use App\Infrastructure\Services\Paginator;
 class GetHomePageQueryHandler implements QueryHandleInterface
 {
 
+    use PaginatorTrait;
+
     private int $showNumber;
 
     private int $pageNumber;
@@ -20,10 +23,7 @@ class GetHomePageQueryHandler implements QueryHandleInterface
     public function __construct(
       private readonly BookRepositoryInterface $bookRepository,
       private readonly ImageRepositoryInterface $imageRepository
-    ) {
-        $this->showNumber = PagePaginator::DEFAULT_HOME_PAGE_SHOW_NUM->value;
-        $this->pageNumber = PagePaginator::DEFAULT_PAGE_START_NUM->value;
-    }
+    ) {}
 
     /**
      * @param  GetPaginatedBooksCommand  $command
@@ -32,34 +32,17 @@ class GetHomePageQueryHandler implements QueryHandleInterface
      */
     public function handle(QueryInterface $command): array
     {
-        $this->ensureParamsAreValid($command->getParams());
+        [$this->showNumber, $this->pageNumber] = $this->getParamsValidParams($command->getParams(),
+          PagePaginator::DEFAULT_HOME_PAGE_SHOW_NUM->value,
+          PagePaginator::DEFAULT_PAGE_START_NUM->value
+        );
 
-        $limit = ($this->pageNumber - 1) * $this->showNumber;
+        $limit = $this->countLimit($this->showNumber, $this->pageNumber);
 
-        $paginatedBooks = $this->bookRepository->getPaginated($limit,
+        $paginatedBooks = $this->bookRepository->getPublishedBooksPaginated($limit,
           $this->showNumber);
 
         return $this->makePresentation($paginatedBooks);
-    }
-
-    private function ensureParamsAreValid(?array $params): void
-    {
-        if (! $params) {
-            return;
-        }
-
-        $showNumber = $params[PagePaginator::SHOW->value] ?? PagePaginator::DEFAULT_HOME_PAGE_SHOW_NUM->value;
-        $pageNumber = $params[PagePaginator::PAGE->value] ?? PagePaginator::DEFAULT_PAGE_START_NUM->value;
-
-        if ( ! is_numeric($showNumber) || ! is_numeric($pageNumber)) {
-            $this->showNumber = PagePaginator::DEFAULT_HOME_PAGE_SHOW_NUM->value;
-            $this->pageNumber = PagePaginator::DEFAULT_PAGE_START_NUM->value;
-
-            return;
-        }
-
-        $this->showNumber = (int) $showNumber;
-        $this->pageNumber = (int) $pageNumber;
     }
 
     private function makePresentation(Paginator $paginatedBooks): array

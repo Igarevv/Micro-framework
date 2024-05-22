@@ -28,7 +28,13 @@ class BookCsvService
         $filesCount = count($filesInfo['name']);
 
         for($i = 0; $i < $filesCount; ++$i){
-            $books[$filesInfo['name'][$i]] = $this->getArrayFromFiles($filesInfo['tmp_name'][$i]);
+            $result = $this->getArrayFromFiles($filesInfo['tmp_name'][$i]);
+
+            if (! $result){
+                continue;
+            }
+
+            $books[$filesInfo['name'][$i]] = $result;
         }
 
         $this->validatorService->ensureIsbnIsUniqueInEachFile($books);
@@ -65,9 +71,15 @@ class BookCsvService
                   description: $desc,
                   genre: $genre
                 );
+            } catch (InvalidFormat $e){
+                throw new InvalidFormat("Error uploading file: {$e->getMessage()} on line {$lineNum}.");
             } catch (\Throwable $e){
-                throw new InvalidFormat("Error uploading file: {$e->getMessage()} on line {$lineNum}");
+                throw new InvalidFormat("Error uploading file: please check your file for compliance.");
             }
+        }
+
+        if (! $data){
+            throw new InvalidFormat("Error uploading file: file is empty.");
         }
 
         return $data;

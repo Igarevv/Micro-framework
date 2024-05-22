@@ -3,7 +3,9 @@
 namespace App\Presentation\Controllers;
 
 use App\Application\UseCase\Book\GetBooksPaginated\GetPaginatedBooksCommand;
+use App\Application\UseCase\Book\GetBooksPaginated\GetStagedTableBookQueryHandler;
 use App\Application\UseCase\Book\GetBooksPaginated\GetTableBooksQueryHandler;
+use App\Domain\Based\Exception\InvalidFormat;
 use App\Domain\Book\Exception\BookException;
 use App\Infrastructure\Bus\Query\QueryBusInterface;
 use Igarevv\Micrame\Controller\Controller;
@@ -23,7 +25,20 @@ class AdminController extends Controller
 
     public function showUnreadyBooks(): Response
     {
-        return $this->render('/admin/admin.unready.twig');
+        $getParams = $this->request->getGet(['page', 'show']);
+
+        try {
+            $books = $this->bus->dispatch(
+              new GetPaginatedBooksCommand($getParams), GetStagedTableBookQueryHandler::class
+            );
+        } catch (BookException|InvalidFormat $e){
+            $this->request->session()->setFlash('errorFromDb', [
+              'error' => $e->getMessage(),
+            ]);
+            return $this->render('/admin/admin.unready.twig');
+        }
+
+        return $this->render('/admin/admin.unready.twig', $books);
     }
 
     public function showBookForm(): Response
@@ -40,7 +55,6 @@ class AdminController extends Controller
               GetTableBooksQueryHandler::class);
 
         } catch (BookException $e){
-
             $this->request->session()->setFlash('error', [
               'error' => $e->getMessage(),
             ]);

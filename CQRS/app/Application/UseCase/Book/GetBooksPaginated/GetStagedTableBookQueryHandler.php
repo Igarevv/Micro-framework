@@ -9,37 +9,32 @@ use App\Domain\Based\Bus\Query\QueryInterface;
 use App\Domain\Book\Enum\PagePaginator;
 use App\Domain\Book\Repository\BookRepositoryInterface;
 use App\Infrastructure\Services\Paginator;
-use Cloudinary\Transformation\Page;
 
-class GetTableBooksQueryHandler implements QueryHandleInterface
+class GetStagedTableBookQueryHandler implements QueryHandleInterface
 {
 
     use PaginatorTrait;
 
-    private int $showNumber;
+    private string $showNumber;
 
-    private int $pageNumber;
+    private string $pageNumber;
 
     public function __construct(
-      private readonly BookRepositoryInterface $repository
+      private BookRepositoryInterface $bookRepository
     ) {}
 
-    /**
-     * @var GetPaginatedBooksCommand $command
-     */
-    public function handle(QueryInterface $command): array
+    public function handle(QueryInterface $command)
     {
-        [$this->showNumber, $this->pageNumber,] = $this->getParamsValidParams($command->getParams(),
+        [$this->showNumber, $this->pageNumber] = $this->getParamsValidParams($command->getParams(),
           PagePaginator::DEFAULT_TABLE_SHOW_NUM->value,
           PagePaginator::DEFAULT_PAGE_START_NUM->value
         );
 
         $limit = $this->countLimit($this->showNumber, $this->pageNumber);
 
-        $paginatedBooks = $this->repository->getPublishedBooksPaginated($limit,
-          $this->showNumber);
+        $stagedBooks = $this->bookRepository->getStagedBooksPaginated($limit, $this->showNumber);
 
-        return $this->makePresentation($paginatedBooks);
+        return $this->makePresentation($stagedBooks);
     }
 
     private function makePresentation(Paginator $paginatedBooks): array

@@ -32,7 +32,7 @@ class Book implements DatabaseEntity
     private string $description;
 
     #[Column(name: 'image_cdn_id')]
-    private string $imageId;
+    private ?string $imageId;
 
     #[Column(type: Types::JSON)]
     private array $genre;
@@ -48,9 +48,9 @@ class Book implements DatabaseEntity
       string $title,
       Year $year,
       string $description,
-      string $imageId,
       array $genre,
       Isbn $isbn,
+      ?string $imageId = null,
     )
     {
         $this->id = $id;
@@ -67,13 +67,13 @@ class Book implements DatabaseEntity
       string $title,
       Year $year,
       string $description,
-      string $imageId,
       array $genre,
       Isbn $isbn,
-      ?int $id = null
+      ?int $id = null,
+      ?string $imageId = null,
     ): static
     {
-        return new static($id, $title, $year, $description, $imageId, $genre, $isbn);
+        return new static($id, $title, $year, $description, $genre, $isbn, $imageId);
     }
 
     /**
@@ -104,7 +104,7 @@ class Book implements DatabaseEntity
         return $this->description;
     }
 
-    public function getImageId(): string
+    public function getImageId(): ?string
     {
         return $this->imageId;
     }

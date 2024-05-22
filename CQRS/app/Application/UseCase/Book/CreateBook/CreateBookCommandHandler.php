@@ -42,9 +42,9 @@ class CreateBookCommandHandler implements CommandHandlerInterface
           title: $command->getTitle(),
           year: Year::fromString($command->getYear()),
           description: $command->getDescription(),
-          imageId: $command->getImageId(),
           genre: $command->getGenres(),
-          isbn: $isbn
+          isbn: $isbn,
+          imageId: $command->getImageId()
         );
         $bookAuthor = BookAuthor::create($book, $author);
 

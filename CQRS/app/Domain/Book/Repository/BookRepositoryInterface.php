@@ -9,7 +9,7 @@ use App\Infrastructure\Services\Paginator;
 
 interface BookRepositoryInterface
 {
-    public function save(BookAuthor $book);
+    public function save(BookAuthor $book): void;
 
     public function getById(int $id): ?Book;
 
@@ -17,8 +17,12 @@ interface BookRepositoryInterface
 
     public function getAll();
 
-    public function getPaginated(int $limit, int $offset): Paginator;
+    public function getPublishedBooksPaginated(int $limit, int $offset): Paginator;
+
+    public function getStagedBooksPaginated(int $limit, int $offset): Paginator;
 
     public function delete(int $id): void;
+
+    public function saveBooksFromCsv(array $entities): void;
 
 }
