@@ -21,6 +21,7 @@ class UploadImageHandler implements CommandHandlerInterface
      */
     public function handle(CommandInterface $command): void
     {
+        dd($command);
         try {
             $this->repository->updateImageData($command->getBookId(),$command->getImageId());
         } catch (\Throwable $e){

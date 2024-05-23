@@ -3,7 +3,6 @@ let clearBtn = document.getElementById('clear');
 let noImage = document.getElementById('noImage');
 let fileInput = document.getElementById('exampleFormControlFile1');
 let imagePreview = document.querySelector('.image-preview');
-let spinner = document.getElementById('spinner');
 fileInput.addEventListener('change', (e) => {
   let allowedExt = ['image/png', 'image/jpg', 'image/jpeg'];
 
@@ -53,7 +52,6 @@ uploadBtn.addEventListener('click', () => {
   xhr.open('POST', '/admin/book/unready');
   xhr.onreadystatechange = function () {
     if (xhr.readyState === XMLHttpRequest.DONE){
-      spinner.style.display = 'none';
       if (xhr.status === 200){
         let response = JSON.parse(xhr.responseText);
 
@@ -63,6 +61,5 @@ uploadBtn.addEventListener('click', () => {
       }
     }
   }
-  spinner.style.display = 'block';
   xhr.send(formData);
 });
