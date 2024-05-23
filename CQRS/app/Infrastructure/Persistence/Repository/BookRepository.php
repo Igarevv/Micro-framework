@@ -127,11 +127,13 @@ class BookRepository implements BookRepositoryInterface
         });
     }
 
-    public function updateImageData(int $bookId, string $imageId): bool
+    public function updateImageData(int $bookId, ?string $imageId): void
     {
         $book = $this->entityManager->find(Book::class, $bookId);
 
-        dd($book);
+        $book->setImageId($imageId);
+
+        $this->entityManager->sync($book);
     }
 
 }

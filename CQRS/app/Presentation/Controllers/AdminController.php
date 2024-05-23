@@ -8,6 +8,7 @@ use App\Application\UseCase\Book\GetBooksPaginated\GetTableBooksQueryHandler;
 use App\Domain\Based\Exception\InvalidFormat;
 use App\Domain\Book\Exception\BookException;
 use App\Infrastructure\Bus\Query\QueryBusInterface;
+use App\Infrastructure\Services\Session\FlashMessageHandler;
 use Igarevv\Micrame\Controller\Controller;
 use Igarevv\Micrame\Http\Response\RedirectResponse;
 use Igarevv\Micrame\Http\Response\Response;
@@ -15,7 +16,8 @@ use Igarevv\Micrame\Http\Response\Response;
 class AdminController extends Controller
 {
     public function __construct(
-      private readonly QueryBusInterface $bus
+      private readonly QueryBusInterface $bus,
+      private readonly FlashMessageHandler $flasher
     ) {}
 
     public function index(): Response
@@ -32,9 +34,8 @@ class AdminController extends Controller
               new GetPaginatedBooksCommand($getParams), GetStagedTableBookQueryHandler::class
             );
         } catch (BookException|InvalidFormat $e){
-            $this->request->session()->setFlash('errorFromDb', [
-              'error' => $e->getMessage(),
-            ]);
+            $this->flasher->setError('errorFromDb', $e->getMessage());
+
             return $this->render('/admin/admin.unready.twig');
         }
 
@@ -55,9 +56,8 @@ class AdminController extends Controller
               GetTableBooksQueryHandler::class);
 
         } catch (BookException $e){
-            $this->request->session()->setFlash('error', [
-              'error' => $e->getMessage(),
-            ]);
+            $this->flasher->setError('error', $e->getMessage());
+
             return new RedirectResponse('/admin/book');
         }
 

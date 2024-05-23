@@ -135,4 +135,9 @@ class Book implements DatabaseEntity
         }
     }
 
+    public function setImageId(?string $imageId): void
+    {
+        $this->imageId = $imageId;
+    }
+
 }

@@ -3,7 +3,13 @@
 {% block main %}
     <div class="container">
         {% if session().hasFlash('success-full-add') %}
-            {% for message in session().flash('success-full-add') %}
+            {% for message in session().flash('success-full-add')[0] %}
+                <div class="alert alert-success mt-2" role="alert">
+                    <p class="mb-0 text-bold">{{ message }}</p>
+                </div>
+            {% endfor %}
+        {% elseif session().hasFlash('success-upload-add') %}
+            {% for message in session().flash('success-upload-add')[0] %}
                 <div class="alert alert-success mt-2" role="alert">
                     <p class="mb-0 text-bold">{{ message }}</p>
                 </div>

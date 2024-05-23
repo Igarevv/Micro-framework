@@ -8,7 +8,7 @@ readonly class UploadImageCommand implements CommandInterface
 {
     public function __construct(
       private int $bookId,
-      private array $imageData
+      private ?string $imageId
     ) {}
 
     public function getBookId(): int
@@ -16,9 +16,9 @@ readonly class UploadImageCommand implements CommandInterface
         return $this->bookId;
     }
 
-    public function getImageData(): array
+    public function getImageId(): ?string
     {
-        return $this->imageData;
+        return $this->imageId;
     }
 
 }

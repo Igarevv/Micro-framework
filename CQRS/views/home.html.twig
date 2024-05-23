@@ -3,7 +3,7 @@
 {% block content %}
     {{ include('/templates/basenav.html.twig') }}
     {% if session().hasFlash('success-register') %}
-        {% set message = session().flash('success-register')[0] %}
+        {% set message = session().flash('success-register')[0]['success'] %}
         <script>
           window.onload = function () {
             $('#reg-success').modal('show');
@@ -25,7 +25,7 @@
                     </h5>
                 </div>
                 <div class="modal-body">
-                    <p>{{ message['message'] }}</p>
+                    <p>{{ success }}</p>
                 </div>
 
             </div>

@@ -1,10 +1,9 @@
-
 let uploadBtn = document.getElementById('upload');
 let clearBtn = document.getElementById('clear');
 let noImage = document.getElementById('noImage');
 let fileInput = document.getElementById('exampleFormControlFile1');
 let imagePreview = document.querySelector('.image-preview');
-
+let spinner = document.getElementById('spinner');
 fileInput.addEventListener('change', (e) => {
   let allowedExt = ['image/png', 'image/jpg', 'image/jpeg'];
 
@@ -19,9 +18,9 @@ fileInput.addEventListener('change', (e) => {
     clearBtn.disabled = false;
   } else {
     uploadBtn.disabled = true;
-    clearBtn.disabled = true;
     noImage.hidden = false;
   }
+  clearBtn.disabled = false;
 });
 
 clearBtn.addEventListener('click', () => {
@@ -38,6 +37,7 @@ let bookId;
 uploadButtons.forEach( (button) => {
   button.addEventListener('click',  () =>{
     bookId = button.getAttribute('data-book-id');
+    document.getElementById('book-id').innerHTML = bookId;
   });
 });
 
@@ -53,10 +53,16 @@ uploadBtn.addEventListener('click', () => {
   xhr.open('POST', '/admin/book/unready');
   xhr.onreadystatechange = function () {
     if (xhr.readyState === XMLHttpRequest.DONE){
+      spinner.style.display = 'none';
       if (xhr.status === 200){
-        //
+        let response = JSON.parse(xhr.responseText);
+
+        if (response.redirect){
+          window.location.href = response.redirect;
+        }
       }
     }
   }
+  spinner.style.display = 'block';
   xhr.send(formData);
 });

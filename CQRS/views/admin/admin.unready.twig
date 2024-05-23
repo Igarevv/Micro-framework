@@ -6,6 +6,10 @@
             <div class="alert alert-danger mt-2" role="alert">
                 <p class="mb-0 text-bold">{{ session().flash('errorFromDb')[0]['error'] }}</p>
             </div>
+        {% elseif session().hasFlash('error-upload') %}
+            <div class="alert alert-danger mt-2" role="alert">
+                <p class="mb-0 text-bold">{{ session().flash('error-upload')[0]['error'] }}</p>
+            </div>
         {% endif %}
         {% if collection is empty %}
             <div class="d-flex align-items-center justify-content-center" style="height: 60vh">
@@ -149,7 +153,7 @@
                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">Upload image</h5>
+                            <h5 class="modal-title" id="staticBackdropLabel">Upload image for book №<span id="book-id"></span></h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>

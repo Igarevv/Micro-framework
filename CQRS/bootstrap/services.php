@@ -20,6 +20,7 @@ use App\Infrastructure\Persistence\Types\LastNameType;
 use App\Infrastructure\Persistence\Types\YearType;
 use App\Infrastructure\Services\EntityManager\Contracts\EntityManagerServiceInterface;
 use App\Infrastructure\Services\EntityManager\EntityManagerService;
+use App\Infrastructure\Services\Session\FlashMessageHandler;
 use App\Infrastructure\Services\Validators\CsvBookValidator;
 use App\Providers\ServiceProvider;
 use App\Repository\AbstractRepository;
@@ -104,6 +105,9 @@ $container->add(SessionInterface::class, Session::class);
 
 $container->add(ServiceProvider::class)
   ->addArgument(EventDispatcher::class);
+
+$container->addShared(FlashMessageHandler::class)
+    ->addArgument(SessionInterface::class);
 
 /**
  * For kernel and start app

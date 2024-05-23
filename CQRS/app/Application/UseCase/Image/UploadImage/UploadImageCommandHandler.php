@@ -21,9 +21,9 @@ class UploadImageCommandHandler implements CommandHandlerInterface
      */
     public function handle(CommandInterface $command): bool
     {
-        $response = $this->repository->upload($command->getImageData());
-
-        if (! $response){
+        try {
+            $this->repository->upload($command->getImageData());
+        } catch (\Throwable $e){
             throw CloudinaryException::cloudinaryServiceError();
         }
 
