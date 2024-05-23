@@ -61,10 +61,9 @@ class BookInteractor
     public function updateBookImage(int $id, array $imageData): void
     {
         $image = $this->imageService->createUniqueImage($imageData);
-
         try {
             $this->commandBus->dispatch(new BookUploadImage($id,
-              $image->getFullName()),
+              $image->getFileName()),
               UploadImageHandler::class);
 
             $isUpload = $this->commandBus->dispatch(new UploadImageCommand($image),

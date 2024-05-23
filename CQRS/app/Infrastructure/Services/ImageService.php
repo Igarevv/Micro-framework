@@ -12,6 +12,8 @@ class ImageService implements ImageServiceInterface
 
     private string $fileName;
 
+    private string $extension;
+
     /**
      * @throws \App\Domain\Book\Exception\ImageException
      */
@@ -27,7 +29,8 @@ class ImageService implements ImageServiceInterface
 
         return new ImageDto(
           name:  Uuid::uuid4()->toString(),
-          tmpPath: $imageData['tmp_name']
+          tmpPath: $imageData['tmp_name'],
+          type: $this->extension
         );
     }
 
@@ -35,9 +38,9 @@ class ImageService implements ImageServiceInterface
     {
         $allowedExtension = ['jpeg', 'png', 'jpg'];
 
-        $extension = pathinfo($this->fileName, PATHINFO_EXTENSION);
+        $this->extension = pathinfo($this->fileName, PATHINFO_EXTENSION);
 
-        if (! in_array($extension, $allowedExtension, true)) {
+        if (! in_array($this->extension, $allowedExtension, true)) {
             throw ImageException::fileExtensionNotAllowed('Only jpeg, png, jpg files allowed');
         }
     }

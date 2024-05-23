@@ -92,8 +92,8 @@
             <div class="d-flex align-items-center flex-column mt-5">
                 <h4 class="text-danger fw-bold">Notice!</h4>
                 <p style="width: 30%; text-align: center">
-                    Uploading books data viw CSV file means that you <span class="fw-bold">do not</span> upload books
-                    with preview images.
+                    Uploading books data via CSV file means that you upload books
+                    <span class="fw-bold">without</span> preview images.
                     After downloading, all books will be automatically added to staged list, where you could update each
                     book.
                 </p>
@@ -106,13 +106,13 @@
                             <form action="/admin/book/add/csv" method="post" enctype="multipart/form-data">
                                 <div class="upload-dropzone" id="dropzone">
                                     <p>Drag file(s) here to upload.</p>
-                                    <p>Alternatively, you can select a file by</p>
+                                    <p>Alternatively, you can select a file by clicking on this area</p>
                                     <input type="file" id="fileInput" name="csv[]" multiple hidden>
                                 </div>
                                 <div id="fileList" class="file-list"></div>
                                 <div class="upload-footer d-flex justify-content-between">
                                     <button id="clearBtn" class=" btn btn-danger" disabled>Clear all</button>
-                                    <button id="uploadBtn" class=" btn btn-secondary">Upload</button>
+                                    <button id="uploadBtn" class=" btn btn-secondary" disabled>Upload</button>
                                 </div>
                             </form>
                             {% if session().hasFlash('errorCsv') %}
