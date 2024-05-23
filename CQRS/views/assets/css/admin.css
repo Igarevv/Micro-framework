@@ -366,3 +366,8 @@ th {
 hr{
   width: 95%;
 }
+
+.image-p {
+  height: 400px;
+  width: 400px;
+}

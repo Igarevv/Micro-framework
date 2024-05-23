@@ -10,7 +10,7 @@ class Isbn extends IntegerValue
 
     protected function __construct(int|string $value)
     {
-        parent::__construct($value);
+        parent::__construct((string)$value);
 
         $this->isValid();
     }

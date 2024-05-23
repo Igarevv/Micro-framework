@@ -96,7 +96,7 @@ class BookRepository implements BookRepositoryInterface
     {
         $this->entityManager->getConnection()->transactional(function () use ($entities) {
             $i = 1;
-            $batchSize = 30;
+            $batchSize = 50;
 
             foreach ($entities as $entity){
                 try {
@@ -105,6 +105,8 @@ class BookRepository implements BookRepositoryInterface
                     if ($i % $batchSize === 0) {
                         $this->entityManager->sync();
                         $this->entityManager->clear();
+
+                        $i = 1;
                     } else {
                         ++$i;
                     }
@@ -123,6 +125,13 @@ class BookRepository implements BookRepositoryInterface
                 $this->entityManager->clear();
             }
         });
+    }
+
+    public function updateImageData(int $bookId, string $imageId): bool
+    {
+        $book = $this->entityManager->find(Book::class, $bookId);
+
+        dd($book);
     }
 
 }

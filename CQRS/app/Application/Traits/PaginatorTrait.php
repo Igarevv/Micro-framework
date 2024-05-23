@@ -6,7 +6,7 @@ use App\Domain\Book\Enum\PagePaginator;
 
 trait PaginatorTrait
 {
-    public function getParamsValidParams(?array $params, int $defaultShowNumber, int $defaultPageNumber): array
+    public function getValidParams(?array $params, int $defaultShowNumber, int $defaultPageNumber): array
     {
         if (! $params) {
             return [$defaultShowNumber, $defaultPageNumber];

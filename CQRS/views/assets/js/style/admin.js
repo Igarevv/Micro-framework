@@ -83,7 +83,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
       btn.classList.remove("active");
     });
 
-    tab.classList.add("active");
+    if (tab){
+      tab.classList.add("active");
+    }
   }
 
   if (savedButtonState) {

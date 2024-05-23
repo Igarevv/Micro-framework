@@ -44,7 +44,7 @@ class BookController extends Controller
 
         $this->request
           ->session()
-          ->setFlash('success', 'Book was successfully added');
+          ->setFlash('success-full-add', 'Book was successfully added');
         return new RedirectResponse('/admin/list');
     }
 
@@ -72,7 +72,7 @@ class BookController extends Controller
               SaveCsvBookHandler::class);
         } catch (InvalidFormat|HttpException|BookException $e) {
             $this->request->session()->setFlash('errorCsv', [
-              'error' => $e->getMessage()
+              'error' => $e->getMessage(),
             ]);
             return new RedirectResponse('/admin/book');
         }
@@ -80,6 +80,12 @@ class BookController extends Controller
         $this->request->session()->setFlash('success', 'Books was successfully added');
 
         return new RedirectResponse('/admin/book/unready');
+    }
+
+    public function uploadImage(): Response
+    {
+        $bookId = $this->request->getPost('bookId');
+        $image = $this->request->getFile('image');
     }
 
     private function getMergedBookData(): array

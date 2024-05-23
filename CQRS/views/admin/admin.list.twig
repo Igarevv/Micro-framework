@@ -2,14 +2,14 @@
 
 {% block main %}
     <div class="container">
-        {% if session().hasFlash('success') %}
-            {% for message in session().flash('success') %}
+        {% if session().hasFlash('success-full-add') %}
+            {% for message in session().flash('success-full-add') %}
                 <div class="alert alert-success mt-2" role="alert">
                     <p class="mb-0 text-bold">{{ message }}</p>
                 </div>
             {% endfor %}
         {% endif %}
-        <div class="dropdown d-flex align-items-center mt-3">
+        <div class="dropdown d-flex align-items-center mt-3 mb-3">
             <p class="text-bold mr-3 mb-0">Show</p>
             <select id="book-to-show" class="form-select form-select-sm" data-page-id="{{ books['page'] }}"
                     aria-label=".form-select-sm example">
@@ -47,7 +47,7 @@
                                     <td>{{ book.authorName }}</td>
                                     <td>{{ book.year }}</td>
                                     <td>{{ book.isbn }}</td>
-                                    <td>{{ book.createdAt }}</td>
+                                    <td>{{ book.createdAt }} UTC</td>
                                     <td class="text-center">
                                         <button type="button" class="btn btn-danger" data-book-id="{{ book.bookId }}"
                                                 onclick="deleteBook(this)">Delete
@@ -65,29 +65,55 @@
                     <ul class="pagination">
                         {% if page > 1 %}
                             <li class="page-item">
-                                <a class="page-link" href="?page=1" tabindex="-1">First</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page - 1 }}">Prev</a>
+                                <a class="page-link" href="?page={{ page - 1 }}" tabindex="-1">Back</a>
                             </li>
                         {% endif %}
-                        {% for pageNum in 1..count %}
-                            {% if pageNum == page %}
-                                <li class="page-item active">
-                                    <span class="page-link">{{ pageNum }} <span class="sr-only">(current)</span></span>
-                                </li>
-                            {% else %}
+
+                        {% set first_page = 1 %}
+                        {% set last_page = count %}
+                        {% set surrounding_pages_limit = 2 %}
+
+                        <li class="page-item {{ page == first_page ? 'active' : '' }}">
+                            <a class="page-link" href="?page={{ first_page }}">{{ first_page }}</a>
+                        </li>
+
+                        {% if page > surrounding_pages_limit + 2 %}
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+
+                        {% for i in (page - surrounding_pages_limit)..(page - 1) %}
+                            {% if i > first_page %}
                                 <li class="page-item">
-                                    <a class="page-link" href="?page={{ pageNum }}">{{ pageNum }}</a>
+                                    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
                                 </li>
                             {% endif %}
                         {% endfor %}
+
+                        {% if page != first_page and page != last_page %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ page }} <span class="sr-only">(current)</span></span>
+                            </li>
+                        {% endif %}
+
+                        {% for i in (page + 1)..(page + surrounding_pages_limit) %}
+                            {% if i < last_page %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page < count - surrounding_pages_limit - 1 %}
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+
+                        <li class="page-item {{ page == last_page ? 'active' : '' }}">
+                            <a class="page-link" href="?page={{ last_page }}">{{ last_page }}</a>
+                        </li>
+
                         {% if page < count %}
                             <li class="page-item">
                                 <a class="page-link" href="?page={{ page + 1 }}">Next</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ count }}">Last</a>
                             </li>
                         {% endif %}
                     </ul>

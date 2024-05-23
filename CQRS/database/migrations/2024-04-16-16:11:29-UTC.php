@@ -22,10 +22,13 @@ return new class
         ]);
         $table->addColumn('description', Types::TEXT);
         $table->addColumn('image_cdn_id', Types::STRING, [
-          'length' => 255
+          'length' => 255,
+          'notnull' => false
         ]);
         $table->addColumn('genre', Types::JSON);
-        $table->addColumn('isbn', Types::BIGINT);
+        $table->addColumn('isbn', Types::STRING, [
+          'length' => 13
+        ]);
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(['isbn']);
 

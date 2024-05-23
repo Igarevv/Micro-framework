@@ -29,7 +29,7 @@ class GetTableBooksQueryHandler implements QueryHandleInterface
      */
     public function handle(QueryInterface $command): array
     {
-        [$this->showNumber, $this->pageNumber,] = $this->getParamsValidParams($command->getParams(),
+        [$this->showNumber, $this->pageNumber,] = $this->getValidParams($command->getParams(),
           PagePaginator::DEFAULT_TABLE_SHOW_NUM->value,
           PagePaginator::DEFAULT_PAGE_START_NUM->value
         );

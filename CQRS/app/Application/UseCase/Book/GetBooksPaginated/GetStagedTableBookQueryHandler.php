@@ -20,12 +20,12 @@ class GetStagedTableBookQueryHandler implements QueryHandleInterface
     private string $pageNumber;
 
     public function __construct(
-      private BookRepositoryInterface $bookRepository
+      private readonly BookRepositoryInterface $bookRepository
     ) {}
 
     public function handle(QueryInterface $command)
     {
-        [$this->showNumber, $this->pageNumber] = $this->getParamsValidParams($command->getParams(),
+        [$this->showNumber, $this->pageNumber] = $this->getValidParams($command->getParams(),
           PagePaginator::DEFAULT_TABLE_SHOW_NUM->value,
           PagePaginator::DEFAULT_PAGE_START_NUM->value
         );

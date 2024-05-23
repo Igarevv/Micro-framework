@@ -15,8 +15,8 @@ class SaveCsvBookHandler implements CommandHandlerInterface
 {
 
     public function __construct(
-      private BookRepositoryInterface $bookRepository,
-      private BookCsvService $bookCsvService
+      private readonly BookRepositoryInterface $bookRepository,
+      private readonly BookCsvService $bookCsvService
     ) {}
 
     /**
@@ -29,10 +29,6 @@ class SaveCsvBookHandler implements CommandHandlerInterface
         $entities = $this->makeEntities($books);
 
         $this->bookRepository->saveBooksFromCsv($entities);
-
-        // У ТЕБЯ ПОЧЕМУ ТО ПОПАДАЮТ ISBN меньше 13 чисел
-        // подсказка, проблема в лидирующих нулях postgresql :)
-        // ПРОВЕРИТЬ ВЕСЬ ФУНКЦИОНАЛ
     }
 
     private function makeEntities(array $books): array

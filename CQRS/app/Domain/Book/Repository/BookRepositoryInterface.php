@@ -25,4 +25,6 @@ interface BookRepositoryInterface
 
     public function saveBooksFromCsv(array $entities): void;
 
+    public function updateImageData(int $bookId, string $imageId): bool;
+
 }
