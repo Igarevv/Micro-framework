@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Application\UseCase\Book\GetBooksPaginated;
+namespace App\Application\UseCase\Book\GetBooksPaginated\Home;
 
 use App\Application\Presenter\HomePagePresenter;
 use App\Application\Traits\PaginatorTrait;
+use App\Application\UseCase\Book\GetBooksPaginated\GetPaginatedBooksQuery;
 use App\Domain\Based\Bus\Query\QueryHandleInterface;
 use App\Domain\Based\Bus\Query\QueryInterface;
 use App\Domain\Book\Enum\PagePaginator;
@@ -26,7 +27,7 @@ class GetHomePageQueryHandler implements QueryHandleInterface
     ) {}
 
     /**
-     * @param  GetPaginatedBooksCommand  $command
+     * @param  GetPaginatedBooksQuery  $command
      *
      * @throws \Exception
      */

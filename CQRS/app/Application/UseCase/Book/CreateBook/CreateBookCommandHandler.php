@@ -9,6 +9,7 @@ use App\Domain\Based\ValueObject\LastName;
 use App\Domain\Book\Exception\BookException;
 use App\Domain\Book\Repository\BookRepositoryInterface;
 use App\Domain\Book\ValueObject\Isbn;
+use App\Domain\Book\ValueObject\Title;
 use App\Domain\Book\ValueObject\Year;
 use App\Infrastructure\Persistence\Entity\Author;
 use App\Infrastructure\Persistence\Entity\Book;
@@ -39,13 +40,14 @@ class CreateBookCommandHandler implements CommandHandlerInterface
         );
 
         $book = Book::create(
-          title: $command->getTitle(),
+          title: Title::fromString($command->getTitle()),
           year: Year::fromString($command->getYear()),
           description: $command->getDescription(),
           genre: $command->getGenres(),
           isbn: $isbn,
           imageId: $command->getImageId()
         );
+
         $bookAuthor = BookAuthor::create($book, $author);
 
         $book->addBookAuthor($bookAuthor);

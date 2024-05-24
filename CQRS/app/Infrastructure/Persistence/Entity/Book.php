@@ -3,6 +3,7 @@
 namespace App\Infrastructure\Persistence\Entity;
 
 use App\Domain\Book\ValueObject\Isbn;
+use App\Domain\Book\ValueObject\Title;
 use App\Domain\Book\ValueObject\Year;
 use App\Infrastructure\Services\EntityManager\Contracts\DatabaseEntity;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,8 +23,8 @@ class Book implements DatabaseEntity
     #[Id, Column, GeneratedValue]
     private ?int $id;
 
-    #[Column]
-    private string $title;
+    #[Column(type: 'Title')]
+    private Title $title;
 
     #[Column(type: 'Year')]
     private Year $year;
@@ -45,7 +46,7 @@ class Book implements DatabaseEntity
 
     public function __construct(
       ?int $id,
-      string $title,
+      Title $title,
       Year $year,
       string $description,
       array $genre,
@@ -64,7 +65,7 @@ class Book implements DatabaseEntity
     }
 
     public static function create(
-      string $title,
+      Title $title,
       Year $year,
       string $description,
       array $genre,
@@ -89,7 +90,7 @@ class Book implements DatabaseEntity
         return $this->id;
     }
 
-    public function getTitle(): string
+    public function getTitle(): Title
     {
         return $this->title;
     }

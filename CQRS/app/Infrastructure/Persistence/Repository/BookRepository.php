@@ -46,9 +46,17 @@ class BookRepository implements BookRepositoryInterface
         return false;
     }
 
-    public function getAll()
+    public function getOneForBookPage(string $bookUrlId): Book
     {
-        // TODO: Implement getAll() method.
+        $dql = "SELECT ba, b, a FROM App\Infrastructure\Persistence\Entity\Book b
+            JOIN b.bookAuthors ba
+            JOIN ba.author a
+            WHERE LOWER(b.title) = :id AND b.imageId IS NOT NULL";
+
+        $query = $this->entityManager->createQuery($dql)
+          ->setParameter('id', $bookUrlId);
+
+        return $query->getSingleResult();
     }
 
     public function getPublishedBooksPaginated(int $limit, int $offset): Paginator

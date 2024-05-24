@@ -3,6 +3,9 @@ let clearBtn = document.getElementById('clear');
 let noImage = document.getElementById('noImage');
 let fileInput = document.getElementById('exampleFormControlFile1');
 let imagePreview = document.querySelector('.image-preview');
+let loader = document.getElementById('loading-overlay');
+let modal = document.getElementById('staticBackdrop');
+
 fileInput.addEventListener('change', (e) => {
   let allowedExt = ['image/png', 'image/jpg', 'image/jpeg'];
 
@@ -49,9 +52,14 @@ uploadBtn.addEventListener('click', () => {
 
   let xhr = new XMLHttpRequest();
 
+  loader.style.display = 'flex';
+  modal.style.display = 'none';
+
   xhr.open('POST', '/admin/book/unready');
   xhr.onreadystatechange = function () {
     if (xhr.readyState === XMLHttpRequest.DONE){
+      loader.style.display = 'none';
+
       if (xhr.status === 200){
         let response = JSON.parse(xhr.responseText);
 

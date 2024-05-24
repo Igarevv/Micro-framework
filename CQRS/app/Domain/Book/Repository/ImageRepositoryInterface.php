@@ -11,4 +11,6 @@ interface ImageRepositoryInterface
     public function delete(string $imageId): bool;
 
     public function getImagesUrl(array $ids): array;
+
+    public function getOneImage(string $id): string|false;
 }

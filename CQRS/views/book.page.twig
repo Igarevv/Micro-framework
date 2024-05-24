@@ -1,0 +1,19 @@
+{% extends '/templates/base.html.twig' %}
+
+{% block content %}
+    {{ include('/templates/basenav.html.twig') }}
+    {# ЗДЕСЬ ТВОЙ КОД ПРОСЫПАЕТСЯ #}
+
+    {# ЭТО ДАННЫЕ. ИХ ПРОСТО ВСТАВЛЯЕШЬ ТУДА КУДА НУЖНО
+        {{ book.title }}
+        {{ book.authorName }}
+        {{ book.year }}
+        {{ book.isbn }}
+        {{ book.genre }}
+        {{ book.description }}
+        {{ book.image }}
+    #}
+
+    {# ЗДЕСЬ ТВОЙ КОД ЛОЖИТСЯ СПАТЬ #}
+    {{ include('/templates/basefooter.html.twig') }}
+{% endblock %}

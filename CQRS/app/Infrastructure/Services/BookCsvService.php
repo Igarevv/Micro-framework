@@ -8,6 +8,7 @@ use App\Domain\Based\ValueObject\FirstName;
 use App\Domain\Based\ValueObject\LastName;
 use App\Domain\Book\Service\CsvValidatorServiceInterface;
 use App\Domain\Book\ValueObject\Isbn;
+use App\Domain\Book\ValueObject\Title;
 use App\Domain\Book\ValueObject\Year;
 
 class BookCsvService
@@ -63,7 +64,7 @@ class BookCsvService
 
             try {
                 $data[] = new UploadCsvBooksDto(
-                  title: $title,
+                  title: Title::fromString($title),
                   firstName: FirstName::fromString($firstName),
                   lastName: LastName::fromString($lastName),
                   year: Year::fromString($year),

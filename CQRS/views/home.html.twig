@@ -58,11 +58,13 @@
                             <h2 class="display-5">{{ book.title }}</h2>
                             <p class="lead">{{ book.authorName }}</p>
                         </div>
-                        <div class="bg-light shadow-sm mx-auto"
-                             style="width: 80%; height: 300px; border-radius: 21px 21px 0 0;">
-                            <img style="width: 400px; height: 400px;" class="img-rounded img-thumbnail mt-2 shadow-lg"
-                                 src="{{ book.imageUrl }}" alt="{{ book.title }}">
-                        </div>
+                        <a href="/book/{{ book.bookId}}">
+                            <div class="bg-light shadow-sm mx-auto"
+                                 style="width: 80%; height: 300px; border-radius: 21px 21px 0 0;">
+                                <img style="width: 400px; height: 400px;" class="img-rounded img-thumbnail mt-2 shadow-lg"
+                                     src="{{ book.imageUrl }}" alt="{{ book.title }}">
+                            </div>
+                        </a>
                     </div>
                 {% endfor %}
             </div>

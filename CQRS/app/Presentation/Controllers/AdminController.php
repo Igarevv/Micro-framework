@@ -2,9 +2,9 @@
 
 namespace App\Presentation\Controllers;
 
-use App\Application\UseCase\Book\GetBooksPaginated\GetPaginatedBooksCommand;
-use App\Application\UseCase\Book\GetBooksPaginated\GetStagedTableBookQueryHandler;
-use App\Application\UseCase\Book\GetBooksPaginated\GetTableBooksQueryHandler;
+use App\Application\UseCase\Book\GetBooksPaginated\GetPaginatedBooksQuery;
+use App\Application\UseCase\Book\GetBooksPaginated\Tables\GetStagedTableBookQueryHandler;
+use App\Application\UseCase\Book\GetBooksPaginated\Tables\GetTableBooksQueryHandler;
 use App\Domain\Based\Exception\InvalidFormat;
 use App\Domain\Book\Exception\BookException;
 use App\Infrastructure\Bus\Query\QueryBusInterface;
@@ -31,7 +31,7 @@ class AdminController extends Controller
 
         try {
             $books = $this->bus->dispatch(
-              new GetPaginatedBooksCommand($getParams), GetStagedTableBookQueryHandler::class
+              new GetPaginatedBooksQuery($getParams), GetStagedTableBookQueryHandler::class
             );
         } catch (BookException|InvalidFormat $e){
             $this->flasher->setError('errorFromDb', $e->getMessage());
@@ -52,7 +52,7 @@ class AdminController extends Controller
         $getParams = $this->request->getGet(['page', 'show']) ?: null;
 
         try {
-            $books = $this->bus->dispatch(new GetPaginatedBooksCommand($getParams),
+            $books = $this->bus->dispatch(new GetPaginatedBooksQuery($getParams),
               GetTableBooksQueryHandler::class);
 
         } catch (BookException $e){

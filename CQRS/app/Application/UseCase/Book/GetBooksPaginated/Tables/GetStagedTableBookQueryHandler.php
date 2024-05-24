@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\UseCase\Book\GetBooksPaginated;
+namespace App\Application\UseCase\Book\GetBooksPaginated\Tables;
 
 use App\Application\Presenter\TableBookPresenter;
 use App\Application\Traits\PaginatorTrait;

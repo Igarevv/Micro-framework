@@ -42,4 +42,15 @@ class CloudinaryRepository implements ImageRepositoryInterface
         return $urls['resources'];
     }
 
+    public function getOneImage(string $id): string|false
+    {
+        $url = $this->api->assetsByIds($id);
+
+        if (! $url['resources']){
+            return false;
+        }
+
+        return $url['resources'][0]['url'];
+    }
+
 }

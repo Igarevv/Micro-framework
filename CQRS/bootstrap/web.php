@@ -10,6 +10,7 @@ use Igarevv\Micrame\Router\Route;
 
 return [
   Route::get('/', [HomeController::class, 'index']),
+  Route::get('/book/{bookUrlId}', [HomeController::class, 'getOneBook']),
   Route::get('/sign-up', [AuthController::class, 'signUpIndex'], [Guest::class]),
   Route::post('/sign-up', [AuthController::class, 'register'], [Guest::class]),
   Route::get('/sign-in', [AuthController::class, 'signInIndex'], [Guest::class]),

@@ -17,6 +17,7 @@ use App\Infrastructure\Persistence\Types\FirstNameType;
 use App\Infrastructure\Persistence\Types\HashedPasswordType;
 use App\Infrastructure\Persistence\Types\IsbnType;
 use App\Infrastructure\Persistence\Types\LastNameType;
+use App\Infrastructure\Persistence\Types\TitleType;
 use App\Infrastructure\Persistence\Types\YearType;
 use App\Infrastructure\Services\EntityManager\Contracts\EntityManagerServiceInterface;
 use App\Infrastructure\Services\EntityManager\EntityManagerService;
@@ -167,6 +168,7 @@ $container->addShared(EntityManagerInterface::class,
       Type::addType('Email', EmailType::class);
       Type::addType('Year', YearType::class);
       Type::addType('Isbn', IsbnType::class);
+      Type::addType('Title', TitleType::class);
 
       return new EntityManager(
         conn: DriverManager::getConnection($connectionParams),

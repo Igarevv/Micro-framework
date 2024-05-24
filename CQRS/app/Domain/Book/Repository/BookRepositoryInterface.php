@@ -6,6 +6,7 @@ use App\Domain\Book\ValueObject\Isbn;
 use App\Infrastructure\Persistence\Entity\Book;
 use App\Infrastructure\Persistence\Entity\BookAuthor;
 use App\Infrastructure\Services\Paginator;
+use Doctrine\ORM\Mapping\Entity;
 
 interface BookRepositoryInterface
 {
@@ -15,7 +16,7 @@ interface BookRepositoryInterface
 
     public function isBookExist(Isbn $isbn): bool;
 
-    public function getAll();
+    public function getOneForBookPage(string $bookUrlId): Book;
 
     public function getPublishedBooksPaginated(int $limit, int $offset): Paginator;
 

@@ -27,7 +27,7 @@ class HomePagePresenter implements Presenter
     {
         $book = new stdClass();
 
-        $book->id = $this->book->getId();
+        $book->bookId = $this->book->getTitle()->toUrlFormat();
         $book->authorName = $this->author->getFullName();
         $book->title = $this->book->getTitle();
         $book->imageUrl = $this->currentImageUrl;

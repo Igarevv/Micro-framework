@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Application\UseCase\Book\GetBooksPaginated;
+namespace App\Application\UseCase\Book\GetBooksPaginated\Tables;
 
 use App\Application\Presenter\TableBookPresenter;
 use App\Application\Traits\PaginatorTrait;
+use App\Application\UseCase\Book\GetBooksPaginated\GetPaginatedBooksQuery;
 use App\Domain\Based\Bus\Query\QueryHandleInterface;
 use App\Domain\Based\Bus\Query\QueryInterface;
 use App\Domain\Book\Enum\PagePaginator;
 use App\Domain\Book\Repository\BookRepositoryInterface;
 use App\Infrastructure\Services\Paginator;
-use Cloudinary\Transformation\Page;
 
 class GetTableBooksQueryHandler implements QueryHandleInterface
 {
@@ -25,7 +25,7 @@ class GetTableBooksQueryHandler implements QueryHandleInterface
     ) {}
 
     /**
-     * @var GetPaginatedBooksCommand $command
+     * @var GetPaginatedBooksQuery $command
      */
     public function handle(QueryInterface $command): array
     {

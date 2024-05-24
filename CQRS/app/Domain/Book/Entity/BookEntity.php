@@ -2,7 +2,7 @@
 
 namespace App\Domain\Book\Entity;
 
-readonly class BookEntity
+class BookEntity
 {
     public const BOOK_ID = 'bookId';
 
@@ -23,15 +23,16 @@ readonly class BookEntity
     public const IMAGE = 'image';
 
     public function __construct(
-      private int $bookId,
-      private string $title,
-      private string $description,
-      private int $isbn,
-      private int $year,
-      private string $authorFirstName,
-      private string $authorLastName,
-      private array $genre,
-      private string $createdAt
+      private readonly int $bookId,
+      private readonly string $title,
+      private readonly string $description,
+      private readonly int $isbn,
+      private readonly int $year,
+      private readonly string $authorFirstName,
+      private readonly string $authorLastName,
+      private readonly string $genre,
+      private readonly string $createdAt,
+      private ?string $image,
     ) {}
 
     public function getBookId(): int
@@ -69,7 +70,7 @@ readonly class BookEntity
         return $this->authorLastName;
     }
 
-    public function getGenre(): array
+    public function getGenre(): string
     {
         return $this->genre;
     }
@@ -77,6 +78,21 @@ readonly class BookEntity
     public function getCreatedAt(): string
     {
         return $this->createdAt;
+    }
+
+    public function getFullAuthorName(): string
+    {
+        return "{$this->authorFirstName} {$this->authorLastName}";
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setHttpImageUrl(string $imageUrl): void
+    {
+        $this->image = $imageUrl;
     }
 
 }
