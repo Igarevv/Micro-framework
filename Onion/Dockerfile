@@ -6,8 +6,8 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     git
 
-RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-install pgsql pdo pdo_pgsql
+RUN docker-php-ext-configure postgres -with-postgres=/usr/local/postgres \
+    && docker-php-ext-install postgres pdo pdo_pgsql
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
