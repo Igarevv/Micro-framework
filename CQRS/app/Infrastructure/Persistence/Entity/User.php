@@ -36,7 +36,7 @@ class User implements DatabaseEntity
       private readonly Email $email,
 
       #[Id, Column(type: Types::STRING, options: ['unsigned']), GeneratedValue]
-      private readonly ?int $id = null,
+      private ?int $id = null,
     ) {
         $this->createdAt = new DateTimeImmutable('now');
     }
@@ -60,7 +60,7 @@ class User implements DatabaseEntity
         return $this->hashedPassword;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
