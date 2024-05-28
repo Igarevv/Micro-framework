@@ -63,6 +63,9 @@ In config/app.php change your path and namespace for controllers and migration f
 
 In root directory:
 ````
+composer install
+````
+````
 docker-compose up -d --build
 ````
 
