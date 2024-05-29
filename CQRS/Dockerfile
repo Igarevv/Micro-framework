@@ -1,12 +1,16 @@
-FROM phpdockerio/php:8.3-fpm
-WORKDIR "/application"
+FROM php:8.3-fpm
 
-RUN apt-get update \
-    && apt-get -y --no-install-recommends install \
-        php8.3-intl \ \
-        php8.3-mysql \ \
-        php8.3-pgsql \
+COPY . .
+WORKDIR /var/www
+
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    git \
+    curl \
+    zip \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+    && rm -rf /var/lib/apt/lists/*
 
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
+RUN docker-php-ext-install pgsql pdo_pgsql

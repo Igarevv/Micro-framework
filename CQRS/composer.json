@@ -17,7 +17,7 @@
     }],
     "require": {
         "php": "^8.2",
-        "igarevv/micro-framework": "dev-master",
+        "igarevv/micro-framework": "dev-main",
         "doctrine/orm": "^3.1",
         "symfony/cache": "^7.0",
         "doctrine/dbal": "^4.0"

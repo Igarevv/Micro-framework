@@ -38,7 +38,7 @@ there is functionality to upload image for each book.
 - Opportunity to see each book
 - Pagination
 
-As storage for book preview images was used [Cloudinary cloud service](https://cloudinary.com/)
+As storage for book preview images was used [Cloudinary](https://cloudinary.com/) cloud service
 
 ***Project requirements:***
 
@@ -61,9 +61,17 @@ In config/app.php change your path and namespace for controllers and migration f
 
 ### To run app:
 
-In root directory:
+If you have already installed PHP environment, than:
+````
+composer install
+````
+If not, just start docker command:
 ````
 docker-compose up -d --build
+````
+and after it starts, run the following command:
+````
+docker exec -it php-fpm composer install
 ````
 
 ***Console app***
