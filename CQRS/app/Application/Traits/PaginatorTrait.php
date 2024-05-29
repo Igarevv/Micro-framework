@@ -15,8 +15,12 @@ trait PaginatorTrait
         $showNumber = $params[PagePaginator::SHOW->value] ?? $defaultShowNumber;
         $pageNumber = $params[PagePaginator::PAGE->value] ?? $defaultPageNumber;
 
-        if (! is_numeric($showNumber) || $showNumber <= 0 || ! is_numeric($pageNumber) || $pageNumber <= 0) {
-            return [$defaultShowNumber, $defaultPageNumber];
+        if (! is_numeric($showNumber) || $showNumber <= 0) {
+            $showNumber = PagePaginator::DEFAULT_TABLE_SHOW_NUM->value;
+        }
+
+        if (! is_numeric($pageNumber) || $pageNumber <= 0){
+            $pageNumber = PagePaginator::DEFAULT_PAGE_START_NUM->value;
         }
 
         return [(int)$showNumber, (int)$pageNumber];

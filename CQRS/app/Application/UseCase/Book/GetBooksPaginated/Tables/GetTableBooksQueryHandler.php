@@ -8,6 +8,7 @@ use App\Application\UseCase\Book\GetBooksPaginated\GetPaginatedBooksQuery;
 use App\Domain\Based\Bus\Query\QueryHandleInterface;
 use App\Domain\Based\Bus\Query\QueryInterface;
 use App\Domain\Book\Enum\PagePaginator;
+use App\Domain\Book\Exception\BookException;
 use App\Domain\Book\Repository\BookRepositoryInterface;
 use App\Infrastructure\Services\Paginator;
 
@@ -26,6 +27,7 @@ class GetTableBooksQueryHandler implements QueryHandleInterface
 
     /**
      * @var GetPaginatedBooksQuery $command
+     * @throws \App\Domain\Book\Exception\BookException
      */
     public function handle(QueryInterface $command): array
     {
@@ -48,6 +50,10 @@ class GetTableBooksQueryHandler implements QueryHandleInterface
 
         $collection = $paginatedBooks->getArrayData();
 
+        if (! $collection){
+            throw BookException::booksNotFound();
+        }
+
         foreach ($collection as $book) {
             $data = $book->getBookAuthors()->getValues()[0];
 
@@ -56,6 +62,7 @@ class GetTableBooksQueryHandler implements QueryHandleInterface
 
         $books[PagePaginator::PAGES_COUNT->value] = ceil($paginatedBooks->count() / $this->showNumber);
         $books[PagePaginator::PAGE->value] = $this->pageNumber;
+        $books[PagePaginator::SHOW->value] = $this->showNumber;
 
         return $books;
     }

@@ -4,9 +4,11 @@ namespace App\Application\UseCase\Book\GetBooksPaginated\Tables;
 
 use App\Application\Presenter\TableBookPresenter;
 use App\Application\Traits\PaginatorTrait;
+use App\Application\UseCase\Book\GetBooksPaginated\GetPaginatedBooksQuery;
 use App\Domain\Based\Bus\Query\QueryHandleInterface;
 use App\Domain\Based\Bus\Query\QueryInterface;
 use App\Domain\Book\Enum\PagePaginator;
+use App\Domain\Book\Exception\BookException;
 use App\Domain\Book\Repository\BookRepositoryInterface;
 use App\Infrastructure\Services\Paginator;
 
@@ -23,7 +25,11 @@ class GetStagedTableBookQueryHandler implements QueryHandleInterface
       private readonly BookRepositoryInterface $bookRepository
     ) {}
 
-    public function handle(QueryInterface $command)
+    /**
+     * @var GetPaginatedBooksQuery $command
+     * @throws \App\Domain\Book\Exception\BookException
+     */
+    public function handle(QueryInterface $command): array
     {
         [$this->showNumber, $this->pageNumber] = $this->getValidParams($command->getParams(),
           PagePaginator::DEFAULT_TABLE_SHOW_NUM->value,
@@ -42,6 +48,10 @@ class GetStagedTableBookQueryHandler implements QueryHandleInterface
         $books = [];
 
         $collection = $paginatedBooks->getArrayData();
+
+        if (! $collection){
+            throw BookException::booksNotFound();
+        }
 
         foreach ($collection as $book) {
             $data = $book->getBookAuthors()->getValues()[0];

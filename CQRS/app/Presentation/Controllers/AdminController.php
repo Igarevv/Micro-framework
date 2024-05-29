@@ -10,6 +10,7 @@ use App\Domain\Book\Exception\BookException;
 use App\Infrastructure\Bus\Query\QueryBusInterface;
 use App\Infrastructure\Services\Session\FlashMessageHandler;
 use Igarevv\Micrame\Controller\Controller;
+use Igarevv\Micrame\Http\Response\JsonResponse;
 use Igarevv\Micrame\Http\Response\RedirectResponse;
 use Igarevv\Micrame\Http\Response\Response;
 
@@ -39,6 +40,10 @@ class AdminController extends Controller
             return $this->render('/admin/admin.unready.twig');
         }
 
+        if ($this->request->isXhr()){
+            return new JsonResponse($books);
+        }
+
         return $this->render('/admin/admin.unready.twig', $books);
     }
 
@@ -54,14 +59,17 @@ class AdminController extends Controller
         try {
             $books = $this->bus->dispatch(new GetPaginatedBooksQuery($getParams),
               GetTableBooksQueryHandler::class);
-
         } catch (BookException $e){
             $this->flasher->setError('error', $e->getMessage());
 
             return new RedirectResponse('/admin/book');
         }
 
-        return $this->render('/admin/admin.list.twig', $books);
+        if ($this->request->isXhr()){
+            return new JsonResponse($books);
+        }
+
+        return $this->render('/admin/admin.list.twig');
     }
 
 }

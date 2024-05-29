@@ -194,10 +194,22 @@ a {
   word-wrap: break-word;
   background-color: #fff;
   background-clip: border-box;
-  border: 0px solid transparent;
+  border: 1px solid transparent;
   border-radius: 0px;
 }
 
+.table-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 5px solid rgba(0,0,0,.125);
+  border-radius: .25rem;
+  padding: 10px 10px 0px 10px;
+}
 
 .card-body {
   -webkit-box-flex: 1;

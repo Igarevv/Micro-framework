@@ -2,9 +2,9 @@
 
 {% block content %}
     {{ include('/templates/basenav.html.twig') }}
-    {# ЗДЕСЬ ТВОЙ КОД ПРОСЫПАЕТСЯ #}
+    {# НАЧАЛО #}
 
-    {# ЭТО ДАННЫЕ. ИХ ПРОСТО ВСТАВЛЯЕШЬ ТУДА КУДА НУЖНО
+    {# ДАННЫЕ
         {{ book.title }}
         {{ book.authorName }}
         {{ book.year }}
@@ -14,6 +14,6 @@
         {{ book.image }}
     #}
 
-    {# ЗДЕСЬ ТВОЙ КОД ЛОЖИТСЯ СПАТЬ #}
+    {# КОНЕЦ #}
     {{ include('/templates/basefooter.html.twig') }}
 {% endblock %}

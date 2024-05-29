@@ -69,7 +69,7 @@ final class Request implements RequestInterface
             return $this->files;
         }
 
-        if (! isset($this->files[$key])) {
+        if ( ! isset($this->files[$key])) {
             throw new HttpException("File with key {$key} not found");
         }
 
@@ -84,7 +84,7 @@ final class Request implements RequestInterface
             return $this->files;
         }
 
-        if (!isset($this->files[$key])) {
+        if ( ! isset($this->files[$key])) {
             throw new HttpException("Files with key {$key} not found");
         }
 
@@ -99,7 +99,6 @@ final class Request implements RequestInterface
 
         return $this->files[$key];
     }
-
 
     public function setSession(SessionInterface $session): void
     {
@@ -119,6 +118,13 @@ final class Request implements RequestInterface
     public function setRouteArgs(array $args): void
     {
         $this->routeArgs = $args;
+    }
+
+    public function isXhr(): bool
+    {
+        $header = $this->server['HTTP_X_REQUESTED_WITH'] ?? null;
+
+        return $header === 'XMLHttpRequest';
     }
 
     public function getRouteHandlerAndArgs(): array

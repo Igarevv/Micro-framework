@@ -23,4 +23,5 @@ interface RequestInterface
 
     public function getFile(?string $key = null): array;
 
+    public function isXhr(): bool;
 }

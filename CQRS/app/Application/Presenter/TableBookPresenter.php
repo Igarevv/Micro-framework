@@ -25,13 +25,13 @@ class TableBookPresenter implements Presenter
     {
         $tableBookData = new stdClass();
 
-        $tableBookData->title  = $this->book->getTitle();
+        $tableBookData->title  = $this->book->getTitle()->value();
         $tableBookData->bookId = $this->book->getId();
         $tableBookData->authorName = $this->author->getFullName();
         $tableBookData->createdAt  = $this->bookAuthor->getDateTime()
           ->format('Y-m-d H:i:s');
-        $tableBookData->year = $this->book->getYear();
-        $tableBookData->isbn = $this->book->getIsbn();
+        $tableBookData->year = $this->book->getYear()->value();
+        $tableBookData->isbn = $this->book->getIsbn()->value();
 
         return $tableBookData;
     }
@@ -40,9 +40,9 @@ class TableBookPresenter implements Presenter
     {
         return [
            BookEntity::BOOK_ID => $this->book->getId(),
-           BookEntity::TITLE   => $this->book->getTitle(),
-           BookEntity::ISBN    => $this->book->getIsbn(),
-           BookEntity::YEAR    => $this->book->getYear(),
+           BookEntity::TITLE   => $this->book->getTitle()->value(),
+           BookEntity::ISBN    => $this->book->getIsbn()->value(),
+           BookEntity::YEAR    => $this->book->getYear()->value(),
            BookEntity::AUTHOR_NAME => $this->author->getFullName(),
            BookEntity::CREATED_AT  => $this->bookAuthor->getDateTime()->format('Y-m-d H:i:s')
         ];

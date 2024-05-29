@@ -29,7 +29,7 @@ class HomePagePresenter implements Presenter
 
         $book->bookId = $this->book->getTitle()->toUrlFormat();
         $book->authorName = $this->author->getFullName();
-        $book->title = $this->book->getTitle();
+        $book->title = $this->book->getTitle()->value();
         $book->imageUrl = $this->currentImageUrl;
 
         return $book;
@@ -39,7 +39,7 @@ class HomePagePresenter implements Presenter
     {
         return [
           BookEntity::BOOK_ID => $this->book->getId(),
-          BookEntity::TITLE   => $this->book->getTitle(),
+          BookEntity::TITLE   => $this->book->getTitle()->value(),
           BookEntity::IMAGE   => $this->currentImageUrl,
           BookEntity::AUTHOR_NAME => $this->author->getFullName()
         ];
