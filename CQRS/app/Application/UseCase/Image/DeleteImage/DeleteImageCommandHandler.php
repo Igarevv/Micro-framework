@@ -31,7 +31,9 @@ class DeleteImageCommandHandler implements CommandHandlerInterface
 
         $this->bookRepository->delete($command->getId());
 
-        $this->imageRepository->delete($book->getImageId());
+        if ($book->getImageId()){
+            $this->imageRepository->delete($book->getImageId());
+        }
     }
 
 }

@@ -3,8 +3,9 @@ const selectElement = document.getElementById('book-to-show');
 document.addEventListener("DOMContentLoaded", function() {
   const savedOptionIndex = localStorage.getItem('selectedOptionIndex');
   const savedOptionValue = localStorage.getItem('selectedOptionValue');
+  const savedPageId = localStorage.getItem('pageId');
 
-  let pageId = selectElement.getAttribute('data-page-id') ?? 1;
+  let pageId = savedPageId ? parseInt(savedPageId) : 1;
 
   if (savedOptionIndex !== null && savedOptionValue !== null) {
     selectElement.selectedIndex = savedOptionIndex;
@@ -20,7 +21,7 @@ selectElement.addEventListener('change', (event) => {
   localStorage.setItem('selectedOptionIndex', event.target.selectedIndex);
   localStorage.setItem('selectedOptionValue', event.target.value);
 
-  let pageId =  selectElement.getAttribute('data-page-id') ?? 1;
+  let pageId = parseInt(localStorage.getItem('pageId')) ?? 1;
 
   const selectedValue = event.target.value;
 
@@ -52,7 +53,7 @@ function fetchData(pageId, selectedValue){
 }
 
 function insertDataToBookTable(data) {
-  const tableBody = document.getElementById('unreadyTable');
+  const tableBody = document.querySelector('.customizable');
   tableBody.innerHTML = '';
 
   const books = data.collection;
@@ -83,19 +84,23 @@ function insertDataToBookTable(data) {
 
     let createdAtCell = document.createElement('td');
     createdAtCell.textContent = book.createdAt + ' UTC';
-
     newRow.appendChild(createdAtCell);
 
     let updateRow = document.createElement('td');
+    updateRow.classList.add('text-center');
     let updateButton = document.createElement('button');
     updateButton.type = 'button';
     updateButton.classList.add('btn', 'btn-primary');
     updateButton.setAttribute('data-book-id', book.bookId);
+    updateButton.setAttribute('data-toggle', 'modal');
+    updateButton.setAttribute('data-target', '#staticBackdrop');
+    updateButton.setAttribute('id', 'modalOpen');
     updateButton.textContent = 'Upload Image';
     updateRow.appendChild(updateButton);
     newRow.appendChild(updateRow);
 
     let deleteCell = document.createElement('td');
+    deleteCell.classList.add('text-center');
     let deleteButton = document.createElement('button');
     deleteButton.type = 'button';
     deleteButton.classList.add('btn', 'btn-danger');
@@ -127,8 +132,7 @@ function updatePagination(totalPages, currentPage, howManyShow) {
   } else {
     if (endPage === totalPages) {
       startPage = Math.max(1, totalPages - maxPagesToShow + 1);
-    }
-    else if (startPage === 1) {
+    } else if (startPage === 1) {
       endPage = Math.min(totalPages, maxPagesToShow);
     }
   }
@@ -136,13 +140,16 @@ function updatePagination(totalPages, currentPage, howManyShow) {
   const createPageLink = (pageNum) => {
     const li = document.createElement('li');
     li.classList.add('page-item');
-
+    if (pageNum === currentPage) {
+      li.classList.add('active');
+    }
     const link = document.createElement('a');
     link.classList.add('page-link');
     link.href = `?page=${pageNum}&show=${howManyShow}`;
     link.textContent = pageNum;
     link.addEventListener('click', (event) => {
       event.preventDefault();
+      localStorage.setItem('pageId', pageNum);
       fetchData(pageNum, howManyShow);
     });
     li.appendChild(link);
@@ -172,6 +179,12 @@ function updatePagination(totalPages, currentPage, howManyShow) {
     }
     createPageLink(totalPages);
   }
+
+  paginationContainer.querySelectorAll('.page-item').forEach((item) => {
+    if (item.textContent === currentPage) {
+      item.classList.add('active');
+    }
+  });
 
   selectElement.setAttribute('data-page-id', currentPage);
 }

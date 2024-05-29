@@ -3,7 +3,7 @@ const selectElement = document.getElementById('book-to-show');
 document.addEventListener("DOMContentLoaded", function() {
   const savedOptionIndex = localStorage.getItem('selectedOptionIndex');
   const savedOptionValue = localStorage.getItem('selectedOptionValue');
-  const savedPageId = localStorage.getItem('pageId');
+  const savedPageId = localStorage.getItem('publish-page-id');
 
   let pageId = savedPageId ? parseInt(savedPageId) : 1;
 
@@ -21,7 +21,7 @@ selectElement.addEventListener('change', (event) => {
   localStorage.setItem('selectedOptionIndex', event.target.selectedIndex);
   localStorage.setItem('selectedOptionValue', event.target.value);
 
-  let pageId = localStorage.getItem('pageId') ? parseInt(localStorage.getItem('pageId')) : 1;
+  let pageId = parseInt(localStorage.getItem('publish-page-id')) ?? 1;
 
   const selectedValue = event.target.value;
 
@@ -87,6 +87,7 @@ function insertDataToBookTable(data) {
     newRow.appendChild(createdAtCell);
 
     let deleteCell = document.createElement('td');
+    deleteCell.classList.add('text-center');
     let deleteButton = document.createElement('button');
     deleteButton.type = 'button';
     deleteButton.classList.add('btn', 'btn-danger');
@@ -118,8 +119,7 @@ function updatePagination(totalPages, currentPage, howManyShow) {
   } else {
     if (endPage === totalPages) {
       startPage = Math.max(1, totalPages - maxPagesToShow + 1);
-    }
-    else if (startPage === 1) {
+    } else if (startPage === 1) {
       endPage = Math.min(totalPages, maxPagesToShow);
     }
   }
@@ -136,7 +136,7 @@ function updatePagination(totalPages, currentPage, howManyShow) {
     link.textContent = pageNum;
     link.addEventListener('click', (event) => {
       event.preventDefault();
-      localStorage.setItem('pageId', pageNum);
+      localStorage.setItem('publish-page-id', pageNum);
       fetchData(pageNum, howManyShow);
     });
     li.appendChild(link);
@@ -166,6 +166,12 @@ function updatePagination(totalPages, currentPage, howManyShow) {
     }
     createPageLink(totalPages);
   }
+
+  paginationContainer.querySelectorAll('.page-item').forEach((item) => {
+    if (item.textContent === currentPage) {
+      item.classList.add('active');
+    }
+  });
 
   selectElement.setAttribute('data-page-id', currentPage);
 }

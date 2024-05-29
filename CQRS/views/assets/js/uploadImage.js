@@ -6,6 +6,22 @@ let imagePreview = document.querySelector('.image-preview');
 let loader = document.getElementById('loading-overlay');
 let modal = document.getElementById('staticBackdrop');
 
+let bookId;
+const addEventListeners = () => {
+  document.querySelectorAll('button[data-target="#staticBackdrop"]').forEach((button) => {
+    button.addEventListener('click', () => {
+      bookId = button.getAttribute('data-book-id');
+      document.getElementById('book-id').innerHTML = bookId;
+    });
+  });
+}
+
+const table = document.getElementById('table');
+const observer = new MutationObserver(addEventListeners);
+observer.observe(table, { childList: true, subtree: true });
+
+addEventListeners();
+
 fileInput.addEventListener('change', (e) => {
   let allowedExt = ['image/png', 'image/jpg', 'image/jpeg'];
 
@@ -31,16 +47,6 @@ clearBtn.addEventListener('click', () => {
   noImage.hidden = false;
   uploadBtn.disabled = true;
   clearBtn.disabled = true;
-});
-
-let uploadButtons = document.querySelectorAll('button[data-target="#staticBackdrop"]');
-let bookId;
-
-uploadButtons.forEach( (button) => {
-  button.addEventListener('click',  () =>{
-    bookId = button.getAttribute('data-book-id');
-    document.getElementById('book-id').innerHTML = bookId;
-  });
 });
 
 uploadBtn.addEventListener('click', () => {
