@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ff5604aa-e06e-4e72-8783-8940576b1f16" name="Changes" comment="" />
+    <list default="true" id="ff5604aa-e06e-4e72-8783-8940576b1f16" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -269,11 +271,10 @@
       <workItem from="1716903665586" duration="262000" />
       <workItem from="1716906219479" duration="127000" />
       <workItem from="1716906639114" duration="302000" />
+      <workItem from="1716918209325" duration="58000" />
+      <workItem from="1716918274611" duration="290000" />
     </task>
     <servers />
-  </component>
-  <component name="TerminalProjectNonSharedOptionsProvider">
-    <option name="shellPath" value="C:\Windows\System32\wsl.exe" />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
