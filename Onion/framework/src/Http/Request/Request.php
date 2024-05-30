@@ -66,7 +66,7 @@ final class Request implements RequestInterface
     public function getFile(?string $key = null): array
     {
         if ($key === null) {
-            throw new HttpException('File key not provided');
+            return $this->files;
         }
 
         if (! isset($this->files[$key])) {
