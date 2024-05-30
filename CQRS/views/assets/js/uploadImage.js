@@ -20,8 +20,6 @@ const table = document.getElementById('table');
 const observer = new MutationObserver(addEventListeners);
 observer.observe(table, { childList: true, subtree: true });
 
-addEventListeners();
-
 fileInput.addEventListener('change', (e) => {
   let allowedExt = ['image/png', 'image/jpg', 'image/jpeg'];
 

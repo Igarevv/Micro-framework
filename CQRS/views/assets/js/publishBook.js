@@ -55,12 +55,18 @@ function fetchData(pageId, selectedValue){
 function insertDataToBookTable(data) {
   const tableBody = document.querySelector('.customizable');
   tableBody.innerHTML = '';
-
+  console.log(data);
   const books = data.collection;
 
-  books.forEach(book => {
+  let iterable = (data.page - 1) * data.show + 1;
+
+  books.forEach((book) => {
     let newRow = document.createElement('tr');
     newRow.id = 'book-' + book.bookId;
+
+    let noCell = document.createElement('td');
+    noCell.textContent = `${iterable++}`;
+    newRow.appendChild(noCell);
 
     let idCell = document.createElement('td');
     idCell.textContent = book.bookId;

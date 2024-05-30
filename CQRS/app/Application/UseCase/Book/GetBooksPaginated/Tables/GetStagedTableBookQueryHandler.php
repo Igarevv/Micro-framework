@@ -61,6 +61,7 @@ class GetStagedTableBookQueryHandler implements QueryHandleInterface
 
         $books[PagePaginator::PAGES_COUNT->value] = ceil($paginatedBooks->count() / $this->showNumber);
         $books[PagePaginator::PAGE->value] = $this->pageNumber;
+        $books[PagePaginator::SHOW->value] = $this->showNumber;
 
         return $books;
     }
