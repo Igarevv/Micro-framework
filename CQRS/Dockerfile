@@ -14,3 +14,7 @@ RUN apt-get update && apt-get install -y \
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 RUN docker-php-ext-install pgsql pdo_pgsql
+
+CMD touch /usr/local/php-logs/php-fpm.log && \
+    chmod 666 /usr/local/php-logs/php-fpm.log && \
+    php-fpm
