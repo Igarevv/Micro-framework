@@ -16,7 +16,7 @@ interface BookRepositoryInterface
 
     public function isBookExist(Isbn $isbn): bool;
 
-    public function getOneForBookPage(string $bookUrlId): Book;
+    public function getOneForBookPage(string $bookId): Book;
 
     public function getPublishedBooksPaginated(int $limit, int $offset): Paginator;
 

@@ -29,10 +29,8 @@ class GetFullBookDataQueryHandler implements QueryHandleInterface
      */
     public function handle(QueryInterface $command): \stdClass
     {
-        $title = Title::fromString($command->getBookUrlId())->fromUrlFormat();
-
         try {
-            $book = $this->bookRepository->getOneForBookPage($title);
+            $book = $this->bookRepository->getOneForBookPage($command->getBookId());
         } catch (NoResultException $e){
             throw new BookException('Book not found', 404);
         }

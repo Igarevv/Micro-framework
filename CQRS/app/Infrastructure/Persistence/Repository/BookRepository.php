@@ -46,15 +46,15 @@ class BookRepository implements BookRepositoryInterface
         return false;
     }
 
-    public function getOneForBookPage(string $bookUrlId): Book
+    public function getOneForBookPage(string $bookId): Book
     {
         $dql = "SELECT ba, b, a FROM App\Infrastructure\Persistence\Entity\Book b
             JOIN b.bookAuthors ba
             JOIN ba.author a
-            WHERE LOWER(b.title) = :id AND b.imageId IS NOT NULL";
+            WHERE b.id = :id AND b.imageId IS NOT NULL";
 
         $query = $this->entityManager->createQuery($dql)
-          ->setParameter('id', $bookUrlId);
+          ->setParameter('id', $bookId);
 
         return $query->getSingleResult();
     }

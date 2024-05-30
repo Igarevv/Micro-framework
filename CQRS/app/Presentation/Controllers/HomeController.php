@@ -36,10 +36,10 @@ class HomeController extends Controller
         return $this->render('home.html.twig', $books);
     }
 
-    public function getOneBook(string $bookUrlId): Response
+    public function getOneBook(string $bookId, string $bookTag): Response
     {
         try {
-            $book = $this->bus->dispatch(new GetFullBookDataQuery($bookUrlId),
+            $book = $this->bus->dispatch(new GetFullBookDataQuery($bookId, $bookTag),
             GetFullBookDataQueryHandler::class);
         } catch (BookException $e) {
             return $this->render('/static/404.twig',

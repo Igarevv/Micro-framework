@@ -7,11 +7,18 @@ use App\Domain\Based\Bus\Query\QueryInterface;
 class GetFullBookDataQuery implements QueryInterface
 {
     public function __construct(
-      private string $bookUrlId
+      private string $bookId,
+      private string $bookTag
     ) {}
 
-    public function getBookUrlId(): string
+    public function getBookId(): string
     {
-        return $this->bookUrlId;
+        return $this->bookId;
     }
+
+    public function getBookTag(): string
+    {
+        return $this->bookTag;
+    }
+
 }
