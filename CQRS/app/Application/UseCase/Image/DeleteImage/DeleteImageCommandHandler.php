@@ -5,7 +5,7 @@ namespace App\Application\UseCase\Image\DeleteImage;
 use App\Domain\Based\Bus\Command\CommandHandlerInterface;
 use App\Domain\Based\Bus\Command\CommandInterface;
 use App\Domain\Book\Exception\BookException;
-use App\Domain\Book\Repository\BookRepositoryInterface;
+use App\Domain\Book\Repository\BookManagementRepositoryInterface;
 use App\Domain\Book\Repository\ImageRepositoryInterface;
 
 class DeleteImageCommandHandler implements CommandHandlerInterface
@@ -13,7 +13,7 @@ class DeleteImageCommandHandler implements CommandHandlerInterface
 
     public function __construct(
       private readonly ImageRepositoryInterface $imageRepository,
-      private readonly BookRepositoryInterface $bookRepository
+      private readonly BookManagementRepositoryInterface $bookRepository
     ) {}
 
     /**

@@ -146,9 +146,6 @@ function updatePagination(totalPages, currentPage, howManyShow) {
   const createPageLink = (pageNum) => {
     const li = document.createElement('li');
     li.classList.add('page-item');
-    if (pageNum === currentPage) {
-      li.classList.add('active');
-    }
     const link = document.createElement('a');
     link.classList.add('page-link');
     link.href = `?page=${pageNum}&show=${howManyShow}`;
@@ -158,6 +155,9 @@ function updatePagination(totalPages, currentPage, howManyShow) {
       localStorage.setItem('pageId', pageNum);
       fetchData(pageNum, howManyShow);
     });
+    if (pageNum === currentPage) {
+      li.classList.add('active');
+    }
     li.appendChild(link);
     paginationContainer.appendChild(li);
   };

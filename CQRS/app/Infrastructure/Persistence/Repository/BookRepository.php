@@ -3,7 +3,8 @@
 namespace App\Infrastructure\Persistence\Repository;
 
 use App\Domain\Book\Exception\BookException;
-use App\Domain\Book\Repository\BookRepositoryInterface;
+use App\Domain\Book\Repository\BookManagementRepositoryInterface;
+use App\Domain\Book\Repository\PublicBookRepositoryInterface;
 use App\Domain\Book\Service\PaginatorInterface;
 use App\Domain\Book\ValueObject\Isbn;
 use App\Infrastructure\Persistence\Entity\Book;
@@ -15,7 +16,8 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 
-class BookRepository implements BookRepositoryInterface
+class BookRepository implements
+  BookManagementRepositoryInterface, PublicBookRepositoryInterface
 {
 
     private EntityRepository $repository;
@@ -66,10 +68,8 @@ class BookRepository implements BookRepositoryInterface
     {
         $dql =
           "SELECT NEW App\Application\DTO\TableBookDto(b.id,b.title, a.firstName,
-          a.lastName,
-          b.isbn,
-          b.year,
-          ba.createdAt)
+            a.lastName,b.isbn,       
+            b.year,ba.createdAt)
           FROM App\Infrastructure\Persistence\Entity\BookAuthor ba
           JOIN ba.book b
           JOIN ba.author a
@@ -90,10 +90,8 @@ class BookRepository implements BookRepositoryInterface
     {
         $dql =
           "SELECT NEW App\Application\DTO\TableBookDto(b.id,b.title, a.firstName,
-          a.lastName,
-          b.isbn,
-          b.year,
-          ba.createdAt)
+            a.lastName, b.isbn, 
+            b.year,ba.createdAt)
           FROM App\Infrastructure\Persistence\Entity\BookAuthor ba
           JOIN ba.book b
           JOIN ba.author a
@@ -154,13 +152,33 @@ class BookRepository implements BookRepositoryInterface
         });
     }
 
-    public function updateImageData(int $bookId, ?string $imageId): void
+    public function updateBookImageData(int $bookId, ?string $imageId): void
     {
         $book = $this->entityManager->find(Book::class, $bookId);
 
         $book->setImageId($imageId);
 
         $this->entityManager->sync($book);
+    }
+
+    public function getPreviewBooks(int $limit, int $offset): PaginatorInterface
+    {
+        $dql = "SELECT NEW App\Application\DTO\PreviewBookDto(
+                    b.id, a.firstName,
+                    a.lastName, b.title, b.imageId)
+                FROM App\Infrastructure\Persistence\Entity\BookAuthor ba
+                JOIN ba.book b
+                JOIN ba.author a
+                WHERE b.imageId IS NOT NULL";
+
+        $query = $this->entityManager->createQuery($dql)
+            ->setMaxResults($offset)
+            ->setFirstResult($limit);
+
+        $paginator = new Paginator($query);
+        $paginator->setUseOutputWalkers(false);
+
+        return $paginator;
     }
 
 }

@@ -1,8 +1,9 @@
 <?php
 
 use App\Application\Mappers\UserMapper;
-use App\Domain\Book\Repository\BookRepositoryInterface;
+use App\Domain\Book\Repository\BookManagementRepositoryInterface;
 use App\Domain\Book\Repository\ImageRepositoryInterface;
+use App\Domain\Book\Repository\PublicBookRepositoryInterface;
 use App\Domain\Book\Service\CsvValidatorServiceInterface;
 use App\Domain\User\Repository\UserRepositoryInterface;
 use App\Infrastructure\Bus\Command\CommandBus;
@@ -193,7 +194,9 @@ $container->add(UserRepositoryInterface::class,
     UserMapper::class
   ]);
 
-$container->addShared(BookRepositoryInterface::class,
+$container->addShared(PublicBookRepositoryInterface::class, BookRepository::class)
+    ->addArgument(EntityManagerServiceInterface::class);
+$container->addShared(BookManagementRepositoryInterface::class,
 BookRepository::class)
     ->addArgument(EntityManagerServiceInterface::class);
 

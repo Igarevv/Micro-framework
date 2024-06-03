@@ -8,8 +8,9 @@ use App\Application\UseCase\Book\GetBooksPaginated\GetPaginatedBooksQuery;
 use App\Domain\Based\Bus\Query\QueryHandleInterface;
 use App\Domain\Based\Bus\Query\QueryInterface;
 use App\Domain\Book\Enum\PagePaginator;
-use App\Domain\Book\Repository\BookRepositoryInterface;
 use App\Domain\Book\Repository\ImageRepositoryInterface;
+use App\Domain\Book\Repository\PublicBookRepositoryInterface;
+use App\Domain\Book\Service\PaginatorInterface;
 use App\Infrastructure\Services\Paginator;
 
 class GetHomePageQueryHandler implements QueryHandleInterface
@@ -22,7 +23,7 @@ class GetHomePageQueryHandler implements QueryHandleInterface
     private int $pageNumber;
 
     public function __construct(
-      private readonly BookRepositoryInterface $bookRepository,
+      private readonly PublicBookRepositoryInterface $bookRepository,
       private readonly ImageRepositoryInterface $imageRepository
     ) {}
 
@@ -40,13 +41,13 @@ class GetHomePageQueryHandler implements QueryHandleInterface
 
         $limit = $this->countLimit($this->showNumber, $this->pageNumber);
 
-        $paginatedBooks = $this->bookRepository->getPublishedBooksPaginated($limit,
+        $paginatedBooks = $this->bookRepository->getPreviewBooks($limit,
           $this->showNumber);
 
         return $this->makePresentation($paginatedBooks);
     }
 
-    private function makePresentation(Paginator $paginatedBooks): array
+    private function makePresentation(PaginatorInterface $paginatedBooks): array
     {
         $books = [];
 
@@ -54,11 +55,8 @@ class GetHomePageQueryHandler implements QueryHandleInterface
 
         $imageUrls = $this->getImageUrls($collection);
 
-
         foreach ($collection as $key => $book) {
-            $bookAuthor = $book->getBookAuthors()->getValues()[0];
-
-            $books[PagePaginator::COLLECTION->value][] = (new HomePagePresenter($bookAuthor,
+            $books[PagePaginator::COLLECTION->value][] = (new HomePagePresenter($book,
               $imageUrls[$key]['url']))->toBase();
         }
 

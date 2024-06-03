@@ -5,7 +5,7 @@ namespace App\Application\UseCase\Book\SaveCSV;
 use App\Domain\Based\Bus\Command\CommandHandlerInterface;
 use App\Domain\Based\Bus\Command\CommandInterface;
 use App\Domain\Based\Exception\InvalidFormat;
-use App\Domain\Book\Repository\BookRepositoryInterface;
+use App\Domain\Book\Repository\BookManagementRepositoryInterface;
 use App\Infrastructure\Persistence\Entity\Author;
 use App\Infrastructure\Persistence\Entity\Book;
 use App\Infrastructure\Persistence\Entity\BookAuthor;
@@ -15,7 +15,7 @@ class SaveCsvBookHandler implements CommandHandlerInterface
 {
 
     public function __construct(
-      private readonly BookRepositoryInterface $bookRepository,
+      private readonly BookManagementRepositoryInterface $bookRepository,
       private readonly BookCsvService $bookCsvService
     ) {}
 

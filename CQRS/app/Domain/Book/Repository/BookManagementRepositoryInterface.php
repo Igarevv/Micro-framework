@@ -9,15 +9,11 @@ use App\Infrastructure\Persistence\Entity\BookAuthor;
 use App\Infrastructure\Services\Paginator;
 use Doctrine\ORM\Mapping\Entity;
 
-interface BookRepositoryInterface
+interface BookManagementRepositoryInterface
 {
     public function save(BookAuthor $book): void;
 
-    public function getById(int $id): ?Book;
-
-    public function isBookExist(Isbn $isbn): bool;
-
-    public function getOneForBookPage(string $bookId): Book;
+    public function saveBooksFromCsv(array $entities): void;
 
     public function getPublishedBooksPaginated(int $limit, int $offset): PaginatorInterface;
 
@@ -25,8 +21,6 @@ interface BookRepositoryInterface
 
     public function delete(int $id): void;
 
-    public function saveBooksFromCsv(array $entities): void;
-
-    public function updateImageData(int $bookId, ?string $imageId): void;
+    public function updateBookImageData(int $bookId, ?string $imageId): void;
 
 }

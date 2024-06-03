@@ -7,7 +7,7 @@ use App\Domain\Based\Bus\Command\CommandInterface;
 use App\Domain\Based\ValueObject\FirstName;
 use App\Domain\Based\ValueObject\LastName;
 use App\Domain\Book\Exception\BookException;
-use App\Domain\Book\Repository\BookRepositoryInterface;
+use App\Domain\Book\Repository\BookManagementRepositoryInterface;
 use App\Domain\Book\ValueObject\Isbn;
 use App\Domain\Book\ValueObject\Title;
 use App\Domain\Book\ValueObject\Year;
@@ -19,7 +19,7 @@ class CreateBookCommandHandler implements CommandHandlerInterface
 {
 
     public function __construct(
-      private readonly BookRepositoryInterface $repository
+      private readonly BookManagementRepositoryInterface $repository
     ) {}
 
     /**

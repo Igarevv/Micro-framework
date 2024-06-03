@@ -9,7 +9,7 @@ use App\Domain\Based\Bus\Query\QueryHandleInterface;
 use App\Domain\Based\Bus\Query\QueryInterface;
 use App\Domain\Book\Enum\PagePaginator;
 use App\Domain\Book\Exception\BookException;
-use App\Domain\Book\Repository\BookRepositoryInterface;
+use App\Domain\Book\Repository\BookManagementRepositoryInterface;
 use App\Domain\Book\Service\PaginatorInterface;
 
 class GetStagedTableBookQueryHandler implements QueryHandleInterface
@@ -22,7 +22,7 @@ class GetStagedTableBookQueryHandler implements QueryHandleInterface
     private string $pageNumber;
 
     public function __construct(
-      private readonly BookRepositoryInterface $bookRepository
+      private readonly BookManagementRepositoryInterface $bookRepository
     ) {}
 
     /**

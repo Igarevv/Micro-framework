@@ -4,13 +4,13 @@ namespace App\Application\UseCase\Book\DeleteBook;
 
 use App\Domain\Based\Bus\Command\CommandHandlerInterface;
 use App\Domain\Based\Bus\Command\CommandInterface;
-use App\Domain\Book\Repository\BookRepositoryInterface;
+use App\Domain\Book\Repository\BookManagementRepositoryInterface;
 
 class DeleteBookCommandHandler implements CommandHandlerInterface
 {
 
     public function __construct(
-      private readonly BookRepositoryInterface $repository
+      private readonly BookManagementRepositoryInterface $repository
     ) {}
 
     /**@var DeleteBookCommand $command*/
