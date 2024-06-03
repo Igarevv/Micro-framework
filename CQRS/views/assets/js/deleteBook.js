@@ -1,6 +1,6 @@
 async function deleteBook(button) {
-  var bookId = button.getAttribute('data-book-id');
-  var tableFiled = document.getElementById('book-' + bookId);
+  let bookId = button.getAttribute('data-book-id');
+  let tableFiled = document.getElementById('book-' + bookId);
 
   tableFiled.style.display = 'none';
 
@@ -11,8 +11,7 @@ async function deleteBook(button) {
 
     if (response.ok) {
       const responseData = await response.json();
-      console.log(responseData)
-      var deletedElement = document.getElementById('book-' + bookId);
+      let deletedElement = document.getElementById('book-' + bookId);
       if (deletedElement) {
         deletedElement.remove();
       }

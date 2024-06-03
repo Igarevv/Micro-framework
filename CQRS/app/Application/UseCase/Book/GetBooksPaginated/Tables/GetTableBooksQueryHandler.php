@@ -10,6 +10,7 @@ use App\Domain\Based\Bus\Query\QueryInterface;
 use App\Domain\Book\Enum\PagePaginator;
 use App\Domain\Book\Exception\BookException;
 use App\Domain\Book\Repository\BookRepositoryInterface;
+use App\Domain\Book\Service\PaginatorInterface;
 use App\Infrastructure\Services\Paginator;
 
 class GetTableBooksQueryHandler implements QueryHandleInterface
@@ -44,7 +45,7 @@ class GetTableBooksQueryHandler implements QueryHandleInterface
         return $this->makePresentation($paginatedBooks);
     }
 
-    private function makePresentation(Paginator $paginatedBooks): array
+    private function makePresentation(PaginatorInterface $paginatedBooks): array
     {
         $books = [];
 
@@ -55,9 +56,7 @@ class GetTableBooksQueryHandler implements QueryHandleInterface
         }
 
         foreach ($collection as $book) {
-            $data = $book->getBookAuthors()->getValues()[0];
-
-            $books[PagePaginator::COLLECTION->value][] = (new TableBookPresenter($data))->toBase();
+            $books[PagePaginator::COLLECTION->value][] = (new TableBookPresenter($book))->toBase();
         }
 
         $books[PagePaginator::PAGES_COUNT->value] = ceil($paginatedBooks->count() / $this->showNumber);

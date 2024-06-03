@@ -4,13 +4,16 @@ namespace App\Infrastructure\Persistence\Repository;
 
 use App\Domain\Book\Exception\BookException;
 use App\Domain\Book\Repository\BookRepositoryInterface;
+use App\Domain\Book\Service\PaginatorInterface;
 use App\Domain\Book\ValueObject\Isbn;
 use App\Infrastructure\Persistence\Entity\Book;
 use App\Infrastructure\Persistence\Entity\BookAuthor;
 use App\Infrastructure\Services\EntityManager\Contracts\EntityManagerServiceInterface;
 use App\Infrastructure\Services\Paginator;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 
 class BookRepository implements BookRepositoryInterface
 {
@@ -61,34 +64,50 @@ class BookRepository implements BookRepositoryInterface
 
     public function getPublishedBooksPaginated(int $limit, int $offset): Paginator
     {
-        $dql = "SELECT ba, b, a
-            FROM App\Infrastructure\Persistence\Entity\Book b
-            JOIN b.bookAuthors ba
-            JOIN ba.author a
-            WHERE b.imageId IS NOT null
-            ORDER BY ba.id ASC";
+        $dql =
+          "SELECT NEW App\Application\DTO\TableBookDto(b.id,b.title, a.firstName,
+          a.lastName,
+          b.isbn,
+          b.year,
+          ba.createdAt)
+          FROM App\Infrastructure\Persistence\Entity\BookAuthor ba
+          JOIN ba.book b
+          JOIN ba.author a
+          WHERE b.imageId IS NOT NULL
+          ORDER BY ba.id ASC";
 
         $query = $this->entityManager->createQuery($dql)
-          ->setFirstResult($limit)
-          ->setMaxResults($offset);
+          ->setMaxResults($offset)
+          ->setFirstResult($limit);
 
-        return new Paginator($query);
+        $paginator = new Paginator($query);
+        $paginator->setUseOutputWalkers(false);
+
+        return $paginator;
     }
 
-    public function getStagedBooksPaginated(int $limit, int $offset): Paginator
+    public function getStagedBooksPaginated(int $limit, int $offset): PaginatorInterface
     {
-        $dql = "SELECT ba, b, a
-            FROM App\Infrastructure\Persistence\Entity\Book b
-            JOIN b.bookAuthors ba
-            JOIN ba.author a
-            WHERE b.imageId IS null
-            ORDER BY ba.id ASC";
+        $dql =
+          "SELECT NEW App\Application\DTO\TableBookDto(b.id,b.title, a.firstName,
+          a.lastName,
+          b.isbn,
+          b.year,
+          ba.createdAt)
+          FROM App\Infrastructure\Persistence\Entity\BookAuthor ba
+          JOIN ba.book b
+          JOIN ba.author a
+          WHERE b.imageId IS NULL
+          ORDER BY ba.id ASC";
 
         $query = $this->entityManager->createQuery($dql)
-          ->setFirstResult($limit)
-          ->setMaxResults($offset);
+          ->setMaxResults($offset)
+          ->setFirstResult($limit);
 
-        return new Paginator($query);
+        $paginator = new Paginator($query);
+        $paginator->setUseOutputWalkers(false);
+
+        return $paginator;
     }
 
     public function delete(int $id): void

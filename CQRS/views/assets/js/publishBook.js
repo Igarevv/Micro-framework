@@ -44,6 +44,7 @@ function fetchData(pageId, selectedValue){
     }
     return response.json();
   }).then(data => {
+
     insertDataToBookTable(data);
 
     updatePagination(data.count, data.page, selectedValue);
@@ -55,7 +56,6 @@ function fetchData(pageId, selectedValue){
 function insertDataToBookTable(data) {
   const tableBody = document.querySelector('.customizable');
   tableBody.innerHTML = '';
-  console.log(data);
   const books = data.collection;
 
   let iterable = (data.page - 1) * data.show + 1;

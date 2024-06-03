@@ -10,7 +10,7 @@ use App\Domain\Based\Bus\Query\QueryInterface;
 use App\Domain\Book\Enum\PagePaginator;
 use App\Domain\Book\Exception\BookException;
 use App\Domain\Book\Repository\BookRepositoryInterface;
-use App\Infrastructure\Services\Paginator;
+use App\Domain\Book\Service\PaginatorInterface;
 
 class GetStagedTableBookQueryHandler implements QueryHandleInterface
 {
@@ -43,7 +43,7 @@ class GetStagedTableBookQueryHandler implements QueryHandleInterface
         return $this->makePresentation($stagedBooks);
     }
 
-    private function makePresentation(Paginator $paginatedBooks): array
+    private function makePresentation(PaginatorInterface $paginatedBooks): array
     {
         $books = [];
 
@@ -53,13 +53,12 @@ class GetStagedTableBookQueryHandler implements QueryHandleInterface
             throw BookException::booksNotFound();
         }
 
-        foreach ($collection as $book) {
-            $data = $book->getBookAuthors()->getValues()[0];
-
-            $books[PagePaginator::COLLECTION->value][] = (new TableBookPresenter($data))->toBase();
+        foreach ($collection as $book){
+            $books[PagePaginator::COLLECTION->value][] = (new TableBookPresenter($book))->toBase();
         }
 
-        $books[PagePaginator::PAGES_COUNT->value] = ceil($paginatedBooks->count() / $this->showNumber);
+        $numPagesForAllData = ceil($paginatedBooks->count() / $this->showNumber);
+        $books[PagePaginator::PAGES_COUNT->value] = $numPagesForAllData;
         $books[PagePaginator::PAGE->value] = $this->pageNumber;
         $books[PagePaginator::SHOW->value] = $this->showNumber;
 

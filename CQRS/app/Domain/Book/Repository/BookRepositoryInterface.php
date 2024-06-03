@@ -2,6 +2,7 @@
 
 namespace App\Domain\Book\Repository;
 
+use App\Domain\Book\Service\PaginatorInterface;
 use App\Domain\Book\ValueObject\Isbn;
 use App\Infrastructure\Persistence\Entity\Book;
 use App\Infrastructure\Persistence\Entity\BookAuthor;
@@ -18,9 +19,9 @@ interface BookRepositoryInterface
 
     public function getOneForBookPage(string $bookId): Book;
 
-    public function getPublishedBooksPaginated(int $limit, int $offset): Paginator;
+    public function getPublishedBooksPaginated(int $limit, int $offset): PaginatorInterface;
 
-    public function getStagedBooksPaginated(int $limit, int $offset): Paginator;
+    public function getStagedBooksPaginated(int $limit, int $offset): PaginatorInterface;
 
     public function delete(int $id): void;
 
