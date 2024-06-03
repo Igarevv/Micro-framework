@@ -24,6 +24,8 @@ The application was created based on two architecture approaches:
 - CA with CQRS principle
 - Onion architecture
 
+CQRS stands for command-query responsibility segregation. This principle mean that method must be command that make some manipulations or query that returns data.
+
 As for database layers, was used PostgreSQL with [Doctrine ORM and DBAL](https://www.doctrine-project.org/)
 
 ***Project contains next functionality:***

@@ -73,11 +73,15 @@ class BookCsvService
                   genre: $genre
                 );
             } catch (InvalidFormat $e){
+                fclose($file);
                 throw new InvalidFormat("Error uploading file: {$e->getMessage()} on line {$lineNum}.");
             } catch (\Throwable $e){
+                fclose($file);
                 throw new InvalidFormat("Error uploading file: please check your file for compliance.");
             }
         }
+
+        fclose($file);
 
         if (! $data){
             throw new InvalidFormat("Error uploading file: file is empty.");
