@@ -71,7 +71,7 @@ class AuthController extends Controller
         try {
             $user = $this->commandBus->dispatch($command,
               LoginCommandHandler::class);
-        } catch (AuthException $e) {
+        } catch (AuthException|InvalidFormat $e) {
             $this->flasher->setError('error', $e->getMessage());
             return new RedirectResponse('/sign-in');
         }

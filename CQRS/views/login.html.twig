@@ -49,7 +49,7 @@
                                 </form>
                                 {% if session().hasFlash('error') %}
                                     <div class="alert alert-danger mt-3">
-                                        {{ session().flash('error')[0] }}
+                                        {{ session().flash('error')[0]['error'] }}
                                     </div>
                                 {% endif %}
                             </div>
