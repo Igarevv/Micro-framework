@@ -1,6 +1,6 @@
-### Project with micro-framework
+### Micro-framework project + app built on it
 
-***Micro-framework contains:***
+### ***Micro-framework contains:***
 
 - HTTP Request handlers
 - Routing based on middlewares
@@ -16,6 +16,7 @@
 - [Fast-route](https://packagist.org/packages/nikic/fast-route)
 - [Dotenv](https://packagist.org/packages/symfony/dotenv)
 - [Twig](https://packagist.org/packages/twig/twig)
+- [Doctrine DBAL](https://www.doctrine-project.org/)
 
 ### Simple Library website built on this framework 
 
@@ -28,7 +29,7 @@ CQRS stands for command-query responsibility segregation. This principle mean th
 
 As for database layers, was used PostgreSQL with [Doctrine ORM and DBAL](https://www.doctrine-project.org/)
 
-***Project contains next functionality:***
+### ***Project contains next functionality:***
 - Adding books via form input and CSV.
 - The ability to view added books that were added by form input(with image)<br>and 
 by CSV (books that were added by CSV do not have picture after uploading CSV)
@@ -42,7 +43,7 @@ there is functionality to upload image for each book.
 
 As storage for book preview images was used [Cloudinary](https://cloudinary.com/) cloud service
 
-***Project requirements:***
+### ***Project requirements:***
 
 .env file with variables: 
 - **Database**
