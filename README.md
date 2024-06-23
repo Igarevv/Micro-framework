@@ -1,4 +1,4 @@
-### Micro-framework project + app built on it
+### Micro-framework project + app with CQRS pattern
 
 ### ***Micro-framework contains:***
 
